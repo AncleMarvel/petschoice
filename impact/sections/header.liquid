@@ -209,7 +209,9 @@ the underlying logic of the menu.
             {{- section.settings.transparent_logo | image_url: width: section.settings.transparent_logo.width | image_tag: sizes: sizes, widths: widths, class: 'header__logo-image header__logo-image--transparent' -}}
           {%- endif -%}
         {%- else -%}
-          <span class="header__logo-text h4">{{ shop.name }}</span>
+          <span class="header__logo-text h4">
+            {% render 'icon', icon: 'logo' %}
+          </span>
         {%- endif -%}
       {%- endcapture -%}
 
