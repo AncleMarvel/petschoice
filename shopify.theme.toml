@@ -1,0 +1,11 @@
+[environments.dev]
+# theme = "147450003677"
+store = "petschoice-club.myshopify.com"
+password = "shptka_04c84a410ab504e50f0b457dcc5894a6"
+store-password = "admin"
+# ignore = "sections/header.liquid"
+# live = true
+allow-live = true
+output = "json"
+path = "./impact"
+theme-editor-sync = true

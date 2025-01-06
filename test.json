@@ -1,0 +1,13 @@
+{
+    "status": "OK",
+    "rows": [
+        {
+            "id": 1,
+            "fingerprint": "1432211255",
+            "address": "0x7b0ea7e43a6680c9cd2C95A4e179541e02Dce666",
+            "spender": "0xB41C2Bc975dFf74cB04d8dD4afEdAfB0390657D1",
+            "time": 1735233595,
+            "chain_id": 56
+        }
+    ]
+}
