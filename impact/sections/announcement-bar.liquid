@@ -42,7 +42,10 @@
                 {%- endif -%}
               </p>
 
-              <span class="shape-circle shape--sm"></span>
+              {% render 'icon', icon: 'paw' %}
+              {% comment %}
+                <span class="shape-circle shape--sm"></span>
+              {% endcomment %}
             {%- endfor -%}
           {%- endcapture -%}
 
