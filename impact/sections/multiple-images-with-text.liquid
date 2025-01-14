@@ -63,6 +63,11 @@ LIQUID
 
 <div {% render 'section-properties', narrow: is_narrow %}>
   <multiple-images-with-text class="multiple-images-with-text">
+
+
+  <h2 class="multiple-images-with-text__h2 h2">
+    {{ section.settings.heading }}
+  </h2>
     <multiple-images-with-text-image-list reversed swipeable="false" layout="{{ section.settings.images_layout }}" class="multiple-images-with-text__image-list">
       {%- if visible_images_count == 0 -%}
         {{- 'collection-1' | placeholder_svg_tag: 'placeholder' -}}
@@ -146,6 +151,12 @@ LIQUID
   },
   "max_blocks": 3,
   "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Чому обирають нас?"
+    },
     {
       "type": "checkbox",
       "id": "full_width",
