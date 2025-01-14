@@ -1,0 +1,45 @@
+:root {
+    --black: #141414;
+    --white: #FFFFFF;
+    --gray: #444444;
+    --dark-white: #E8E8E8;
+}
+
+/* 
+-----------------------------------------------------
+Footer
+-----------------------------------------------------
+*/
+.footer {
+    background: var(--black);
+    color: var(--white);
+}
+
+.footer .footer__block-list {
+    justify-content: space-between;
+}
+
+.footer .text-subdued {
+    color: var(--white);
+}
+
+.footer .footer__aside-bottom {
+    justify-content: center;
+}
+
+.footer .social-media {
+    justify-content: flex-end;
+}
+
+.footer .footer__newsletter-form {
+    max-width: initial;
+}
+
+.footer .footer__newsletter-form .input {
+    background: var(--gray);
+}
+
+.footer .circle-chevron {
+    background: var(--dark-white);
+    color: var(--black);
+}

@@ -32,6 +32,13 @@
                   {%- render block -%}
                 </div>
 
+              {%- when 'logo' -%}
+                {%- if block.settings.image != blank -%}
+                  <div class="footer__block footer__block--logo" {{ block.shopify_attributes }}>
+                    {{- block.settings.image | image_url: width: block.settings.image.width | image_tag: sizes: sizes, widths: '300,400,500,600,800,1000,1200,1400,1600,1800,2000', draggable: false, class: 'footer-logo-icon' -}}
+                  </div>
+                {%- endif -%}
+
               {%- when 'text' -%}
                 {%- if block.settings.title != blank or block.settings.content != blank or shop.features.follow_on_shop? and block.settings.enable_follow_on_shop -%}
                   <div class="footer__block footer__block--text" {{ block.shopify_attributes }}>
@@ -106,6 +113,14 @@
                         {%- render 'input', name: 'contact[email]', label: label, type: 'email', required: true, autocomplete: 'email', enterkeyhint: 'send', self_submit: true -%}
                       {%- endif -%}
                     {%- endform -%}
+
+                    {%- if section.settings.show_social_media -%}
+                      {%- capture social_media -%}{%- render 'social-media' -%}{%- endcapture -%}
+                    {%- endif -%}
+
+                    {%- if social_media != blank -%}
+                      {{- social_media -}}
+                    {%- endif -%}
                   </div>
                 </div>
             {%- endcase -%}
@@ -122,13 +137,9 @@
       <div class="footer__aside empty:hidden">
         {%- comment -%}
         ----------------------------------------------------------------------------------------------------------------
-        SOCIAL MEDIA + LOCALIZATION
+        LOCALIZATION
         ----------------------------------------------------------------------------------------------------------------
         {%- endcomment -%}
-
-        {%- if section.settings.show_social_media -%}
-          {%- capture social_media -%}{%- render 'social-media' -%}{%- endcapture -%}
-        {%- endif -%}
 
         {%- if section.settings.show_country_selector and localization.available_countries.size > 1 -%}
           {%- assign country_selector = true -%}
@@ -136,30 +147,6 @@
 
         {%- if section.settings.show_locale_selector and localization.available_languages.size > 1 -%}
           {%- assign locale_selector = true -%}
-        {%- endif -%}
-
-        {%- if social_media != blank or country_selector or locale_selector -%}
-          <div class="footer__aside-top">
-            {{- social_media -}}
-
-            {%- if country_selector or locale_selector -%}
-              <div class="h-stack gap-6">
-                {%- if social_media == blank -%}
-                  {%- assign popover_horizontal_position = 'start' -%}
-                {%- else -%}
-                  {%- assign popover_horizontal_position = 'end' -%}
-                {%- endif -%}
-
-                {%- if country_selector -%}
-                  {%- render 'localization-selector', type: 'country', show_country_name: section.settings.show_country_name, show_country_flag: section.settings.show_country_flag, popover_horizontal_position: popover_horizontal_position -%}
-                {%- endif -%}
-
-                {%- if locale_selector -%}
-                  {%- render 'localization-selector', type: 'locale', popover_horizontal_position: popover_horizontal_position -%}
-                {%- endif -%}
-              </div>
-            {%- endif -%}
-          </div>
         {%- endif -%}
 
         {%- comment -%}
@@ -178,7 +165,7 @@
           {%- endif -%}
 
           <div class="footer__copyright v-stack gap-1">
-            <p class="text-sm text-subdued">© {{ 'now' | date: '%Y' }}, {{ shop.name }}. {{ powered_by_link }}</p>
+            <p class="text-sm text-subdued">© {{ 'now' | date: '%Y' }}, Petschoice.Club. {{ powered_by_link }}</p>
 
             {%- if section.settings.show_policy_links and shop.policies.size > 0 -%}
               <ul class="footer__policy-links unstyled-list">
@@ -199,7 +186,6 @@
   "name": "Footer",
   "class": "shopify-section--footer",
   "tag": "footer",
-  "max_blocks": 5,
   "settings": [
     {
       "type": "checkbox",
@@ -258,6 +244,17 @@
   "blocks": [
     {
       "type": "@app"
+    },
+    {
+      "type": "logo",
+      "name": "Logo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Logo"
+        }
+      ]
     },
     {
       "type": "text",
@@ -370,6 +367,14 @@
           "label": "Content"
         }
       ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer empty",
+      "category": "Footer",
+      "settings": {},
+      "blocks": []
     }
   ]
 }
