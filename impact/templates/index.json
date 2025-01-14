@@ -240,6 +240,7 @@
         "1664424486a2b084ab-0"
       ],
       "settings": {
+        "heading": "Чому обирають нас?",
         "full_width": true,
         "images_layout": "scattered",
         "collage_images_alignment": "middle",
@@ -406,7 +407,11 @@
           "settings": {
             "logo_width": 100,
             "author": "",
-            "content": "Share info about what your customers say about your products.",
+            "photo": "shopify://shop_images/randomGirl.jpg",
+            "heading": "Loved the product!",
+            "name": "Maverick",
+            "under_name": "Dog owner",
+            "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua quis nostrud exercitation ullamcoLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do",
             "show_rating": false,
             "rating": 4
           }
@@ -416,6 +421,9 @@
           "settings": {
             "logo_width": 100,
             "author": "",
+            "heading": "Loved the product!",
+            "name": "Maverick",
+            "under_name": "Dog owner",
             "content": "Or share content about your promotion, offers...",
             "show_rating": false,
             "rating": 4
@@ -426,7 +434,6 @@
         "16644243327ba53d2a-0",
         "16644243327ba53d2a-1"
       ],
-      "disabled": true,
       "settings": {
         "full_width": true,
         "content_size": "medium",

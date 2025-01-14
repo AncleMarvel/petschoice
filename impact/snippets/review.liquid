@@ -1,0 +1,50 @@
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+REVIEW: snippets/review.liquid
+----------------------------------------------------------------------------------------------------------------------
+
+********************************************
+Goal
+********************************************
+
+Generate a quote from person reviewing product
+
+********************************************
+Supported variables
+********************************************
+
+* heading
+* content
+* image
+* name
+* under_name
+{%- endcomment -%}
+
+<div class="review">
+    <div class="review__person">
+        {% if image %}
+            <div class="review__person_image-wrapper">
+                {{- image | image_url: width: image.width | image_tag: widths: '300,400,500,600,700,800,1000,1200,1400,1600,1800,2000,2200,2400,2600' -}}
+            </div>
+        {% else %}
+            <div class="review__person_image-wrapper">
+                {{ 'product-1' | placeholder_svg_tag }}
+            </div>
+        {% endif %}
+        <span class="review__person_name">
+            {{- name -}}
+        </span>
+        <span class="review__person_under-name">
+            {{- under_name -}}
+        </span>
+    </div>
+    <div class="review__content-column">
+        {% render 'icon', icon: 'quote', class: 'review__quote-icon' %}
+        <h3 class="review__heading h3">
+            {{- heading -}}
+        </h3>
+        <p class="review__content">
+            {{- content -}}
+        </p>
+    </div>
+</div>
