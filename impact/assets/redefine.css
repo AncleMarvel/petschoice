@@ -171,6 +171,14 @@ snippets/review.liquid
     padding: 0;
 }
 
+/* 
+Others
+*/
+
+.slideshow-cta-container {
+    margin: 0 !important;
+}
+
 @media (max-width: 2560px) {
     .multiple-images-with-text__h2 {
         left: 9%;

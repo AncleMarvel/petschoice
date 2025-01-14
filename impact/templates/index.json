@@ -131,7 +131,7 @@
       ],
       "settings": {
         "full_width": false,
-        "block_size": "medium",
+        "block_size": "large",
         "subheading": "",
         "title": "",
         "content": "",
@@ -196,8 +196,8 @@
             "content": "",
             "button_text": "",
             "button_url": "",
-            "animate_impact_text": false,
-            "animate_impact_text_duration": 2
+            "animate_impact_text": true,
+            "animate_impact_text_duration": 3
           }
         }
       },
@@ -435,6 +435,7 @@
         "16644243327ba53d2a-1"
       ],
       "settings": {
+        "heading": "Хвостики нам довіряють!",
         "full_width": true,
         "content_size": "medium",
         "background": "",
