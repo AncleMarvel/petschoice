@@ -15,7 +15,7 @@
         "slide-1": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/hero.jpg",
+            "image": "shopify://shop_images/freepik__enhance__15850.jpg",
             "content_max_width": 780,
             "mobile_text_position": "place-self-center-start text-start",
             "desktop_text_position": "sm:place-self-center-start sm:text-start",
@@ -179,7 +179,7 @@
         "item_FKy8GU": {
           "type": "item",
           "settings": {
-            "image": "shopify://shop_images/5b9bc6c484a94458ea47d715f0fba3db.jpg",
+            "image": "shopify://shop_images/Frame_15.png",
             "icon": "none",
             "icon_width": 48,
             "title": "Чому догляд важливий?",
@@ -189,7 +189,7 @@
         "item_U3MaRn": {
           "type": "item",
           "settings": {
-            "image": "shopify://shop_images/2b46d045e972824846191116cde313ea.jpg",
+            "image": "shopify://shop_images/Frame_16.png",
             "icon": "none",
             "icon_width": 48,
             "title": "Секрети догляду за шерстю",
@@ -263,10 +263,22 @@
             "button_url": "",
             "button_text": ""
           }
+        },
+        "item_RXQp7C": {
+          "type": "item",
+          "settings": {
+            "image_rotation_degrees": 0,
+            "subheading": "",
+            "title": "Позиції для всіх",
+            "content": "<p>Кожен хвостик заслуговує на індивідуальний підхід, і ми це врахували. Наші шампуні створені для кожного етапу життя та особливостей вашого улюбленця. Для малечі — ніжність, для дорослих песиків — турбота, а для чутливих носиків — абсолютна безпека. У нас є те, що підійде саме вашому хвостику!</p>",
+            "button_url": "",
+            "button_text": ""
+          }
         }
       },
       "block_order": [
-        "1664424486a2b084ab-0"
+        "1664424486a2b084ab-0",
+        "item_RXQp7C"
       ],
       "settings": {
         "heading": "Чому обирають нас?",
@@ -315,29 +327,7 @@
             "link_text": "",
             "mobile_text_position": "place-self-center text-center",
             "desktop_column_span": 2,
-            "desktop_row_span": 1,
-            "desktop_text_position": "sm:place-self-center sm:text-center",
-            "background": "#000000",
-            "background_gradient": "",
-            "text_color": "#ffffff",
-            "text_gradient": "",
-            "button_background": "#000000",
-            "button_text_color": "#ffffff",
-            "overlay_color": "#000000",
-            "overlay_opacity": 60
-          }
-        },
-        "29246d34-c6e0-4373-84f6-b15e57736a00": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/jpg.jpg",
-            "title": "Сети",
-            "heading_tag": "h4",
-            "link_url": "shopify://collections/каталог",
-            "link_text": "",
-            "mobile_text_position": "place-self-center text-center",
-            "desktop_column_span": 2,
-            "desktop_row_span": 1,
+            "desktop_row_span": 2,
             "desktop_text_position": "sm:place-self-center sm:text-center",
             "background": "#000000",
             "background_gradient": "",
@@ -352,8 +342,7 @@
       },
       "block_order": [
         "item-1",
-        "item-2",
-        "29246d34-c6e0-4373-84f6-b15e57736a00"
+        "item-2"
       ],
       "settings": {
         "full_width": true,
@@ -450,10 +439,11 @@
           "settings": {
             "logo_width": 100,
             "author": "",
-            "heading": "Loved the product!",
-            "name": "Maverick",
-            "under_name": "Dog owner",
-            "content": "Or share content about your promotion, offers...",
+            "photo": "shopify://shop_images/koretsky.png",
+            "heading": "Чудовий шампунь!",
+            "name": "Степан",
+            "under_name": "",
+            "content": "😊 Наш песик дуже чутливий до косметики, але цей засіб підійшов ідеально. Шерсть стала гладенькою, а запах – просто неймовірний! Помітила, що шкіра стала менш сухою, і собака почувається комфортно. Буду замовляти ще!",
             "show_rating": false,
             "rating": 4
           }
