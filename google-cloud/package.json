@@ -1,18 +1,29 @@
 {
-  "name": "google-cloud",
+  "name": "novapost-functions",
   "version": "1.0.0",
   "main": "index.js",
-  "type": "module",
+  "author": "Oleksandr",
+  "license": "MIT",
   "scripts": {
-    "start": "functions-framework --target=helloWorld"
+    "dev:sync-inventory": "nodemon --exec functions-framework --target=syncInventory --ignore '*.json'",
+    "dev:order-create": "nodemon --exec functions-framework --target=orderCreate --ignore '*.json'",
+    "dev:order-cancel": "nodemon --exec functions-framework --target=orderCancel --ignore '*.json'",
+    "dev:get-orders-statuses": "nodemon --exec functions-framework --target=getOrdersStatuses --ignore '*.json'",
+    "deploy:sync-inventory": "gcloud functions deploy sync-inventory --gen2 --entry-point syncInventory --max-instances 1 --source=./ --region europe-west3 --runtime nodejs20 --trigger-http --project petschoice",
+    "deploy:order-create": "gcloud functions deploy order-create --gen2 --entry-point orderCreate --max-instances 1 --source=./ --region europe-west3 --runtime nodejs20 --trigger-http --project petschoice",
+    "deploy:order-cancel": "gcloud functions deploy order-cancel --gen2 --entry-point orderCancel --max-instances 1 --source=./ --region europe-west3 --runtime nodejs20 --trigger-http --project petschoice",
+    "deploy:get-orders-statuses": "gcloud functions deploy get-orders-statuses --gen2 --entry-point getOrdersStatuses --max-instances 1 --source=./ --region europe-west3 --runtime nodejs20 --trigger-http --project petschoice",
+    "deploy:all": "yarn deploy:sync-inventory && yarn deploy:order-create && yarn deploy:order-cancel && yarn deploy:get-orders-statuses"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
     "@google-cloud/firestore": "^7.11.0",
-    "easy-soap-request": "^5.6.1",
-    "xml2js": "^0.6.2"
+    "@google-cloud/functions-framework": "^3.4.4",
+    "axios": "^1.7.9",
+    "dotenv": "^16.4.7",
+    "fast-xml-parser": "^4.5.1",
+    "shopify-api-node": "^3.14.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
   }
 }
