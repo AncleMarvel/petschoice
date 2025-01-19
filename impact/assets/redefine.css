@@ -172,11 +172,61 @@ snippets/review.liquid
 }
 
 /* 
+---------------------------------------------
+Customer
+---------------------------------------------
+*/
+
+.customer-form__box {
+    box-shadow: 0px 0px 11.2px 0px #00000040;
+
+    border-radius: 12px;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    -ms-border-radius: 12px;
+    -o-border-radius: 12px;
+}
+
+/* 
+---------------------------------------------
 Others
+---------------------------------------------
 */
 
 .slideshow-cta-container {
     margin: 0 !important;
+}
+
+buy-buttons .button--secondary {
+    border: 1px solid var(--black)
+}
+
+.image-link-blocks__item_title-wrapper {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--white-2);
+}
+
+.image-link-blocks.scroll-area.bleed {
+    overflow: initial;
+}
+
+.image-link-blocks__item-wrapper {
+    overflow: hidden;
+    box-shadow: 0px 0px 5.7px 2px #9D9A9A40;
+    border-radius: 12px;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    -ms-border-radius: 12px;
+    -o-border-radius: 12px;
+}
+
+.image-link-blocks__item-wrapper .rounded {
+    border-radius: 12px 12px 0 0;
+    -webkit-border-radius: 12px 12px 0 0;
+    -moz-border-radius: 12px 12px 0 0;
+    -ms-border-radius: 12px 12px 0 0;
+    -o-border-radius: 12px 12px 0 0;
 }
 
 @media (max-width: 2560px) {

@@ -57,21 +57,32 @@ LIQUID
               assign loading_strategy = 'lazy'
             endif
           -%}
-
-          <div {% render 'surface', class: 'image-link-blocks__item group rounded', background: block.settings.background, text_color: block.settings.text_color, background_fallback: 'bg-secondary' %} {{ block.shopify_attributes }}>
-            {%- if block.settings.stretch_image -%}
-              {%- capture item_content -%}
-                {%- if block.settings.image != blank -%}
-                  {{- block.settings.image | image_url: width: block.settings.image.width | image_tag: loading: loading_strategy, sizes: '(max-width: 699px) 160px, 285px', widths: '200,300,400,500,600,700,800,900,1000,1200', class: 'zoom-image' -}}
-                {%- else -%}
-                  {{- 'image' | placeholder_svg_tag: 'zoom-image placeholder' -}}
-                {%- endif -%}
-
-                {%- if block.settings.link_text != blank -%}
-                  <div class="place-self-end-start w-full bold">
-                    <div class="h-stack justify-between gap-2">
-                      {{ block.settings.link_text | escape }}
-
+          <div class="image-link-blocks__item-wrapper">
+            <div {% render 'surface', class: 'image-link-blocks__item group rounded', background: block.settings.background, text_color: block.settings.text_color, background_fallback: 'bg-secondary' %} {{ block.shopify_attributes }}>
+              {%- if block.settings.stretch_image -%}
+                {%- capture item_content -%}
+                  {%- if block.settings.image != blank -%}
+                    {{- block.settings.image | image_url: width: block.settings.image.width | image_tag: loading: loading_strategy, sizes: '(max-width: 699px) 160px, 285px', widths: '200,300,400,500,600,700,800,900,1000,1200', class: 'zoom-image' -}}
+                  {%- else -%}
+                    {{- 'image' | placeholder_svg_tag: 'zoom-image placeholder' -}}
+                  {%- endif -%}
+                {%- endcapture -%}
+  
+                <a {% if block.settings.link_url %}href="{{ block.settings.link_url }}"{% endif %} class="content-over-media rounded" style="--content-over-media-overlay: {{ block.settings.overlay_color.rgb }} / {{ block.settings.overlay_opacity | divided_by: 100.0 }}">
+                  {{- item_content -}}
+                </a>
+              {%- else -%}
+                <a {% if block.settings.link_url != blank %}href="{{ block.settings.link_url }}"{% endif %} class="image-link-blocks__inner">
+                  {%- if block.settings.image != blank -%}
+                    {{- block.settings.image | image_url: width: block.settings.image.width | image_tag: loading: loading_strategy, sizes: '(max-width: 699px) 160px, 285px', widths: '200,300,400,500,600,700,800,900,1000,1200', class: 'image-link-blocks__image zoom-image' -}}
+                  {%- else -%}
+                    {{- 'image' | placeholder_svg_tag: 'image-link-blocks__image placeholder' -}}
+                  {%- endif -%}
+  
+                  {%- if block.settings.link_text != blank -%}
+                    <p class="image-link-blocks__title {% if block.settings.link_url != blank %}image-link-blocks__title--animate{% endif %} text-center bold">
+                      {{- block.settings.link_text | escape -}}
+  
                       {%- if block.settings.link_url != blank -%}
                         {%- if block.settings.stretch_image -%}
                           {% render 'icon' with 'circle-button-right-clipped', direction_aware: true %}
@@ -79,37 +90,18 @@ LIQUID
                           <span class="circle-chevron">{% render 'icon' with 'chevron-right-small', direction_aware: true %}</span>
                         {%- endif -%}
                       {%- endif -%}
-                    </div>
-                  </div>
-                {%- endif -%}
-              {%- endcapture -%}
-
-              <a {% if block.settings.link_url %}href="{{ block.settings.link_url }}"{% endif %} class="content-over-media rounded" style="--content-over-media-overlay: {{ block.settings.overlay_color.rgb }} / {{ block.settings.overlay_opacity | divided_by: 100.0 }}">
-                {{- item_content -}}
-              </a>
-            {%- else -%}
-              <a {% if block.settings.link_url != blank %}href="{{ block.settings.link_url }}"{% endif %} class="image-link-blocks__inner">
-                {%- if block.settings.image != blank -%}
-                  {{- block.settings.image | image_url: width: block.settings.image.width | image_tag: loading: loading_strategy, sizes: '(max-width: 699px) 160px, 285px', widths: '200,300,400,500,600,700,800,900,1000,1200', class: 'image-link-blocks__image zoom-image' -}}
-                {%- else -%}
-                  {{- 'image' | placeholder_svg_tag: 'image-link-blocks__image placeholder' -}}
-                {%- endif -%}
-
-                {%- if block.settings.link_text != blank -%}
-                  <p class="image-link-blocks__title {% if block.settings.link_url != blank %}image-link-blocks__title--animate{% endif %} text-center bold">
-                    {{- block.settings.link_text | escape -}}
-
-                    {%- if block.settings.link_url != blank -%}
-                      {%- if block.settings.stretch_image -%}
-                        {% render 'icon' with 'circle-button-right-clipped', direction_aware: true %}
-                      {%- else -%}
-                        <span class="circle-chevron">{% render 'icon' with 'chevron-right-small', direction_aware: true %}</span>
-                      {%- endif -%}
-                    {%- endif -%}
-                  </p>
-                {%- endif -%}
-              </a>
-            {%- endif -%}
+                    </p>
+                  {%- endif -%}
+                </a>
+              {%- endif -%}
+            </div>
+            {% if block.settings.stretch_image %}
+              <div class="image-link-blocks__item_title-wrapper">
+                <span class="image-link-blocks__item_title bold">
+                  {{ block.settings.link_text }}
+                </span>
+              </div>
+            {% endif %}
           </div>
         {%- endfor -%}
       </image-link-blocks>

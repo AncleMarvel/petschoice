@@ -123,11 +123,39 @@
             "overlay_color": "#000000",
             "overlay_opacity": 0
           }
+        },
+        "item_cL8UBn": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/350.jpg",
+            "stretch_image": true,
+            "link_text": "Ваніль-Кокос",
+            "link_url": "https://petschoice.club/products/dogs-shampoo?variant=41864347942986",
+            "background": "",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0
+          }
+        },
+        "item_3CXUkk": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/350_6f426463-a0ab-404c-a6e5-2beb3fc8a88b.jpg",
+            "stretch_image": true,
+            "link_text": "Гіпоалергенний",
+            "link_url": "https://petschoice.club/products/dogs-shampoo?variant=41864347975754",
+            "background": "",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0
+          }
         }
       },
       "block_order": [
         "1664424046b00c932c-0",
-        "1664424046b00c932c-1"
+        "1664424046b00c932c-1",
+        "item_cL8UBn",
+        "item_3CXUkk"
       ],
       "settings": {
         "full_width": false,

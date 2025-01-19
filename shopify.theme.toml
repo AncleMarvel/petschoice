@@ -10,7 +10,7 @@ output = "json"
 path = "./impact"
 theme-editor-sync = true
 
-[environments.dev-prod-live]
+[environments.live]
 # theme = "147450003677"
 store = "419319-9b.myshopify.com"
 password = "shptka_317fef5eb17a66c2e49c58e6ab96d59f"

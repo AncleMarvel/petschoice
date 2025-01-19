@@ -14,13 +14,22 @@
       "blocks": {
         "fields": {
           "type": "fields",
-          "settings": {}
+          "settings": {
+            "show_email_consent": false
+          }
         }
       },
       "block_order": [
         "fields"
       ],
-      "settings": {}
+      "settings": {
+        "background": "#f6f6f6",
+        "background_gradient": "",
+        "text_color": "",
+        "heading_gradient": "",
+        "button_background": "#141414",
+        "button_text_color": "#f6f6f6"
+      }
     }
   },
   "order": [

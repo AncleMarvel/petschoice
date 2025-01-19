@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "shopify theme dev -e dev-prod-live",
-    "push": "shopify theme push -e dev-prod-live",
-    "pull": "shopify theme pull -e dev-prod-live"
+    "dev": "shopify theme dev -e live",
+    "push": "shopify theme push -e live",
+    "pull": "shopify theme pull -e live"
   },
   "keywords": [],
   "author": "",
