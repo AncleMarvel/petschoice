@@ -58,6 +58,7 @@
         "button_KGtxfC": {
           "type": "button",
           "settings": {
+            "icon": "shopify://shop_images/Inst.svg",
             "style": "outline",
             "size": "xl",
             "text": "Instgram",

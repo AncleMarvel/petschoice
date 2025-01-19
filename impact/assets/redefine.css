@@ -229,6 +229,21 @@ buy-buttons .button--secondary {
     -o-border-radius: 12px 12px 0 0;
 }
 
+.icon-button {
+    width: 42px;
+    height: 42px;
+    margin-top: 40px;
+    background: none !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon-button img {
+    max-width: 100%;
+    margin: 0 !important;
+}
+
 @media (max-width: 2560px) {
     .multiple-images-with-text__h2 {
         left: 9%;

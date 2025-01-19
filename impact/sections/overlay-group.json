@@ -13,27 +13,44 @@
   "sections": {
     "newsletter-popup": {
       "type": "newsletter-popup",
-      "settings": {}
+      "settings": {
+        "apparition_delay": 5,
+        "show_only_on_index": false,
+        "show_only_for_visitors": true,
+        "show_only_once": true,
+        "title": "Підписуйтесь, щоб отримувати актуальні новини",
+        "button_text": "Підписатися",
+        "subtext": "Підписуйтесь, щоб отримувати актуальні новини"
+      }
     },
     "privacy-banner": {
       "type": "privacy-banner",
       "disabled": true,
-      "settings": {}
+      "settings": {
+        "privacy_bar_title": "Cookie policy",
+        "privacy_bar_content": "<p>We use cookies and similar technologies to provide the best experience on our website. Refer to our Privacy Policy for more information.</p>"
+      }
     },
     "cart-drawer": {
       "type": "cart-drawer",
       "settings": {
         "show_cart_note": true,
         "show_shipping_text": true,
+        "show_view_cart_button": true,
         "show_checkout_button": true,
-        "product_card_background": "#f2f2f2"
+        "recommendations_title": "Trending this month",
+        "products": [],
+        "product_card_background": "#f2f2f2",
+        "product_card_text_color": ""
       }
     },
     "search-drawer": {
       "type": "search-drawer",
       "settings": {
         "full_width": false,
-        "show_article_category": true
+        "show_article_category": true,
+        "search_menu": "",
+        "search_menu_show_title": true
       }
     }
   },
