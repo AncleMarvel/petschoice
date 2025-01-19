@@ -248,6 +248,8 @@ buy-buttons .button--secondary {
     overflow-x: scroll;
 }
 
+
+
 @media (max-width: 2560px) {
     .multiple-images-with-text__h2 {
         left: 9%;
@@ -345,5 +347,17 @@ buy-buttons .button--secondary {
 
     .review__heading {
         text-align: center;
+    }
+
+    slideshow-carousel .h0 {
+        font-size: 40px;
+        margin-bottom: 20px;
+    }
+
+    .slideshow-cta-container .button {
+        width: 100%;
+    }
+    .slideshow-cta-container .button:nth-child(2n) {
+        margin-top: 5px !important;
     }
 }
