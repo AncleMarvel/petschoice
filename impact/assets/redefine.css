@@ -244,6 +244,10 @@ buy-buttons .button--secondary {
     margin: 0 !important;
 }
 
+.floating-controls-container {
+    overflow-x: scroll;
+}
+
 @media (max-width: 2560px) {
     .multiple-images-with-text__h2 {
         left: 9%;
