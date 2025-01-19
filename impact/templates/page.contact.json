@@ -12,15 +12,79 @@
     "main": {
       "type": "main-page",
       "disabled": true,
-      "settings": {}
+      "settings": {
+        "content_width": "80ch"
+      }
     },
     "contact": {
       "type": "contact",
-      "settings": {}
+      "disabled": true,
+      "settings": {
+        "full_width": true,
+        "subheading": "Contact Us",
+        "title": "Do you have any question?",
+        "content": "",
+        "text_position": "start",
+        "contact_form_size": "large",
+        "background": "",
+        "background_gradient": "",
+        "text_color": "",
+        "heading_color": "",
+        "heading_gradient": "",
+        "contact_background": "",
+        "contact_text_color": "",
+        "button_background": "",
+        "button_text_color": ""
+      }
+    },
+    "rich_text_4t8biV": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_4AL46y": {
+          "type": "heading",
+          "settings": {
+            "text": "Як з нами зв'язатися?",
+            "heading_tag": "h1",
+            "text_color": "",
+            "gradient": ""
+          }
+        },
+        "liquid_nRmcWr": {
+          "type": "liquid",
+          "settings": {
+            "liquid": "<p><b>Пошта:</b> petschoiceclub@gmail.com </p>"
+          }
+        },
+        "button_KGtxfC": {
+          "type": "button",
+          "settings": {
+            "style": "outline",
+            "size": "xl",
+            "text": "Instgram",
+            "url": "",
+            "background": "",
+            "text_color": ""
+          }
+        }
+      },
+      "block_order": [
+        "heading_4AL46y",
+        "liquid_nRmcWr",
+        "button_KGtxfC"
+      ],
+      "settings": {
+        "full_width": true,
+        "content_width": "small",
+        "text_position": "start",
+        "background": "",
+        "background_gradient": "",
+        "text_color": ""
+      }
     }
   },
   "order": [
     "main",
-    "contact"
+    "contact",
+    "rich_text_4t8biV"
   ]
 }

@@ -9,7 +9,28 @@
   "market": [],
   "order": [],
   "page": [],
-  "product": [],
+  "product": [
+    {
+      "key": "animal-type",
+      "namespace": "shopify",
+      "name": "Animal type",
+      "description": "Specifies the type of animal a product is intended for, such as ducks, deer, or dogs",
+      "type": {
+        "name": "list.metaobject_reference",
+        "category": "REFERENCE"
+      }
+    },
+    {
+      "key": "constitutive-ingredients",
+      "namespace": "shopify",
+      "name": "Constitutive ingredients",
+      "description": "Specifies the main components used in a product's formulation, e.g. beeswax, rosehip oil",
+      "type": {
+        "name": "list.metaobject_reference",
+        "category": "REFERENCE"
+      }
+    }
+  ],
   "variant": [],
   "shop": []
 }
