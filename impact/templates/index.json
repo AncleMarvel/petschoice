@@ -16,8 +16,9 @@
           "type": "image",
           "settings": {
             "image": "shopify://shop_images/freepik__enhance__15850.jpg",
+            "mobile_image": "shopify://shop_images/Frame_1.png",
             "content_max_width": 780,
-            "mobile_text_position": "place-self-center-start text-start",
+            "mobile_text_position": "place-self-end-start text-start",
             "desktop_text_position": "sm:place-self-center-start sm:text-start",
             "subheading": "Спробуйте догляд, який полюбить ваш улюбленець.",
             "title": "Шерсть, як шовк!",
@@ -39,23 +40,23 @@
         },
         "slide-2": {
           "type": "image",
-          "disabled": true,
           "settings": {
-            "image": "shopify://shop_images/f544107edbdbf531d1b6ca8ffd0b8aad.jpg",
+            "image": "shopify://shop_images/Frame_30.jpg",
+            "mobile_image": "shopify://shop_images/Frame_29_8601d500-7888-4ed2-a4cf-b99f6e544d44.png",
             "content_max_width": 780,
-            "mobile_text_position": "place-self-center text-center",
-            "desktop_text_position": "sm:place-self-center sm:text-center",
-            "subheading": "Tell your story",
-            "title": "Slide title",
+            "mobile_text_position": "place-self-end-start text-start",
+            "desktop_text_position": "sm:place-self-center-end sm:text-end",
+            "subheading": "Краса хвостика починається з турботи",
+            "title": "Любов у кожній краплі!",
             "heading_tag": "h0",
-            "button_text": "",
-            "button_link": "",
-            "button_text_2": "",
-            "button_link_2": "",
+            "button_text": "Обрати косметику",
+            "button_link": "shopify://collections/каталог",
+            "button_text_2": "Дізнатись більше",
+            "button_link_2": "shopify://pages/про-нас",
             "text_color": "#ffffff",
-            "button_background": "#ffffff",
+            "button_background": "#000000",
             "button_background_2": "#ffffff",
-            "button_text_color": "#000000",
+            "button_text_color": "#ffffff",
             "button_text_color_2": "#000000",
             "overlay_color": "#000000",
             "overlay_opacity": 30,
@@ -85,7 +86,7 @@
       "type": "scrolling-text",
       "settings": {
         "full_width": true,
-        "text": "Третій товар у подарунок",
+        "text": "Турбота починається тут",
         "text_size": "large",
         "text_style": "fill",
         "scrolling_mode": "auto",
@@ -267,6 +268,7 @@
         "item_RXQp7C": {
           "type": "item",
           "settings": {
+            "image": "shopify://shop_images/image_11.png",
             "image_rotation_degrees": 0,
             "subheading": "",
             "title": "Позиції для всіх",
@@ -274,16 +276,29 @@
             "button_url": "",
             "button_text": ""
           }
+        },
+        "item_qcY7UT": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/image_13.png",
+            "image_rotation_degrees": 0,
+            "subheading": "",
+            "title": "Комфорт у використанні",
+            "content": "<p>Догляд за хвостиком має бути простим і приємним — ми подбали про це. Наші шампуні легко змиваються, не залишаючи слідів, підтримують природний блиск шерсті та дарують ніжний аромат. А зручні дозатори роблять використання ще комфортнішим!</p>",
+            "button_url": "",
+            "button_text": ""
+          }
         }
       },
       "block_order": [
         "1664424486a2b084ab-0",
-        "item_RXQp7C"
+        "item_RXQp7C",
+        "item_qcY7UT"
       ],
       "settings": {
         "heading": "Чому обирають нас?",
         "full_width": true,
-        "images_layout": "scattered",
+        "images_layout": "stacked",
         "collage_images_alignment": "middle",
         "background": "",
         "background_gradient": "",
@@ -298,7 +313,7 @@
         "item-1": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/500_82f4f15b-bffe-4f78-bd02-ec17a3d77e33.jpg",
+            "image": "shopify://shop_images/500_0b13ab9d-3b65-4171-a4d4-507b4999b39d.jpg",
             "title": "Мило для лап",
             "heading_tag": "h4",
             "link_url": "shopify://products/мило-для-лап-лаванда-розмарин",
@@ -429,7 +444,7 @@
             "heading": "Дуже задоволена шампунем!",
             "name": "Стефанія",
             "under_name": "Мама Пес Дюка",
-            "content": "Шерсть нашого улюбленця стала м’якою, чистою і сяючою після першого використання. Засіб має ніжний аромат, який зовсім не дратує. Приємно здивувало, що шкіра собаки залишилася зволоженою, жодних подразнень чи свербежу. Дякую за швидку доставку!",
+            "content": "Шерсть нашого улюбленця стала м’якою, чистою і сяючою після першого використання. Засіб має ніжний аромат, який зовсім не дратує. Приємно здивувало, що шкіра собаки залишилася зволоженою, жодних подразнень чи зуду. Окреме дякую за швидку доставку!",
             "show_rating": false,
             "rating": 4
           }
@@ -442,8 +457,8 @@
             "photo": "shopify://shop_images/koretsky.png",
             "heading": "Чудовий шампунь!",
             "name": "Степан",
-            "under_name": "",
-            "content": "😊 Наш песик дуже чутливий до косметики, але цей засіб підійшов ідеально. Шерсть стала гладенькою, а запах – просто неймовірний! Помітила, що шкіра стала менш сухою, і собака почувається комфортно. Буду замовляти ще!",
+            "under_name": "Тато Пес Дюка",
+            "content": "😊 Наш песик дуже чутливий до косметики, але цей засіб підійшов ідеально. Шерсть стала гладенькою, а запах – просто неймовірний! Помітив, що шкіра стала менш сухою, і собака почувається комфортно. Буду замовляти ще!",
             "show_rating": false,
             "rating": 4
           }

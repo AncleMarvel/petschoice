@@ -95,7 +95,7 @@
       "view_in_space": "Переглянути у своєму просторі",
       "taxes_included": "Податок враховано.",
       "taxes_excluded": "Податок не враховано.",
-      "shipping_policy_html": "<a href=\"{{ link }}\" class=\"link\">Вартість доставки<\/a> обчислюється під час оформлення замовлення",
+      "shipping_policy_html": "<a href=\"{{ link }}\" class=\"link\">Вартість доставки</a> обчислюється під час оформлення замовлення",
       "size_chart": "Таблиця розмірів",
       "available_colors_count": {
         "one": "Доступно кольорів: {{ count }}",
@@ -320,7 +320,8 @@
         "one": "{{ count }} предмет",
         "few": "{{ count }} предмети",
         "many": "{{ count }} предметів",
-        "other": "{{ count }} предмет"
+        "other": "{{ count }} предмет",
+        "zero": ""
       },
       "continue_shopping": "Продовжити покупки",
       "weight": "Вага",
@@ -333,9 +334,9 @@
       "view_cart": "Переглянути кошик",
       "checkout": "Оформити замовлення",
       "we_accept": "Ми приймаємо",
-      "taxes_and_shipping_policy_at_checkout_html": "Податки й <a href=\"{{ link }}\" class=\"link\">вартість доставки<\/a> обчислюються під час оформлення замовлення",
+      "taxes_and_shipping_policy_at_checkout_html": "Податки й <a href=\"{{ link }}\" class=\"link\">вартість доставки</a> обчислюються під час оформлення замовлення",
       "taxes_included_but_shipping_at_checkout": "Податок враховано, і вартість доставки обчислюється під час оформлення замовлення",
-      "taxes_included_and_shipping_policy_html": "Податок враховано. <a href=\"{{ link }}\" class=\"link\">Вартість доставки<\/a> обчислюється під час оформлення замовлення.",
+      "taxes_included_and_shipping_policy_html": "Податок враховано. <a href=\"{{ link }}\" class=\"link\">Вартість доставки</a> обчислюється під час оформлення замовлення.",
       "taxes_and_shipping_at_checkout": "Податки та вартість доставки обчислюються під час оформлення замовлення"
     },
     "order": {
@@ -439,6 +440,25 @@
         "zero": "Ця товар поки не має відгуків.",
         "one": "Отримано відгуків: {{ count }}.",
         "other": "Отримано відгуків: {{ count }}."
+      }
+    }
+  },
+  "shopify": {
+    "sentence": {
+      "words_connector": ",",
+      "two_words_connector": "і",
+      "last_word_connector": ", і"
+    },
+    "checkout": {
+      "address_management": {
+        "confirm_address_deletion": "Ви впевненні що ви хочете видалити цей адрес {{address}}?"
+      },
+      "general": {
+        "page_title": "Кошик",
+        "error_page_title": "Помилка",
+        "skip_to_content": "Перейти до змісту",
+        "breadcrumb": "Навігація",
+        "continue_button_label": "Продовжити"
       }
     }
   }
