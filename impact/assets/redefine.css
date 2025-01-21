@@ -248,7 +248,9 @@ buy-buttons .button--secondary {
     overflow-x: scroll;
 }
 
-
+.shopify-policy__container .shopify-policy__title {
+    display: none !important;
+}
 
 @media (max-width: 2560px) {
     .multiple-images-with-text__h2 {
