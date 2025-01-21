@@ -23,9 +23,9 @@
         "links": {
           "type": "links",
           "settings": {
-            "menu": "main-menu",
+            "menu": "link-list",
             "show_menu_title": true,
-            "menu_title": ""
+            "menu_title": "Меню"
           }
         },
         "newsletter": {
@@ -45,7 +45,7 @@
       ],
       "settings": {
         "show_social_media": true,
-        "show_payment_icons": false,
+        "show_payment_icons": true,
         "show_policy_links": false,
         "show_country_selector": false,
         "show_country_flag": false,
