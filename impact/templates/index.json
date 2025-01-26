@@ -63,11 +63,38 @@
             "background": "",
             "background_gradient": ""
           }
+        },
+        "image_hEz4x4": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/f544107edbdbf531d1b6ca8ffd0b8aad.jpg",
+            "mobile_image": "shopify://shop_images/ed2f6cb1b023a6dc09ab1d590bf118f0.jpg",
+            "content_max_width": 780,
+            "mobile_text_position": "place-self-end-start text-start",
+            "desktop_text_position": "sm:place-self-center-end sm:text-end",
+            "subheading": "Турбота яку можна відчути лапками",
+            "title": "Здоровʼя вашого улюбленця залежить від вас!",
+            "heading_tag": "h0",
+            "button_text": "Обрати косметику",
+            "button_link": "shopify://collections/каталог",
+            "button_text_2": "Дізнатись більше",
+            "button_link_2": "shopify://pages/про-нас",
+            "text_color": "#ffffff",
+            "button_background": "#000000",
+            "button_background_2": "#ffffff",
+            "button_text_color": "#ffffff",
+            "button_text_color_2": "#000000",
+            "overlay_color": "#000000",
+            "overlay_opacity": 30,
+            "background": "",
+            "background_gradient": ""
+          }
         }
       },
       "block_order": [
         "slide-1",
-        "slide-2"
+        "slide-2",
+        "image_hEz4x4"
       ],
       "settings": {
         "full_width": true,
