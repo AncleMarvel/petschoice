@@ -56,7 +56,8 @@ const selectors = {
     postalCode: "#postal-code",
     country: "#country",
 
-    checkoutBtn: '[type="submit"][name="checkout"]'
+    checkoutBtn: '[type="submit"][name="checkout"]',
+    buyNowBtn: '[data-shopify="payment-button"].shopify-payment-button',
 }
 
 function togglePrefillOverlay() {
@@ -100,7 +101,12 @@ prefillForm.addEventListener('submit', prefillSubmitHandler);
  * Turn on prefill form when click on checkout buttons
  */
 const checkoutBtns = document.querySelectorAll(selectors.checkoutBtn);
+const buyNowBtns = document.querySelectorAll(selectors.buyNowBtn);
 checkoutBtns?.forEach(btn => {
+    btn.addEventListener('click', checkoutHandler);
+});
+
+buyNowBtns?.forEach(btn => {
     btn.addEventListener('click', checkoutHandler);
 });
 
@@ -207,14 +213,18 @@ async function fetchPostOffices(settlementRef, query) {
  * @param {HTMLElement} dropdown - HTML select element
  * @param {Array} items - Список элементов для отображения
  * @param {string} valueKey - Ключ для значения (value) option
- * @param {string} textKey - Ключ для текста (innerText) option
+ * @param {string|Array<string>} textKey - Key(s) for (innerText) option
  */
-function renderDropdownOptions(dropdown, items, valueKey, textKey) {
+function renderDropdownOptions(dropdown, items, valueKey, textKeys) {
     dropdown.innerHTML = '<option value="" selected disabled hidden>Выберите</option>';
     items.forEach((item) => {
         const option = document.createElement('option');
         option.value = item[valueKey];
-        option.textContent = item[textKey];
+        if (Array.isArray(textKeys)) {
+            option.textContent = textKeys.map(key => item[key]).join(', ');
+        } else {
+            option.textContent = item[textKeys];
+        }
         dropdown.appendChild(option);
     });
 }
@@ -227,7 +237,7 @@ settlementSearch.addEventListener('input', async (event) => {
     if (query.length < 2) return; // Игнорируем запросы короче 2 символов
 
     const settlements = await fetchSettlements(query);
-    renderDropdownOptions(settlementSelection, settlements, 'Ref', 'Description');
+    renderDropdownOptions(settlementSelection, settlements, 'Ref', ['Description', 'AreaDescription']);
 });
 
 /**

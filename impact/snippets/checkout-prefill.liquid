@@ -24,11 +24,11 @@ This snippet is used to prefill the checkout form with the customer's informatio
 
 {% endcomment %}
 
-<div class="prefill-overlay hidden" id="#prefill-overlay">
+<div class="prefill-overlay hidden" id="prefill-overlay">
     <div class="prefill-container" id="prefill-container">
         <div class="prefill-header">
             <h2>Оформлення замовлення</h2>
-            <button class="prefill-close-btn" id="lose-prefill-form">
+            <button class="prefill-close-btn" id="close-prefill-form">
                 {% render "icon", icon: "close", class: "prefill-close-btn-icon" %}
             </button>
         </div>
@@ -38,16 +38,16 @@ This snippet is used to prefill the checkout form with the customer's informatio
                 <fieldset>
                     <legend>Контактні дані</legend>
                     <label for="first-name">Ім'я</label>
-                    <input type="text" id="first-name" name="first-name" required />
+                    <input class="input" type="text" id="first-name" name="first-name" required />
 
                     <label for="last-name">Фамілія</label>
-                    <input type="text" id="last-name" name="last-name" required />
+                    <input class="input" type="text" id="last-name" name="last-name" required />
 
                     <label for="email">Електронна адреса</label>
-                    <input type="email" id="email" name="email" required />
+                    <input class="input" type="email" id="email" name="email" required />
 
                     <label for="phone">Номер телефону</label>
-                    <input type="tel" id="phone" name="phone" placeholder="+380" required />
+                    <input class="input" type="tel" id="phone" name="phone" placeholder="+380" required />
                 </fieldset>
 
                 <!-- Shipping Type -->
@@ -64,21 +64,21 @@ This snippet is used to prefill the checkout form with the customer's informatio
                 </fieldset>
 
                 <!-- Post Office Shipping -->
-                <div id="post-office-shipping" class="shipping-details" style="display: none;">
+                <div id="post-office-shipping" class="shipping-details">
                     <fieldset>
                         <legend>Відділення Нової Пошти</legend>
                         <label for="settlement-search">Пошук населеного пункту</label>
-                        <input type="text" id="settlement-search" name="settlement-search" autocomplete="off" />
+                        <input class="input" type="text" id="settlement-search" name="settlement-search" autocomplete="off" />
                         
-                        <select name="settlement-selection" id="settlement-selection">
+                        <select class="select" name="settlement-selection" id="settlement-selection">
                             <option value="" selected disabled hidden>Виберіть наслений пункт</option>
                             
                         </select>
 
                         <label for="post-office-number">Пошук відділення</label>
-                        <input type="text" id="search-post-office" name="search-post-office" autocomplete="off" />
+                        <input class="input" type="text" id="search-post-office" name="search-post-office" autocomplete="off" />
 
-                        <select name="post-office" id="post-office">
+                        <select class="select" name="post-office" id="post-office">
                             <option value="" selected disabled hidden>Виберіть відділення</option>
                             
                         </select>
@@ -90,23 +90,23 @@ This snippet is used to prefill the checkout form with the customer's informatio
                     <fieldset>
                         <legend>Адреса доставки</legend>
                         <label for="area">Область</label>
-                        <input type="text" id="area" name="area" autocomplete="area" />
+                        <input class="input" type="text" id="area" name="area" autocomplete="area" />
 
                         <label for="city">Населений пункт (місто)</label>
-                        <input type="text" id="city" name="city" autocomplete="city" />
+                        <input class="input" type="text" id="city" name="city" autocomplete="city" />
 
                         <label for="street">Вулиця</label>
-                        <input type="text" id="street" name="street" autocomplete="street" />
+                        <input class="input" type="text" id="street" name="street" autocomplete="street" />
 
                         <label for="street">Дім</label>
-                        <input type="text" id="house" name="house" autocomplete="house" />
+                        <input class="input" type="text" id="house" name="house" autocomplete="house" />
 
                         <label for="street">Квартира</label>
-                        <input type="text" id="flat" name="flat" autocomplete="flat" />
+                        <input class="input" type="text" id="flat" name="flat" autocomplete="flat" />
 
-                        <input type="text" id="postal-code" name="postal-code" hidden readonly />
+                        <input class="input" type="text" id="postal-code" name="postal-code" hidden readonly />
 
-                        <input type="text" id="country" name="country" value="Ukraine" hidden readonly />
+                        <input class="input" type="text" id="country" name="country" value="Ukraine" hidden readonly />
                     </fieldset>
                 </div>
 
