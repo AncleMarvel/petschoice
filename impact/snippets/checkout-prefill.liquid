@@ -38,10 +38,10 @@ This snippet is used to prefill the checkout form with the customer's informatio
                 <fieldset>
                     <legend>Контактні дані</legend>
                     <label for="first-name">Ім'я</label>
-                    <input class="input" type="text" id="first-name" name="first-name" required />
+                    <input class="input" type="text" id="first-name" name="firstName" required />
 
                     <label for="last-name">Фамілія</label>
-                    <input class="input" type="text" id="last-name" name="last-name" required />
+                    <input class="input" type="text" id="last-name" name="lastName" required />
 
                     <label for="email">Електронна адреса</label>
                     <input class="input" type="email" id="email" name="email" required />
@@ -66,37 +66,48 @@ This snippet is used to prefill the checkout form with the customer's informatio
                 <!-- Post Office Shipping -->
                 <div id="post-office-shipping" class="shipping-details">
                     <fieldset>
-                        <legend>Відділення Нової Пошти</legend>
                         <label for="settlement-search">Пошук населеного пункту</label>
-                        <input class="input" type="text" id="settlement-search" name="settlement-search" autocomplete="off" />
+                        <input class="input" type="text" id="settlement-search" name="settlement-search" autocomplete="off" placeholder="Київ" />
                         
-                        <select class="select" name="settlement-selection" id="settlement-selection">
-                            <option value="" selected disabled hidden>Виберіть наслений пункт</option>
+                        <select class="select hidden" name="settlement-selection" id="settlement-selection">
+                            <option value="" selected disabled hidden>Оберіть наслений пункт</option>
                             
                         </select>
 
                         <label for="post-office-number">Пошук відділення</label>
-                        <input class="input" type="text" id="search-post-office" name="search-post-office" autocomplete="off" />
+                        <input class="input" type="text" id="search-post-office" name="search-post-office" autocomplete="off" placeholder="Номер відділення" />
 
-                        <select class="select" name="post-office" id="post-office">
-                            <option value="" selected disabled hidden>Виберіть відділення</option>
+                        <select class="select hidden" name="post-office" id="post-office">
+                            <option value="" selected disabled hidden>Оберіть відділення</option>
                             
                         </select>
                     </fieldset>
                 </div>
 
                 <!-- Address for Courier -->
-                <div id="courier-shipping" class="shipping-details">
+                <div id="courier-shipping" class="shipping-details hidden">
                     <fieldset>
-                        <legend>Адреса доставки</legend>
-                        <label for="area">Область</label>
-                        <input class="input" type="text" id="area" name="area" autocomplete="area" />
+                        <label for="city">Населений пункт</label>
+                        <input class="input" type="text" id="courier-settlement-search" name="courier-settlement-search" autocomplete="off" placeholder="Київ" />
+                        <select class="select hidden" name="courier-settlement-selection" id="courier-settlement-selection">
+                            <option value="" selected disabled hidden>Оберіть населений пункт</option>
+                            
+                        </select>
+                        
 
-                        <label for="city">Населений пункт (місто)</label>
-                        <input class="input" type="text" id="city" name="city" autocomplete="city" />
+                        {% comment %} 
+                            ------------  ПОИСК УЛИЦ ОТКЛЮЧЁН: AddressGeneral.getSettlements returns different city ref than Address.getCities which is required for Address.getStreet
+
+                            <label for="street">Вулиця</label>                        
+                            <input class="input" type="text" id="courier-street-search" name="courier-street-search" autocomplete="off" placeholder="Назва вулиці" />
+                            <select class="select hidden" name="courier-street-selection" id="courier-street-selection">
+                                <option value="" selected disabled hidden>Оберіть вулицю</option>
+                                
+                            </select> 
+                        {% endcomment %}
 
                         <label for="street">Вулиця</label>
-                        <input class="input" type="text" id="street" name="street" autocomplete="street" />
+                        <input class="input" type="text" id="street" name="street" autocomplete="street" placeholder="Уточнуйте чи це вул, просп, мкрн тощо" />
 
                         <label for="street">Дім</label>
                         <input class="input" type="text" id="house" name="house" autocomplete="house" />
@@ -104,8 +115,7 @@ This snippet is used to prefill the checkout form with the customer's informatio
                         <label for="street">Квартира</label>
                         <input class="input" type="text" id="flat" name="flat" autocomplete="flat" />
 
-                        <input class="input" type="text" id="postal-code" name="postal-code" hidden readonly />
-
+                        <input class="input" type="text" id="postal-code" name="postal-code" value="50055" hidden readonly />
                         <input class="input" type="text" id="country" name="country" value="Ukraine" hidden readonly />
                     </fieldset>
                 </div>

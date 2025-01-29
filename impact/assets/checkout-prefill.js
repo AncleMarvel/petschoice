@@ -1,3 +1,5 @@
+
+
 /**
  * @param {Object} params
  * 
@@ -15,19 +17,36 @@
  * @example 'https://petschoice.club/cart/41864347975754:1?checkout[email]=customer@example.com&checkout[shipping_address][city]=Lviv&checkout[shipping_address][first_name]=Nikita&checkout[shipping_address][last_name]=Shechenko&checkout[shipping_address][address1]=Ломоносова,55,кв6&checkout[shipping_address][zip]=03022&checkout[shipping_address][country]=Ukraine&checkout[shipping_address][phone]=+380995586745'
  */
 function createPrefilLink({ variantsWithQty, email, city, firstName, lastName, address, zip, country, phone }) {
-    let variants = '';
+    let variants = Object.entries(variantsWithQty)
+        .map(([variantId, qty]) => `${variantId}:${qty}`)
+        .join(',');
 
-    for (const variantId in variantsWithQty) {
-        if (variantsWithQty.hasOwnProperty(variantId)) {
-            const qty = variantsWithQty[variantId];
-            variants += `${variantId}:${qty},`;
-        }
-    }
+    const queryParams = {
+        "checkout[email]": email,
+        "checkout[shipping_address][city]": city,
+        "checkout[shipping_address][first_name]": firstName,
+        "checkout[shipping_address][last_name]": lastName,
+        "checkout[shipping_address][address1]": address,
+        "checkout[shipping_address][zip]": zip,
+        "checkout[shipping_address][country]": country,
+        "checkout[shipping_address][phone]": phone
+    };
 
-    variants = variants.slice(0, -1);
+    const queryString = Object.entries(queryParams)
+        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+        .join('&');
 
-    return `https://petschoice.club/cart/${variants}?checkout[email]=${email}&checkout[shipping_address][city]=${city}&checkout[shipping_address][first_name]=${firstName}&checkout[shipping_address][last_name]=${lastName}&checkout[shipping_address][address1]=${address}&checkout[shipping_address][zip]=${zip}&checkout[shipping_address][country]=${country}&checkout[shipping_address][phone]=${phone}`;
+    return `https://petschoice.club/cart/${variants}?${queryString}`;
 }
+
+const state = {
+    fetchedSettlements: [],
+    fetchedPostOffices: [],
+    fetchedStreets: [],
+    selectedSettlement: null,
+    selectedPostoffice: null,
+    selectedStreet: null,
+};
 
 const selectors = {
     prefillOverlay: "#prefill-overlay",
@@ -43,13 +62,17 @@ const selectors = {
 
     shippingType: '[name="shipping-type"]',
 
+    postOfficeAddressWindow: "#post-office-shipping",
     searchPostOffice: "#search-post-office",
     postOfficeSelection: "#post-office",
     settlementSearch: "#settlement-search",
     settlementSelection: "#settlement-selection",
 
-    area: "#area",
-    city: "#city",
+    courierAddressWindow: "#courier-shipping",
+    courierSettlementSearch: "#courier-settlement-search",
+    courierSettlementSelection: "#courier-settlement-selection",
+    courierStreetSearch: "#courier-street-search",
+    courierStreetSelection: "#courier-street-selection",
     street: "#street",
     house: "#house",
     flat: "#flat",
@@ -57,7 +80,7 @@ const selectors = {
     country: "#country",
 
     checkoutBtn: '[type="submit"][name="checkout"]',
-    buyNowBtn: '[data-shopify="payment-button"].shopify-payment-button',
+    buyNowBtn: '.payment-button__prefill-checkout-trigger',
 }
 
 function togglePrefillOverlay() {
@@ -74,17 +97,51 @@ function checkoutHandler(event) {
     togglePrefillOverlay();
 }
 
-function prefillSubmitHandler(event) {
+async function prefillSubmitHandler(event) {
     event.preventDefault();
     event.stopPropagation();
 
+    const cart = await fetch('/cart.js').then(response => response.json()).catch(console.error);
+    if (!cart || !cart.item_count) return;
+
     const form = document.querySelector(selectors.prefillForm);
     const formData = new FormData(form);
+    const dataExample = {
+        "firstName": "Нікіта",
+        "lastName": "Шевченко",
+        "email": "anclemarvel@gmail.com",
+        "phone": "+380993350918",
+        "shipping-type": "post-office",
+        "settlement-search": "Обрано: Львів, Львівська",
+        "settlement-selection": "e71abb60-4b33-11e4-ab6d-005056801329",
+        "search-post-office": "Обрано: Відділення №1: вул. Городоцька, 359",
+        "post-office": "1ec09d2e-e1c2-11e3-8c4a-0050568002cf",
+        "courier-settlement-search": "",
+        "street": "",
+        "house": "",
+        "flat": "",
+        "postal-code": "50055",
+        "country": "Ukraine"
+    }
     const data = {};
+
+
+    const { PostalCodeUA, Description, CityDescription } = state.fetchedPostOffices.find(postoffice => postoffice.Ref === state.selectedPostoffice);
+    data.zip = PostalCodeUA;
+    data.address = Description;
+    data.city = CityDescription;
 
     for (const [key, value] of formData.entries()) {
         data[key] = value;
     }
+    console.log('✌️data --->', data);
+
+    const variantsWithQty = {};
+    cart.items.forEach(item => {
+        variantsWithQty[item.variant_id] = item.quantity;
+    });
+
+    data.variantsWithQty = variantsWithQty;
 
     const prefillLink = createPrefilLink(data);
 
@@ -96,19 +153,6 @@ function prefillSubmitHandler(event) {
  */
 const prefillForm = document.querySelector(selectors.prefillForm);
 prefillForm.addEventListener('submit', prefillSubmitHandler);
-
-/**
- * Turn on prefill form when click on checkout buttons
- */
-const checkoutBtns = document.querySelectorAll(selectors.checkoutBtn);
-const buyNowBtns = document.querySelectorAll(selectors.buyNowBtn);
-checkoutBtns?.forEach(btn => {
-    btn.addEventListener('click', checkoutHandler);
-});
-
-buyNowBtns?.forEach(btn => {
-    btn.addEventListener('click', checkoutHandler);
-});
 
 /**
  * Handle click on close prefill form button
@@ -170,9 +214,41 @@ async function fetchSettlements(query) {
 
     const result = await response.json();
     if (result.success) {
+        state.fetchedSettlements = result.data;
         return result.data;
     } else {
         console.error('Ошибка при получении населенных пунктов:', result.errors);
+        return [];
+    }
+}
+
+/**
+ * Fetch streets from Nova Poshta API
+ * @param {string} query - Текст для поиска населенного пункта
+ * @param {string} cityRef - City Ref
+ * @returns {Array} - Список населенных пунктов
+ */
+async function fetchStreets(query, cityRef) {
+    const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            apiKey: apiKey,
+            modelName: 'Address',
+            calledMethod: 'getStreet',
+            methodProperties: {
+                CityRef: "e71abb60-4b33-11e4-ab6d-005056801329",//cityRef,
+                FindByString: query
+            },
+        }),
+    });
+
+    const result = await response.json();
+    if (result.success) {
+        state.fetchedStreets = result.data;
+        return result.data;
+    } else {
+        console.error('Ошибка при получении улиц:', result.errors);
         return [];
     }
 }
@@ -201,6 +277,7 @@ async function fetchPostOffices(settlementRef, query) {
 
     const result = await response.json();
     if (result.success) {
+        state.fetchedPostOffices = result.data;
         return result.data;
     } else {
         console.error('Ошибка при получении отделений:', result.errors);
@@ -216,7 +293,8 @@ async function fetchPostOffices(settlementRef, query) {
  * @param {string|Array<string>} textKey - Key(s) for (innerText) option
  */
 function renderDropdownOptions(dropdown, items, valueKey, textKeys) {
-    dropdown.innerHTML = '<option value="" selected disabled hidden>Выберите</option>';
+    const selectionTargetString = dropdown.id === 'settlement-selection' ? 'населений пункт' : 'відділення';
+    dropdown.innerHTML = `<option value="" selected disabled hidden>Оберіть ${selectionTargetString}</option>`;
     items.forEach((item) => {
         const option = document.createElement('option');
         option.value = item[valueKey];
@@ -227,6 +305,7 @@ function renderDropdownOptions(dropdown, items, valueKey, textKeys) {
         }
         dropdown.appendChild(option);
     });
+    dropdown.classList.remove('hidden');
 }
 
 /**
@@ -245,50 +324,181 @@ settlementSearch.addEventListener('input', async (event) => {
  */
 searchPostOffice.addEventListener('input', async (event) => {
     const query = event.target.value.trim();
-    const settlementRef = settlementSelection.value; // REF выбранного населенного пункта
+    const settlementRef = settlementSelection.value;
 
-    if (!settlementRef || query.length < 2) return; // Проверяем выбран ли населенный пункт
+    if (!settlementRef) {
+        settlementSearch.classList.add('error');
+        settlementSelection.classList.add('error');
+        settlementSearch.scrollIntoView({ behavior: 'smooth' });
+        return;
+    } else {
+        settlementSearch.classList.remove('error');
+        settlementSelection.classList.remove('error');
+    }
 
     const postOffices = await fetchPostOffices(settlementRef, query);
+
     renderDropdownOptions(postOfficeSelection, postOffices, 'Ref', 'Description');
 });
 
 /**
  * Handle settlement selection change
- * Сбрасывает список отделений при смене населенного пункта
  */
-settlementSelection.addEventListener('change', () => {
-    postOfficeSelection.innerHTML = '<option value="" selected disabled hidden>Виберіть відділення</option>';
+settlementSelection.addEventListener('change', e => {
+    // 1. Reset post office selection
+    postOfficeSelection.classList.add('hidden');
     searchPostOffice.value = '';
+
+    // 2. Save selected settlement
+    state.selectedSettlement = e.target.value;
+    settlementSearch.value = `Обрано: ${e.target.selectedOptions[0].innerText}`;
+
+    // 3. Reset errors
+    settlementSearch.classList.remove('error');
+    settlementSelection.classList.remove('error');
+});
+
+/**
+ * Handle postOffice selection change
+ */
+postOfficeSelection.addEventListener('change', e => {
+    state.selectedPostoffice = e.target.value;
+    searchPostOffice.value = `Обрано: ${e.target.selectedOptions[0].innerText}`;
 });
 
 /**
  * Show post office selection when input focused
  */
 searchPostOffice.addEventListener('focus', async () => {
-    postOfficeSelection.classList.remove('hidden');
-    postOfficeSelection.click();
+    if (!state.selectedSettlement) {
+        settlementSearch.classList.add('error');
+        settlementSelection.classList.add('error');
+        settlementSearch.scrollIntoView({ behavior: 'smooth' });
+        return;
+    } else {
+        settlementSearch.classList.remove('error');
+        settlementSelection.classList.remove('error');
+    }
 });
 
 /**
- * Show settlement selection when input focused
+ * DOM-селекторы для блока "Address for Courier"
  */
-settlementSearch.addEventListener('focus', async () => {
-    settlementSelection.classList.remove('hidden');
-    settlementSelection.click();
+const courierSettlementSearch = document.querySelector(selectors.courierSettlementSearch);
+const courierSettlementSelection = document.querySelector(selectors.courierSettlementSelection);
+const courierStreetSearch = document.querySelector(selectors.courierStreetSearch);
+const courierStreetSelection = document.querySelector(selectors.courierStreetSelection);
+const postalCodeInput = document.querySelector(selectors.postalCode);
+
+/**
+ * Обработка поиска населённого пункта для курьера
+ */
+courierSettlementSearch.addEventListener('input', async (event) => {
+    const query = event.target.value.trim();
+    if (query.length < 2) return; // Запрос короче 2 символов не обрабатываем
+
+    // Вызываем уже имеющийся метод fetchSettlements
+    const settlements = await fetchSettlements(query);
+
+    // Рендерим результаты в select #courier-settlement-selection
+    renderDropdownOptions(
+        courierSettlementSelection,
+        settlements,
+        'Ref',                       // value для <option>
+        ['Description', 'AreaDescription']  // текст (Description, AreaDescription)
+    );
 });
 
 /**
- * Скрываем подсказки, если клик вне элемента
+ * Обработка выбора населённого пункта (select) для курьера
  */
-document.addEventListener('click', (event) => {
-    if (!event.target.closest(selectors.postOfficeSelection) && !event.target.closest(selectors.searchPostOffice)) {
-        postOfficeSelection.classList.add('hidden');
-    }
+courierSettlementSelection.addEventListener('change', (e) => {
+    // Скрываем селект улиц, сбрасываем введённое в поиск улиц
+    courierStreetSelection.classList.add('hidden');
+    courierStreetSearch.value = '';
 
-    if (!event.target.closest(selectors.settlementSelection) && !event.target.closest(selectors.settlementSearch)) {
-        settlementSelection.classList.add('hidden');
+    const selectedRef = e.target.value; // Ref выбранного населённого пункта
+    state.selectedSettlement = selectedRef;
+
+    // Заполняем инпут курьерского населённого пункта фразой "Обрано: ...",
+    // чтобы пользователь видел, что населённый пункт выбран
+    courierSettlementSearch.value = `Обрано: ${e.target.selectedOptions[0].innerText}`;
+
+    // Ищем в state.fetchedSettlements объект, соответствующий выбранному Ref,
+    // и пытаемся установить почтовый индекс, если он есть
+    const foundSettlement = state.fetchedSettlements.find(
+        (item) => item.Ref === selectedRef
+    );
+    if (foundSettlement && foundSettlement.IndexCOATSU1) {
+        postalCodeInput.value = foundSettlement.IndexCOATSU1;
+    } else {
+        // Если в ответе нет почтового кода, оставляем поле пустым или прячем его
+        postalCodeInput.value = '';
     }
+});
+
+// ПОИСК УЛИЦ ОТКЛЮЧЁН: AddressGeneral.getSettlements returns different city ref than Address.getCities which is required for Address.getStreet
+// /**
+//  * Обработка поиска улицы в выбранном населённом пункте
+//  */
+// courierStreetSearch.addEventListener('input', async (event) => {
+//     const query = event.target.value.trim();
+//     if (query.length < 2) return;
+
+//     // Проверяем, выбран ли населённый пункт
+//     const cityRef = state.selectedSettlement;
+//     if (!cityRef) {
+//         courierSettlementSearch.classList.add('error');
+//         courierSettlementSelection.classList.add('error');
+//         courierSettlementSearch.scrollIntoView({ behavior: 'smooth' });
+//         return;
+//     } else {
+//         courierSettlementSearch.classList.remove('error');
+//         courierSettlementSelection.classList.remove('error');
+//     }
+
+//     // Получаем список улиц для выбранного населённого пункта
+//     const streets = await fetchStreets(query, cityRef);
+
+//     // Рендерим результаты в select #courier-street-selection
+//     renderDropdownOptions(
+//         courierStreetSelection,
+//         streets,
+//         'Ref',                 // value для <option>
+//         'StreetsTypeTranslated' // или 'Description' — зависит от ответа Nova Poshta
+//     );
+
+//     // Часто в ответе Nova Poshta для улиц бывает массив с полями StreetDescription,
+//     // StreetsType, StreetsTypeCode и т.д. Подставляйте ключи так, как вам нужно 
+//     // для вывода.
+// });
+
+// /**
+//  * Обработка выбора улицы (select) для курьера
+//  */
+// courierStreetSelection.addEventListener('change', (e) => {
+//     state.selectedStreetForCourier = e.target.value;
+//     courierStreetSearch.value = `Обрано: ${e.target.selectedOptions[0].innerText}`;
+// });
+
+/**
+ * Обработка выбора типа доставки
+ * 
+ * Показывает/скрывает блоки с адресами для почты и курьера
+ */
+const postOfficeAddressWindow = document.querySelector(selectors.postOfficeAddressWindow);
+const courierAddressWindow = document.querySelector(selectors.courierAddressWindow);
+const shippingType = document.querySelectorAll(selectors.shippingType);
+shippingType.forEach((radio) => {
+    radio.addEventListener('change', (event) => {
+        if (event.target.value === 'post-office') {
+            postOfficeAddressWindow.classList.remove('hidden');
+            courierAddressWindow.classList.add('hidden');
+        } else {
+            postOfficeAddressWindow.classList.add('hidden');
+            courierAddressWindow.classList.remove('hidden');
+        }
+    });
 });
 
 const templateExample = `https://petschoice.club/cart/41864347975754:1?checkout[email]=customer@example.com&checkout[shipping_address][city]=Lviv&checkout[shipping_address][first_name]=Nikita&checkout[shipping_address][last_name]=Shechenko&checkout[shipping_address][address1]=Ломоносова,55,кв6&checkout[shipping_address][zip]=03022&checkout[shipping_address][country]=Ukraine&checkout[shipping_address][phone]=+380995586745`;
@@ -311,3 +521,39 @@ const testParams = {
 }
 
 const result = createPrefilLink(testParams);
+
+const elementsWithAttachedListeners = [];
+
+function attachTriggerListeners(e = null) {
+    if (e && e.type !== 'variant:add') {
+        setTimeout(() => {
+            attachTriggerListeners();
+        }, 500);
+        return;
+    }
+    /**
+     * Turn on prefill form when click on checkout buttons
+     */
+    const checkoutBtns = document.querySelectorAll(selectors.checkoutBtn);
+    const buyNowBtns = document.querySelectorAll(selectors.buyNowBtn);
+    checkoutBtns?.forEach(btn => {
+        if (elementsWithAttachedListeners.find(el => el === btn)) return;
+        btn.addEventListener('click', checkoutHandler);
+        elementsWithAttachedListeners.push(btn);
+        console.log('✌️btn --->', btn);
+    });
+
+    buyNowBtns?.forEach(btn => {
+        if (elementsWithAttachedListeners.find(el => el === btn)) return;
+        btn.addEventListener('click', checkoutHandler);
+        elementsWithAttachedListeners.push(btn);
+        console.log('✌️btn --->', btn);
+    });
+}
+
+attachTriggerListeners();
+
+document.addEventListener('cart:refresh', attachTriggerListeners);
+document.addEventListener('cart:change', attachTriggerListeners);
+document.addEventListener('variant:add', attachTriggerListeners);
+document.addEventListener('facet:update', attachTriggerListeners);

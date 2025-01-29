@@ -79,6 +79,24 @@ label {
 input {
     margin-bottom: 8px;
 }
+input.error {
+    border-color: rgb(255, 0, 0);
+    border-width: 3px;
+}
+
+.payment-button-wrapper {
+    width: auto;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+.payment-button__prefill-checkout-trigger {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
 
 @media (max-width: 768px) {
     .prefill-container {
