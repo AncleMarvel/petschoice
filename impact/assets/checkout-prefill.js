@@ -540,14 +540,12 @@ function attachTriggerListeners(e = null) {
         if (elementsWithAttachedListeners.find(el => el === btn)) return;
         btn.addEventListener('click', checkoutHandler);
         elementsWithAttachedListeners.push(btn);
-        console.log('✌️btn --->', btn);
     });
 
     buyNowBtns?.forEach(btn => {
         if (elementsWithAttachedListeners.find(el => el === btn)) return;
         btn.addEventListener('click', checkoutHandler);
         elementsWithAttachedListeners.push(btn);
-        console.log('✌️btn --->', btn);
     });
 }
 
