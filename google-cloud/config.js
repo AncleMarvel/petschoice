@@ -1,40 +1,40 @@
 require('dotenv').config();
 
 const config = {
-  nodeEnv: process.env.NODE_ENV || 'production',
-  isLocal: process.env.IS_LOCAL || 'true',
+  nodeEnv: 'development',
+  isLocal: true,
   shopify: {
-    shopName: process.env.SHOPIFY_SHOP_NAME,
-    apiKey: process.env.SHOPIFY_API_KEY,
-    password: process.env.SHOPIFY_API_PASSWORD,
-    apiVersion: process.env.SHOPIFY_API_VERSION,
-    locationId: process.env.SHOPIFY_LOCATION_ID,
+    shopName: '419319-9b',
+    apiKey: '972180233377888806965f6177a56941',
+    password: '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',
+    apiVersion: '2025-01',
+    locationId: '79243968733',
   },
   novapost: {
-    apiKey: process.env.NOVAPOST_API_KEY,
+    apiKey: 'a4f8704e04f9ea609b1bd830e1875d7f',
     auth: {
       development: {
-        username: process.env.NOVAPOST_AUTH_USERNAME_DEV || 'web',
-        password: process.env.NOVAPOST_AUTH_PASSWORD_DEV || 'web'
+        username: 'web',
+        password: 'web'
       },
       production: {
-        username: process.env.NOVAPOST_AUTH_USERNAME_PROD,
-        password: process.env.NOVAPOST_AUTH_PROD_PASSWORD_PROD
+        username: 'api_arkhipenko',
+        password: '(MZG22tue+8'
       }
     },
     xml: {
       development: {
-        organization: process.env.NOVAPOST_ORGANIZATION_DEV || 'NPL_A1',
-        warehouse: process.env.NOVAPOST_WAREHOUSE_DEV || ''
+        organization: 'NPL_A1',
+        warehouse: ''
       },
       production: {
-        organization: process.env.NOVAPOST_ORGANIZATION_PROD,
-        warehouse: process.env.NOVAPOST_WAREHOUSE_PROD
+        organization: 'АРХИПЕНКО НАТАЛІЯ ОЛЕКСАНДРІВНА ФОП',
+        warehouse: 'KyivSkhid'
       }
     },
     urls: {
-      development: process.env.NOVAPOST_URL_DEV || 'https://api-nps.np.work/wms_test/ws/depositorExchane.1cws',
-      production: process.env.NOVAPOST_URL_PROD || 'https://api-nps.np.work/wms/ws/depositorExchane.1cws'
+      development: 'https://api-nps.np.work/wms_test/ws/depositorExchane.1cws',
+      production: 'https://api-nps.np.work/wms/ws/depositorExchane.1cws'
     }
   }
 }

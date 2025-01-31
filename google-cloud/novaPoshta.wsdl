@@ -1,0 +1,2425 @@
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:soap12bind="http://schemas.xmlsoap.org/wsdl/soap12/"
+    xmlns:soapbind="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:tns="http://npl-dev.omnic.solutions/wms"
+    xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+    xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsd1="http://npl-dev.omnic.solutions/wms"
+    xmlns:xsd2="http://v8.1c.ru/8.1/data/core" name="OM_depositorExchane"
+    targetNamespace="http://npl-dev.omnic.solutions/wms">
+    <div id="in-page-channel-node-id" data-channel-name="in_page_channel_5Lj_4E" />
+    <types>
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            xmlns:xs1="http://npl-dev.omnic.solutions/wms" xmlns:xs2="http://v8.1c.ru/8.1/data/core"
+            targetNamespace="http://npl-dev.omnic.solutions/wms" attributeFormDefault="unqualified"
+            elementFormDefault="qualified">
+            <xs:import namespace="http://v8.1c.ru/8.1/data/core" />
+            <xs:complexType name="Errors">
+                <xs:sequence>
+                    <xs:element name="Error" type="xs:string" nillable="true" minOccurs="0"
+                        maxOccurs="unbounded" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Info">
+                <xs:sequence>
+                    <xs:element name="Descr" type="xs:string" nillable="true" minOccurs="0"
+                        maxOccurs="unbounded" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Goods">
+                <xs:sequence>
+                    <xs:element name="MessageGoods" minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="Sku" type="xs:string" />
+                                <xs:element name="GoodsUnitName" type="xs:string" />
+                                <xs:element name="GoodsUnitFullName" type="xs:string" />
+                                <xs:element name="BaseMeasureUnit" nillable="true" minOccurs="0">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element name="BarCode" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="MeasureUnitName" type="xs:string" />
+                                            <xs:element name="AccordindToClassifier" type="xs:int"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="Weight" type="xs:float"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="Length" type="xs:float"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="Height" type="xs:float"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="Width" type="xs:float" nillable="true"
+                                                minOccurs="0" />
+                                            <xs:element name="Sku" type="xs:string" nillable="true"
+                                                minOccurs="0" />
+                                            <xs:element name="Includes" type="xs:float"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="BarcodeType" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="GrossHeight" type="xs:float"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="GrossLength" type="xs:float"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="GrossWidth" type="xs:float"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="GrossWeight" type="xs:float"
+                                                nillable="true" minOccurs="0" />
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                                <xs:element name="ExpirationDateSign" type="xs:int" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Guarantee" type="xs:int" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="GuaranteeTerm" type="xs:int" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="InventExpireDays" type="xs:int" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="ItemType" type="xs:int" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Price" type="xs:float" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Sticker" type="xs:int" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="CustomsCode" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="ImageURLs" nillable="true" minOccurs="0">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element name="item" type="xs:string" nillable="true"
+                                                minOccurs="0" maxOccurs="unbounded" />
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                                <xs:element name="AdvancedVendorCode" type="xs:int" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="InventSize" type="xs:int" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="BILItemGroupId" type="xs:int" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="BatchVendorReceipt" type="xs:int" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="BatchControlIssue" type="xs:int" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="QtyInPack" type="xs:int" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="StandardPalletQuantity" type="xs:int"
+                                    nillable="true" minOccurs="0" />
+                                <xs:element name="QtyPerLayer" type="xs:int" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="IsOversizedItem" type="xs:int" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="ExternalSerials" type="xs:int" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Fragile" type="xs:int" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Expesive" type="xs:int" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="DoNotOpen" type="xs:int" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Material" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="MeasureUnits">
+                <xs:sequence>
+                    <xs:element name="MessageMeasureUnit" minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="MeasureUnitName" type="xs:string" />
+                                <xs:element name="FullMeasureUnitName" type="xs:string" />
+                                <xs:element name="AccordindToClassifier" type="xs:int" />
+                                <xs:element name="BarCode" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Height" type="xs:float" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Length" type="xs:float" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Width" type="xs:float" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Weight" type="xs:float" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="GrossHeight" type="xs:float" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="GrossLength" type="xs:float" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="GrossWidth" type="xs:float" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="GrossWeight" type="xs:float" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Includes" type="xs:int" />
+                                <xs:element name="Sku" type="xs:string" />
+                                <xs:element name="BarcodeType" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="ContainerType" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="StandardPalletQuantity" type="xs:int"
+                                    nillable="true" minOccurs="0" />
+                                <xs:element name="QtyPerLayer" type="xs:int" nillable="true"
+                                    minOccurs="0" />
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Orders">
+                <xs:sequence>
+                    <xs:element name="MessageOrders" minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="HeadOrder">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element name="ExternalNumber" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="GUID" type="xs:string" nillable="true"
+                                                minOccurs="0" />
+                                            <xs:element name="ExternalDate" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="DestWarehouse" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="Adress" nillable="true" minOccurs="0">
+                                                <xs:complexType>
+                                                    <xs:sequence>
+                                                        <xs:element name="Region" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="City" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="Street" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="House" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="Flat" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="Phone" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="NPWarehouse" type="xs:int"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="District" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="NPWarehouseSec"
+                                                            type="xs:int" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="ZipCode" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="StructureType"
+                                                            type="xs:int" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="SettlementType"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="CountryCode"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="PostCode" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="Email" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="DivisionID" type="xs:int"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="SettlementID"
+                                                            type="xs:int" nillable="true"
+                                                            minOccurs="0" />
+                                                    </xs:sequence>
+                                                </xs:complexType>
+                                            </xs:element>
+                                            <xs:element name="PayType" type="xs:int" nillable="true"
+                                                minOccurs="0" />
+                                            <xs:element name="payer" type="xs:int" nillable="true"
+                                                minOccurs="0" />
+                                            <xs:element name="PayerCompany" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="PayerCity" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="Contactor" nillable="true"
+                                                minOccurs="0">
+                                                <xs:complexType>
+                                                    <xs:sequence>
+                                                        <xs:element name="rcptName" type="xs:string" />
+                                                        <xs:element name="rcptContact"
+                                                            type="xs:string" />
+                                                        <xs:element name="RecipientType"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="RecipientEDRPOU"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                    </xs:sequence>
+                                                </xs:complexType>
+                                            </xs:element>
+                                            <xs:element name="Description" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="AdditionalInfo" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="Documents" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="Cost" type="xs:float" nillable="true"
+                                                minOccurs="0" />
+                                            <xs:element name="RedeliveryType" type="xs:int"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="DeliveryInOut" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="DeliveryAmount" type="xs:float"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="DeliveryType" type="xs:int"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="AdditionalParams" nillable="true"
+                                                minOccurs="0">
+                                                <xs:complexType>
+                                                    <xs:sequence>
+                                                        <xs:element name="RedeliveryPaymentPayer"
+                                                            type="xs:int" minOccurs="0" />
+                                                        <xs:element name="AdditionalRedeliveryType"
+                                                            type="xs:int" minOccurs="0" />
+                                                        <xs:element name="AdditionalDeliveryInOut"
+                                                            type="xs:string" minOccurs="0" />
+                                                        <xs:element name="TypeTrays" type="xs:int"
+                                                            minOccurs="0" />
+                                                        <xs:element name="TrayPlaces"
+                                                            type="xs:string" minOccurs="0" />
+                                                        <xs:element name="FlourCount"
+                                                            type="xs:string" minOccurs="0" />
+                                                        <xs:element name="Elevator" type="xs:int"
+                                                            minOccurs="0" />
+                                                        <xs:element name="HandToHand" type="xs:int"
+                                                            minOccurs="0" />
+                                                        <xs:element name="DeliveryInSaturday"
+                                                            type="xs:int" minOccurs="0" />
+                                                        <xs:element name="PreferredDeliveryDate"
+                                                            type="xs:string" minOccurs="0" />
+                                                        <xs:element name="DeliveryInCertainTime"
+                                                            type="xs:string" minOccurs="0" />
+                                                        <xs:element name="SameDayDelivery"
+                                                            type="xs:int" minOccurs="0" />
+                                                        <xs:element name="IsTakeAttorney"
+                                                            type="xs:int" minOccurs="0" />
+                                                        <xs:element name="UserActions"
+                                                            type="xs:string" minOccurs="0" />
+                                                        <xs:element name="PartialReturn"
+                                                            type="xs:int" minOccurs="0" />
+                                                        <xs:element name="ForwardingCount"
+                                                            type="xs:int" minOccurs="0" />
+                                                        <xs:element name="AccompanyingDocuments"
+                                                            type="xs:string" minOccurs="0" />
+                                                    </xs:sequence>
+                                                </xs:complexType>
+                                            </xs:element>
+                                            <xs:element name="OrderType" type="xs:int"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="AdditionalInfo2" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="AdditionalInfo3" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="AdditionalInfo4" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="AdditionalInfo5" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="AdditionalInfo6" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="DeliveryPlanDate" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="TTNOrganization" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="PreferredDeliveryDate"
+                                                type="xs:string" nillable="true" minOccurs="0" />
+                                            <xs:element name="PayerEDRPOU" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="WaybilRef" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="AccompanyingDocuments"
+                                                type="xs:string" nillable="true" minOccurs="0" />
+                                            <xs:element name="Consolidation" type="xs:int"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="DocumentList" nillable="true"
+                                                minOccurs="0">
+                                                <xs:complexType>
+                                                    <xs:sequence>
+                                                        <xs:element name="Document" type="xs:string"
+                                                            nillable="true" minOccurs="0"
+                                                            maxOccurs="unbounded" />
+                                                    </xs:sequence>
+                                                </xs:complexType>
+                                            </xs:element>
+                                            <xs:element name="ConsolidationDetails" nillable="true"
+                                                minOccurs="0">
+                                                <xs:complexType>
+                                                    <xs:sequence>
+                                                        <xs:element name="ConsolidationNumber"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="ConsolidationSeat"
+                                                            type="xs:int" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="ConsolidationAmount"
+                                                            type="xs:float" nillable="true"
+                                                            minOccurs="0" />
+                                                    </xs:sequence>
+                                                </xs:complexType>
+                                            </xs:element>
+                                            <xs:element name="CargoType" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="ExpressPallet" type="xs:int"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="ForwardingCount" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="PrintVersion" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="Discount" type="xs:float"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="AdditionalInfo7" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="AdditionalInfo8" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="AdditionalInfo9" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="AdditionalInfo10" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="FinancialInstitution" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="AfterpaymentOnGoodsCostInfo"
+                                                nillable="true" minOccurs="0">
+                                                <xs:complexType>
+                                                    <xs:sequence>
+                                                        <xs:element
+                                                            name="AfterpaymentOnGoodsCostInfoItem"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="Summ" type="xs:float"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="AccountNumber"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="Invoice" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                    </xs:sequence>
+                                                </xs:complexType>
+                                            </xs:element>
+                                            <xs:element name="AwisAPIKey" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="WaybilNumber" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="CrossDocking" type="xs:boolean"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="BackwardDeliveryPhone"
+                                                type="xs:string" nillable="true" minOccurs="0" />
+                                            <xs:element name="TimeInterval" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="ExistAccompDocuments"
+                                                type="xs:boolean" nillable="true" minOccurs="0" />
+                                            <xs:element name="Priority" type="xs:int"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="ServiceID" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="IOSS" type="xs:string" nillable="true"
+                                                minOccurs="0" />
+                                            <xs:element name="CompletingAdvertisingMaterials"
+                                                type="xs:boolean" nillable="true" minOccurs="0" />
+                                            <xs:element name="AdditionalPackaging" type="xs:boolean"
+                                                nillable="true" minOccurs="0" />
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                                <xs:element name="Items" nillable="true" minOccurs="0">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element name="Item" nillable="true" minOccurs="0"
+                                                maxOccurs="unbounded">
+                                                <xs:complexType>
+                                                    <xs:sequence>
+                                                        <xs:element name="Sku" type="xs:string" />
+                                                        <xs:element name="GoodName" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="Qty" type="xs:string" />
+                                                        <xs:element name="Price" type="xs:string" />
+                                                        <xs:element name="Sum" type="xs:string" />
+                                                        <xs:element name="MeasureUnit"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="BarCode" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="Series" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="ExpirationDate"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="Marketing"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="Owner" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="Quality" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="LineAmount"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="AccountNum"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="SpecialCondition"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="LineAmountTax"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="BatchId" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="PalletId" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="BarCodes" nillable="true"
+                                                            minOccurs="0">
+                                                            <xs:complexType>
+                                                                <xs:sequence>
+                                                                    <xs:element name="item"
+                                                                        type="xs:string"
+                                                                        nillable="true"
+                                                                        minOccurs="0" />
+                                                                </xs:sequence>
+                                                            </xs:complexType>
+                                                        </xs:element>
+                                                        <xs:element name="Serials" nillable="true"
+                                                            minOccurs="0">
+                                                            <xs:complexType>
+                                                                <xs:sequence>
+                                                                    <xs:element name="Serial"
+                                                                        nillable="true"
+                                                                        minOccurs="0"
+                                                                        maxOccurs="unbounded">
+                                                                        <xs:complexType>
+                                                                            <xs:sequence>
+                                                                                <xs:element
+                                                                                    name="code"
+                                                                                    type="xs:string"
+                                                                                    nillable="true"
+                                                                                    minOccurs="0" />
+                                                                                <xs:element
+                                                                                    name="warranty"
+                                                                                    type="xs:string"
+                                                                                    nillable="true"
+                                                                                    minOccurs="0" />
+                                                                            </xs:sequence>
+                                                                        </xs:complexType>
+                                                                    </xs:element>
+                                                                </xs:sequence>
+                                                            </xs:complexType>
+                                                        </xs:element>
+                                                    </xs:sequence>
+                                                </xs:complexType>
+                                            </xs:element>
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                                <xs:element name="Attaches" nillable="true" minOccurs="0">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element name="Attach" nillable="true" minOccurs="0"
+                                                maxOccurs="unbounded">
+                                                <xs:complexType>
+                                                    <xs:sequence>
+                                                        <xs:element name="Index" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="Base64" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="FileExtension"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="PrinterProfile"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                    </xs:sequence>
+                                                </xs:complexType>
+                                            </xs:element>
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                                <xs:element name="Invoice" nillable="true" minOccurs="0">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element name="InvoiceNumber" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="InvoiceDate" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="CurrencyCode" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="Incoterm" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="ExportReason" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="Customs" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="Items" nillable="true" minOccurs="0">
+                                                <xs:complexType>
+                                                    <xs:sequence>
+                                                        <xs:element name="Item" nillable="true"
+                                                            minOccurs="0" maxOccurs="unbounded">
+                                                            <xs:complexType>
+                                                                <xs:sequence>
+                                                                    <xs:element name="ID"
+                                                                        type="xs:string"
+                                                                        nillable="true"
+                                                                        minOccurs="0" />
+                                                                    <xs:element name="Name"
+                                                                        type="xs:string"
+                                                                        nillable="true"
+                                                                        minOccurs="0" />
+                                                                    <xs:element name="NameEng"
+                                                                        type="xs:string"
+                                                                        nillable="true"
+                                                                        minOccurs="0" />
+                                                                    <xs:element
+                                                                        name="MeasurementCode"
+                                                                        type="xs:string"
+                                                                        nillable="true"
+                                                                        minOccurs="0" />
+                                                                    <xs:element name="Amount"
+                                                                        type="xs:int"
+                                                                        nillable="true"
+                                                                        minOccurs="0" />
+                                                                    <xs:element name="Cost"
+                                                                        type="xs:float"
+                                                                        nillable="true"
+                                                                        minOccurs="0" />
+                                                                    <xs:element name="CostEur"
+                                                                        type="xs:float"
+                                                                        nillable="true"
+                                                                        minOccurs="0" />
+                                                                    <xs:element name="CostUsd"
+                                                                        type="xs:float"
+                                                                        nillable="true"
+                                                                        minOccurs="0" />
+                                                                    <xs:element name="HsCode"
+                                                                        type="xs:string"
+                                                                        nillable="true"
+                                                                        minOccurs="0" />
+                                                                    <xs:element name="Material"
+                                                                        type="xs:string"
+                                                                        nillable="true"
+                                                                        minOccurs="0" />
+                                                                    <xs:element name="Article"
+                                                                        type="xs:string"
+                                                                        nillable="true"
+                                                                        minOccurs="0" />
+                                                                </xs:sequence>
+                                                            </xs:complexType>
+                                                        </xs:element>
+                                                    </xs:sequence>
+                                                </xs:complexType>
+                                            </xs:element>
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="OrdersUkrposhta">
+                <xs:sequence>
+                    <xs:element name="MessageOrders" minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="HeadOrder">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element name="ExternalNumber" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="ExternalDate" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="GUID" type="xs:string" nillable="true"
+                                                minOccurs="0" />
+                                            <xs:element name="DestWarehouse" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="DeliveryType" type="xs:int"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="Adress" nillable="true" minOccurs="0">
+                                                <xs:complexType>
+                                                    <xs:sequence>
+                                                        <xs:element name="postcode" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="country" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="region" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="district" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="city" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="street" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="houseNumber"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="apartmentNumber"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="specialDestination"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="mailbox" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="posteRestante"
+                                                            type="xs:boolean" nillable="true"
+                                                            minOccurs="0" />
+                                                    </xs:sequence>
+                                                </xs:complexType>
+                                            </xs:element>
+                                            <xs:element name="Recipient" nillable="true"
+                                                minOccurs="0">
+                                                <xs:complexType>
+                                                    <xs:sequence>
+                                                        <xs:element name="name" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="firstName"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="lastName" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="middleName"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="latinName"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="phoneNumber"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="email" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="contactPersonName"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="type" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="edrpou" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="tin" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="bankAccount"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="resident"
+                                                            type="xs:boolean" nillable="true"
+                                                            minOccurs="0" />
+                                                    </xs:sequence>
+                                                </xs:complexType>
+                                            </xs:element>
+                                            <xs:element name="deliveryTypeUP" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="type" type="xs:string" nillable="true"
+                                                minOccurs="0" />
+                                            <xs:element name="onFailReceiveType" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="postPay" type="xs:float"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="description" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="paidByRecipient" type="xs:boolean"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="fragile" type="xs:boolean"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="sms" type="xs:boolean" nillable="true"
+                                                minOccurs="0" />
+                                            <xs:element name="postPayPaidByRecipient"
+                                                type="xs:boolean" nillable="true" minOccurs="0" />
+                                            <xs:element name="documentBack" type="xs:boolean"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="checkOnDelivery" type="xs:boolean"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="transferPostPayToBankAccount"
+                                                type="xs:boolean" nillable="true" minOccurs="0" />
+                                            <xs:element name="packedBySender" type="xs:boolean"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="withDeliveryNotification"
+                                                type="xs:boolean" nillable="true" minOccurs="0" />
+                                            <xs:element name="returnAfterStorageDays" type="xs:int"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="barcode" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="shipmentUuid" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="bearer" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="AdditionalInfo" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                                <xs:element name="Items" nillable="true" minOccurs="0">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element name="Item" nillable="true" minOccurs="0"
+                                                maxOccurs="unbounded">
+                                                <xs:complexType>
+                                                    <xs:sequence>
+                                                        <xs:element name="Sku" type="xs:string" />
+                                                        <xs:element name="GoodName" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="Qty" type="xs:string" />
+                                                        <xs:element name="Price" type="xs:string" />
+                                                        <xs:element name="Sum" type="xs:string" />
+                                                        <xs:element name="MeasureUnit"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="ExpirationDate"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="Quality" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="BatchId" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="Serials" nillable="true"
+                                                            minOccurs="0">
+                                                            <xs:complexType>
+                                                                <xs:sequence>
+                                                                    <xs:element name="Serial"
+                                                                        nillable="true"
+                                                                        minOccurs="0"
+                                                                        maxOccurs="unbounded">
+                                                                        <xs:complexType>
+                                                                            <xs:sequence>
+                                                                                <xs:element
+                                                                                    name="code"
+                                                                                    type="xs:string"
+                                                                                    nillable="true"
+                                                                                    minOccurs="0" />
+                                                                                <xs:element
+                                                                                    name="warranty"
+                                                                                    type="xs:string"
+                                                                                    nillable="true"
+                                                                                    minOccurs="0" />
+                                                                            </xs:sequence>
+                                                                        </xs:complexType>
+                                                                    </xs:element>
+                                                                </xs:sequence>
+                                                            </xs:complexType>
+                                                        </xs:element>
+                                                    </xs:sequence>
+                                                </xs:complexType>
+                                            </xs:element>
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                                <xs:element name="Attaches" nillable="true" minOccurs="0">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element name="Attach" nillable="true" minOccurs="0"
+                                                maxOccurs="unbounded">
+                                                <xs:complexType>
+                                                    <xs:sequence>
+                                                        <xs:element name="Index" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="Base64" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="FileExtension"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="PrinterProfile"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                    </xs:sequence>
+                                                </xs:complexType>
+                                            </xs:element>
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="GoodsER">
+                <xs:sequence>
+                    <xs:element name="MessageGoodsER" nillable="true" minOccurs="0"
+                        maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="Sku" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Errors" type="tns:Errors" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Info" type="tns:Info" nillable="true"
+                                    minOccurs="0" />
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="MUER">
+                <xs:sequence>
+                    <xs:element name="MessageMUER" nillable="true" minOccurs="0"
+                        maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="MeasureUnitName" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Sku" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Errors" type="tns:Errors" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Info" type="tns:Info" nillable="true"
+                                    minOccurs="0" />
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="OrdersER">
+                <xs:sequence>
+                    <xs:element name="MessageOrdersER" nillable="true" minOccurs="0"
+                        maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="ExternalNumber" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Errors" type="tns:Errors" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Info" type="tns:Info" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="GUID" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="WaybilNumber" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="PlanInbound">
+                <xs:sequence>
+                    <xs:element name="MessagePlanInbound" minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="HeadPlanInbound">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element name="ExternalNumber" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="GUID" type="xs:string" nillable="true"
+                                                minOccurs="0" />
+                                            <xs:element name="ExternalDate" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="DestWarehouse" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="РoolId" type="xs:int" nillable="true"
+                                                minOccurs="0" />
+                                            <xs:element name="HeadOrder" nillable="true"
+                                                minOccurs="0">
+                                                <xs:complexType>
+                                                    <xs:sequence>
+                                                        <xs:element name="ExternalNumber"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="GUID" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                    </xs:sequence>
+                                                </xs:complexType>
+                                            </xs:element>
+                                            <xs:element name="AdditionalInfo" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="AdditionalInfo2" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="DeliveryType" type="xs:int"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="ExpectedDateOfReceipt"
+                                                type="xs:string" nillable="true" minOccurs="0" />
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                                <xs:element name="Items">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element name="Item" nillable="true" minOccurs="0"
+                                                maxOccurs="unbounded">
+                                                <xs:complexType>
+                                                    <xs:sequence>
+                                                        <xs:element name="Sku" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="GoodName" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="Qty" type="xs:string"
+                                                            minOccurs="0" />
+                                                        <xs:element name="Price" type="xs:string"
+                                                            minOccurs="0" />
+                                                        <xs:element name="Sum" type="xs:string"
+                                                            minOccurs="0" />
+                                                        <xs:element name="MeasureUnit"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="BarCode" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="Series" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="ExpirationDate"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="Marketing"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="Owner" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="Quality" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="LineAmount"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="AccountNum"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="SpecialCondition"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="LineAmountTax"
+                                                            type="xs:string" nillable="true"
+                                                            minOccurs="0" />
+                                                        <xs:element name="BatchId" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="PalletId" type="xs:string"
+                                                            nillable="true" minOccurs="0" />
+                                                        <xs:element name="BarCodes" nillable="true"
+                                                            minOccurs="0">
+                                                            <xs:complexType>
+                                                                <xs:sequence>
+                                                                    <xs:element name="item"
+                                                                        type="xs:string"
+                                                                        nillable="true"
+                                                                        minOccurs="0"
+                                                                        maxOccurs="unbounded" />
+                                                                </xs:sequence>
+                                                            </xs:complexType>
+                                                        </xs:element>
+                                                        <xs:element name="Order" nillable="true"
+                                                            minOccurs="0">
+                                                            <xs:complexType>
+                                                                <xs:sequence>
+                                                                    <xs:element
+                                                                        name="ExternalNumber"
+                                                                        type="xs:string"
+                                                                        nillable="true"
+                                                                        minOccurs="0" />
+                                                                    <xs:element name="GUID"
+                                                                        type="xs:string"
+                                                                        nillable="true"
+                                                                        minOccurs="0" />
+                                                                </xs:sequence>
+                                                            </xs:complexType>
+                                                        </xs:element>
+                                                    </xs:sequence>
+                                                </xs:complexType>
+                                            </xs:element>
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="PlanInboundER">
+                <xs:sequence>
+                    <xs:element name="MessagePlanInboundER" nillable="true" minOccurs="0"
+                        maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="ExternalNumber" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="GUID" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Errors" type="tns:Errors" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Info" type="tns:Info" nillable="true"
+                                    minOccurs="0" />
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="UndoER">
+                <xs:sequence>
+                    <xs:element name="MessageUndoER" nillable="true" minOccurs="0"
+                        maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="ExternalNumber" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="GUID" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Errors" type="tns:Errors" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Info" type="tns:Info" nillable="true"
+                                    minOccurs="0" />
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="RemainsER">
+                <xs:sequence>
+                    <xs:element name="MessageRER" nillable="true" minOccurs="0"
+                        maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="Sku" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="MeasureUnit" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Qty" type="xs:float" nillable="true" minOccurs="0" />
+                                <xs:element name="Quality" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Warehouse" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Series" type="xs:string" nillable="true"
+                                    minOccurs="0" maxOccurs="unbounded" />
+                                <xs:element name="ExpirationDate" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="ProductionDate" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Errors" type="tns:Errors" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Info" type="tns:Info" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="BatchId" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="SKU">
+                <xs:sequence>
+                    <xs:element name="Item" type="xs:string" nillable="true" minOccurs="0"
+                        maxOccurs="unbounded" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ArrayOrders">
+                <xs:sequence>
+                    <xs:element name="MessageArrayOrders" minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="ExternalNumber" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="GUID" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="OrdersStatusER">
+                <xs:sequence>
+                    <xs:element name="MessageOrdersStatusER" nillable="true" minOccurs="0"
+                        maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="ExternalNumber" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="GUID" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Status" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="StatusTime" type="xs:dateTime" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="WaybilNumber" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="CostOfDelivery" type="xs:float" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="ItemsFactOutbound" nillable="true" minOccurs="0"
+                                    maxOccurs="unbounded">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element name="SKU" type="xs:string" nillable="true"
+                                                minOccurs="0" />
+                                            <xs:element name="MeasureUnit" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="Qty" type="xs:float" nillable="true"
+                                                minOccurs="0" />
+                                            <xs:element name="Quality" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="Series" type="xs:string"
+                                                nillable="true" minOccurs="0" maxOccurs="unbounded" />
+                                            <xs:element name="Consigment" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="ExpirationDate" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="ProductionDate" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="SerialList" nillable="true"
+                                                minOccurs="0">
+                                                <xs:complexType>
+                                                    <xs:sequence>
+                                                        <xs:element name="item" type="xs:string"
+                                                            nillable="true" minOccurs="0"
+                                                            maxOccurs="unbounded" />
+                                                    </xs:sequence>
+                                                </xs:complexType>
+                                            </xs:element>
+                                            <xs:element name="SerialListRevoked" nillable="true"
+                                                minOccurs="0">
+                                                <xs:complexType>
+                                                    <xs:sequence>
+                                                        <xs:element name="item" type="xs:string"
+                                                            nillable="true" minOccurs="0"
+                                                            maxOccurs="unbounded" />
+                                                    </xs:sequence>
+                                                </xs:complexType>
+                                            </xs:element>
+                                            <xs:element name="Price" type="xs:float" nillable="true"
+                                                minOccurs="0" />
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                                <xs:element name="Errors" type="tns:Errors" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Info" type="tns:Info" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="GateScanDateTime" type="xs:dateTime"
+                                    nillable="true" minOccurs="0" />
+                                <xs:element name="ENStatus" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="ENStatusTime" type="xs:dateTime" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="AwisOnBasisList" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="NPWarehouse" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="CostOnSite" type="xs:float" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="FactWeight" type="xs:float" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="FactVolume" type="xs:float" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="FactCargoCount" type="xs:float" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="CargoType" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="ShipmentDirection" type="xs:string"
+                                    nillable="true" minOccurs="0" />
+                                <xs:element name="InternationalWaybilNumber" type="xs:string"
+                                    nillable="true" minOccurs="0" />
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ArrayPlanInbound">
+                <xs:sequence>
+                    <xs:element name="MessageArrayPlanInbound" minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="ExternalNumber" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="GUID" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="FactInboundER">
+                <xs:sequence>
+                    <xs:element name="MessageFactInboundER" nillable="true" minOccurs="0"
+                        maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="ExternalNumber" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="GUID" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="FactInboundNumber" type="xs:string"
+                                    nillable="true" minOccurs="0" />
+                                <xs:element name="Processed" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="NotEqualToPlan" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Status" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="WaybilNumber" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="ENStatus" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="ENStatusTime" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="ItemsFactinbound" nillable="true" minOccurs="0"
+                                    maxOccurs="unbounded">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element name="Sku" type="xs:string" nillable="true"
+                                                minOccurs="0" />
+                                            <xs:element name="MeasureUnit" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="Qty" type="xs:float" nillable="true"
+                                                minOccurs="0" />
+                                            <xs:element name="Quality" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="DestWarehouse" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="Series" type="xs:string"
+                                                nillable="true" minOccurs="0" maxOccurs="unbounded" />
+                                            <xs:element name="ExpirationDate" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="ProductionDate" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="Consigment" type="xs:string"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="QtyPlan" type="xs:float"
+                                                nillable="true" minOccurs="0" />
+                                            <xs:element name="Images" nillable="true" minOccurs="0"
+                                                maxOccurs="unbounded">
+                                                <xs:complexType>
+                                                    <xs:sequence>
+                                                        <xs:element name="Image" nillable="true"
+                                                            minOccurs="0" maxOccurs="unbounded">
+                                                            <xs:complexType>
+                                                                <xs:sequence>
+                                                                    <xs:element name="Index"
+                                                                        type="xs:int"
+                                                                        nillable="true"
+                                                                        minOccurs="0" />
+                                                                    <xs:element name="Base64"
+                                                                        type="xs:base64Binary"
+                                                                        nillable="true"
+                                                                        minOccurs="0" />
+                                                                </xs:sequence>
+                                                            </xs:complexType>
+                                                        </xs:element>
+                                                    </xs:sequence>
+                                                </xs:complexType>
+                                            </xs:element>
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                                <xs:element name="Info" type="tns:Info" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Errors" type="tns:Errors" nillable="true"
+                                    minOccurs="0" />
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ExternalNumbers">
+                <xs:sequence>
+                    <xs:element name="MessageExternalNumbers" minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="ExternalNumber" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="GUID" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="UndoInboundPlansER">
+                <xs:sequence>
+                    <xs:element name="MessageUndoInboundPlansER" nillable="true" minOccurs="0"
+                        maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="ExternalNumber" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="GUID" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Errors" type="tns:Errors" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Info" type="tns:Info" nillable="true"
+                                    minOccurs="0" />
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ItemParamER">
+                <xs:sequence>
+                    <xs:element name="MessageItemParamER" nillable="true" minOccurs="0"
+                        maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="SKU" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Weight" type="xs:float" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Length" type="xs:float" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Height" type="xs:float" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Width" type="xs:float" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="MeasureUnitName" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="BarCode" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Errors" type="tns:Errors" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Info" type="tns:Info" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Description" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Batch">
+                <xs:sequence>
+                    <xs:element name="MessageBatch" minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="SKU" type="xs:string" />
+                                <xs:element name="BatchName" type="xs:string" />
+                                <xs:element name="ShelfLife" type="xs:string" />
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="BatchER">
+                <xs:sequence>
+                    <xs:element name="MessageBatchER" nillable="true" minOccurs="0"
+                        maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="SKU" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="BatchName" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="BatchNumber" type="xs:int" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="ExternalDate" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="ShelfLife" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Description" type="xs:string" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Info" type="tns:Info" nillable="true"
+                                    minOccurs="0" />
+                                <xs:element name="Errors" type="tns:Errors" nillable="true"
+                                    minOccurs="0" />
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="CreateUpdateGoods">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Organization" type="xs:string" />
+                        <xs:element name="Goods" type="tns:Goods" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="CreateUpdateGoodsResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="return" type="tns:GoodsER" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="CreateUpdateMeasureUnits">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Organization" type="xs:string" />
+                        <xs:element name="MeasureUnits" type="tns:MeasureUnits" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="CreateUpdateMeasureUnitsResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="return" type="tns:MUER" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="CreateUpdateOrders">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Organization" type="xs:string" />
+                        <xs:element name="Orders" type="tns:Orders" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="CreateUpdateOrdersResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="return" type="tns:OrdersER" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="CreateUpdateOrdersUkrposhta">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Organization" type="xs:string" />
+                        <xs:element name="Orders" type="tns:OrdersUkrposhta" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="CreateUpdateOrdersUkrposhtaResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="return" type="tns:OrdersER" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="CreateUpdatePlanInbound">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Organization" type="xs:string" />
+                        <xs:element name="PlanInbound" type="tns:PlanInbound" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="CreateUpdatePlanInboundResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="return" type="tns:PlanInboundER" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="UndoOrder">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Organization" type="xs:string" />
+                        <xs:element name="ExternalNumbers" type="tns:ExternalNumbers" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="UndoOrderResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="return" type="tns:UndoER" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetCurrentRemains">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Organization" type="xs:string" />
+                        <xs:element name="SKU" type="tns:SKU" nillable="true" />
+                        <xs:element name="Warehouse" type="xs:string" nillable="true" />
+                        <xs:element name="RemainDate" type="xs:string" nillable="true" />
+                        <xs:element name="AdditionalParam" type="xs:string" nillable="true" />
+                        <xs:element name="batchId" type="xs:string" nillable="true" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetCurrentRemainsResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="return" type="tns:RemainsER" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetOrdersStatus">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Organization" type="xs:string" />
+                        <xs:element name="Warehouse" type="xs:string" nillable="true" />
+                        <xs:element name="StartDate" type="xs:string" nillable="true" />
+                        <xs:element name="EndDate" type="xs:string" nillable="true" />
+                        <xs:element name="ArrayOrders" type="tns:ArrayOrders" nillable="true" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetOrdersStatusResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="return" type="tns:OrdersStatusER" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetFactInbound">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Organization" type="xs:string" nillable="true" />
+                        <xs:element name="Warehouse" type="xs:string" />
+                        <xs:element name="StartDate" type="xs:string" />
+                        <xs:element name="EndDate" type="xs:string" />
+                        <xs:element name="ArrayPlanInbound" type="tns:ArrayPlanInbound"
+                            nillable="true" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetFactInboundResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="return" type="tns:FactInboundER" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="UndoGoodsPlan">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Organization" type="xs:string" />
+                        <xs:element name="ExternalNumbers" type="tns:ExternalNumbers" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="UndoGoodsPlanResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="return" type="tns:UndoInboundPlansER" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetItemParam">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Organization" type="xs:string" />
+                        <xs:element name="SKU" type="tns:SKU" nillable="true" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetItemParamResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="return" type="tns:ItemParamER" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetBatch">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Organization" type="xs:string" />
+                        <xs:element name="SKU" type="tns:SKU" nillable="true" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetBatchResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="return" type="xs:string" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="CreateUpdateBatch">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Organization" type="xs:string" />
+                        <xs:element name="Batch" type="tns:Batch" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="CreateUpdateBatchResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="return" type="xs:string" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+        <xs:schema xmlns:tns="http://v8.1c.ru/8.1/data/core"
+            xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://v8.1c.ru/8.1/data/core" attributeFormDefault="unqualified"
+            elementFormDefault="qualified">
+            <xs:simpleType name="AllowedLength">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Fixed" />
+                    <xs:enumeration value="Variable" />
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType name="AllowedSign">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Any" />
+                    <xs:enumeration value="Nonnegative" />
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType name="CompositeID">
+                <xs:restriction base="xs:string">
+                    <xs:pattern
+                        value="-?[0-9]+(:[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})?" />
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType name="DateFractions">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Date" />
+                    <xs:enumeration value="Time" />
+                    <xs:enumeration value="DateTime" />
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType name="ErrorCategory">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="AccessViolation" />
+                    <xs:enumeration value="LocalFileAccessError" />
+                    <xs:enumeration value="NetworkError" />
+                    <xs:enumeration value="PrinterError" />
+                    <xs:enumeration value="ScriptCompileError" />
+                    <xs:enumeration value="ScriptRuntimeError" />
+                    <xs:enumeration value="ScriptUseError" />
+                    <xs:enumeration value="ExceptionRaisedFromScript" />
+                    <xs:enumeration value="CollaborationSystemError" />
+                    <xs:enumeration value="DataCompositionSettingsError" />
+                    <xs:enumeration value="SessionError" />
+                    <xs:enumeration value="StoredDataError" />
+                    <xs:enumeration value="FullTextSearchError" />
+                    <xs:enumeration value="ExternalDataSourceError" />
+                    <xs:enumeration value="GotoURLError" />
+                    <xs:enumeration value="DatabaseCopyError" />
+                    <xs:enumeration value="NoPermissionToUseFunctionality" />
+                    <xs:enumeration value="MultimediaToolsError" />
+                    <xs:enumeration value="DocumentConversionError" />
+                    <xs:enumeration value="ConfigurationError" />
+                    <xs:enumeration value="OtherError" />
+                    <xs:enumeration value="AllErrors" />
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType name="FileDragMode">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="AsFile" />
+                    <xs:enumeration value="AsFileRef" />
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType name="FillCheckErrorStatus">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Error" />
+                    <xs:enumeration value="Warning" />
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType name="FillChecking">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="DontCheck" />
+                    <xs:enumeration value="ShowError" />
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType name="MainClientApplicationWindowMode">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Normal" />
+                    <xs:enumeration value="Workplace" />
+                    <xs:enumeration value="FullscreenWorkplace" />
+                    <xs:enumeration value="Kiosk" />
+                    <xs:enumeration value="EmbeddedWorkplace" />
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType name="Null">
+                <xs:restriction base="xs:string">
+                    <xs:length value="0" />
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType name="ObjectVersion">
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="[0-9a-fA-F]{40}" />
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType name="StandardBeginningDateVariant">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Custom" />
+                    <xs:enumeration value="BeginningOfThisDay" />
+                    <xs:enumeration value="BeginningOfThisWeek" />
+                    <xs:enumeration value="BeginningOfThisTenDays" />
+                    <xs:enumeration value="BeginningOfThisMonth" />
+                    <xs:enumeration value="BeginningOfThisQuarter" />
+                    <xs:enumeration value="BeginningOfThisHalfYear" />
+                    <xs:enumeration value="BeginningOfThisYear" />
+                    <xs:enumeration value="BeginningOfLastDay" />
+                    <xs:enumeration value="BeginningOfLastWeek" />
+                    <xs:enumeration value="BeginningOfLastTenDays" />
+                    <xs:enumeration value="BeginningOfLastMonth" />
+                    <xs:enumeration value="BeginningOfLastQuarter" />
+                    <xs:enumeration value="BeginningOfLastHalfYear" />
+                    <xs:enumeration value="BeginningOfLastYear" />
+                    <xs:enumeration value="BeginningOfNextDay" />
+                    <xs:enumeration value="BeginningOfNextWeek" />
+                    <xs:enumeration value="BeginningOfNextTenDays" />
+                    <xs:enumeration value="BeginningOfNextMonth" />
+                    <xs:enumeration value="BeginningOfNextQuarter" />
+                    <xs:enumeration value="BeginningOfNextHalfYear" />
+                    <xs:enumeration value="BeginningOfNextYear" />
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType name="StandardPeriodVariant">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="Custom" />
+                    <xs:enumeration value="Today" />
+                    <xs:enumeration value="ThisWeek" />
+                    <xs:enumeration value="ThisTenDays" />
+                    <xs:enumeration value="ThisMonth" />
+                    <xs:enumeration value="ThisQuarter" />
+                    <xs:enumeration value="ThisHalfYear" />
+                    <xs:enumeration value="ThisYear" />
+                    <xs:enumeration value="FromBeginningOfThisWeek" />
+                    <xs:enumeration value="FromBeginningOfThisTenDays" />
+                    <xs:enumeration value="FromBeginningOfThisMonth" />
+                    <xs:enumeration value="FromBeginningOfThisQuarter" />
+                    <xs:enumeration value="FromBeginningOfThisHalfYear" />
+                    <xs:enumeration value="FromBeginningOfThisYear" />
+                    <xs:enumeration value="Yesterday" />
+                    <xs:enumeration value="LastWeek" />
+                    <xs:enumeration value="LastTenDays" />
+                    <xs:enumeration value="LastMonth" />
+                    <xs:enumeration value="LastQuarter" />
+                    <xs:enumeration value="LastHalfYear" />
+                    <xs:enumeration value="LastYear" />
+                    <xs:enumeration value="LastWeekTillSameWeekDay" />
+                    <xs:enumeration value="LastTenDaysTillSameDayNumber" />
+                    <xs:enumeration value="LastMonthTillSameDate" />
+                    <xs:enumeration value="LastQuarterTillSameDate" />
+                    <xs:enumeration value="LastHalfYearTillSameDate" />
+                    <xs:enumeration value="LastYearTillSameDate" />
+                    <xs:enumeration value="Tomorrow" />
+                    <xs:enumeration value="NextWeek" />
+                    <xs:enumeration value="NextTenDays" />
+                    <xs:enumeration value="NextMonth" />
+                    <xs:enumeration value="NextQuarter" />
+                    <xs:enumeration value="NextHalfYear" />
+                    <xs:enumeration value="NextYear" />
+                    <xs:enumeration value="NextWeekTillSameWeekDay" />
+                    <xs:enumeration value="NextTenDaysTillSameDayNumber" />
+                    <xs:enumeration value="NextMonthTillSameDate" />
+                    <xs:enumeration value="NextQuarterTillSameDate" />
+                    <xs:enumeration value="NextHalfYearTillSameDate" />
+                    <xs:enumeration value="NextYearTillSameDate" />
+                    <xs:enumeration value="TillEndOfThisWeek" />
+                    <xs:enumeration value="TillEndOfThisTenDays" />
+                    <xs:enumeration value="TillEndOfThisMonth" />
+                    <xs:enumeration value="TillEndOfThisQuarter" />
+                    <xs:enumeration value="TillEndOfThisHalfYear" />
+                    <xs:enumeration value="TillEndOfThisYear" />
+                    <xs:enumeration value="Last7Days" />
+                    <xs:enumeration value="Next7Days" />
+                    <xs:enumeration value="Month" />
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType name="Type">
+                <xs:restriction base="xs:QName" />
+            </xs:simpleType>
+            <xs:simpleType name="UUID">
+                <xs:restriction base="xs:string">
+                    <xs:pattern
+                        value="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}" />
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType name="ValueStorage">
+                <xs:restriction base="xs:base64Binary" />
+            </xs:simpleType>
+            <xs:complexType name="Array">
+                <xs:sequence>
+                    <xs:element name="Value" nillable="true" minOccurs="0" maxOccurs="unbounded" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="BinaryDataQualifiers">
+                <xs:sequence>
+                    <xs:element name="Length" type="xs:decimal" />
+                    <xs:element name="AllowedLength" type="tns:AllowedLength" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="DataFillError">
+                <xs:sequence>
+                    <xs:element name="Data" type="xs:string" />
+                    <xs:element name="DataDescr" type="xs:string" />
+                    <xs:element name="Text" type="xs:string" />
+                    <xs:element name="Status" type="tns:FillCheckErrorStatus" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="DataFillErrors">
+                <xs:sequence>
+                    <xs:element name="item" type="tns:DataFillError" minOccurs="0"
+                        maxOccurs="unbounded" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="DateQualifiers">
+                <xs:sequence>
+                    <xs:element name="DateFractions" type="tns:DateFractions" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Exception">
+                <xs:complexContent>
+                    <xs:extension base="tns:GenericException">
+                        <xs:sequence>
+                            <xs:element name="data" type="xs:base64Binary" minOccurs="0" />
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:complexType name="FixedArray">
+                <xs:sequence>
+                    <xs:element name="Value" nillable="true" minOccurs="0" maxOccurs="unbounded" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="FixedMap">
+                <xs:sequence>
+                    <xs:element name="pair" type="tns:KeyAndValue" minOccurs="0"
+                        maxOccurs="unbounded" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="FixedStructure">
+                <xs:sequence>
+                    <xs:element name="Property" minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="Value" nillable="true" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xs:NMTOKEN" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="GenericException" abstract="true">
+                <xs:sequence>
+                    <xs:element name="descr" type="xs:string" />
+                    <xs:element name="inner" type="tns:GenericException" minOccurs="0" />
+                    <xs:element name="category" type="xs:string" minOccurs="0" />
+                    <xs:element name="uiHelperUUID" type="tns:UUID" minOccurs="0" />
+                    <xs:element name="creationStack" type="xs:string" minOccurs="0" />
+                </xs:sequence>
+                <xs:attribute name="clsid" type="tns:UUID" use="required" />
+                <xs:attribute name="encoded" type="xs:boolean" default="false" />
+            </xs:complexType>
+            <xs:complexType name="KeyAndValue">
+                <xs:sequence>
+                    <xs:element name="Key" />
+                    <xs:element name="Value" nillable="true" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="LocalStringItemType">
+                <xs:sequence>
+                    <xs:element name="lang" type="xs:NMTOKEN" />
+                    <xs:element name="content" type="xs:string" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="LocalStringType">
+                <xs:sequence>
+                    <xs:element name="item" type="tns:LocalStringItemType" minOccurs="0"
+                        maxOccurs="unbounded" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Map">
+                <xs:sequence>
+                    <xs:element name="pair" type="tns:KeyAndValue" minOccurs="0"
+                        maxOccurs="unbounded" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="NumberQualifiers">
+                <xs:sequence>
+                    <xs:element name="Digits" type="xs:decimal" />
+                    <xs:element name="FractionDigits" type="xs:decimal" />
+                    <xs:element name="AllowedSign" type="tns:AllowedSign" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="StandardBeginningDate">
+                <xs:sequence>
+                    <xs:element name="variant" />
+                    <xs:element name="date" type="xs:dateTime" minOccurs="0" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="StandardPeriod">
+                <xs:sequence>
+                    <xs:element name="variant" />
+                    <xs:element name="startDate" type="xs:dateTime" minOccurs="0" />
+                    <xs:element name="endDate" type="xs:dateTime" minOccurs="0" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="StringQualifiers">
+                <xs:sequence>
+                    <xs:element name="Length" type="xs:decimal" />
+                    <xs:element name="AllowedLength" type="tns:AllowedLength" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Structure">
+                <xs:sequence>
+                    <xs:element name="Property" minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element name="Value" nillable="true" />
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xs:NMTOKEN" use="required" />
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="TypeDescription">
+                <xs:sequence>
+                    <xs:element name="Type" type="xs:QName" minOccurs="0" maxOccurs="unbounded" />
+                    <xs:element name="TypeSet" type="xs:QName" minOccurs="0" maxOccurs="unbounded" />
+                    <xs:element name="TypeId" type="tns:UUID" minOccurs="0" maxOccurs="unbounded" />
+                    <xs:element name="NumberQualifiers" type="tns:NumberQualifiers" minOccurs="0" />
+                    <xs:element name="StringQualifiers" type="tns:StringQualifiers" minOccurs="0" />
+                    <xs:element name="DateQualifiers" type="tns:DateQualifiers" minOccurs="0" />
+                    <xs:element name="BinaryDataQualifiers" type="tns:BinaryDataQualifiers"
+                        minOccurs="0" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ValueListItemType">
+                <xs:sequence>
+                    <xs:element name="value" nillable="true" />
+                    <xs:element name="presentation" type="xs:string" minOccurs="0" />
+                    <xs:element name="checkState" type="xs:decimal" minOccurs="0" />
+                    <xs:element name="picture" minOccurs="0" />
+                    <xs:element name="id" type="xs:long" minOccurs="0" />
+                    <xs:element name="formatPresentationSpecified" type="xs:boolean" minOccurs="0" />
+                    <xs:element name="formatPresentation" type="xs:string" minOccurs="0" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ValueListType">
+                <xs:choice>
+                    <xs:element name="valueType" type="tns:TypeDescription" />
+                    <xs:element name="availableValues" type="tns:ValueListType" minOccurs="0" />
+                    <xs:element name="lastId" type="xs:long" minOccurs="0" />
+                    <xs:element name="item" type="tns:ValueListItemType" minOccurs="0"
+                        maxOccurs="unbounded" />
+                </xs:choice>
+            </xs:complexType>
+            <xs:complexType name="ValueTable">
+                <xs:sequence>
+                    <xs:element name="column" type="tns:ValueTableColumn" minOccurs="0"
+                        maxOccurs="unbounded" />
+                    <xs:element name="index" type="tns:ValueTableIndex" minOccurs="0"
+                        maxOccurs="unbounded" />
+                    <xs:element name="row" type="tns:ValueTableRow" minOccurs="0"
+                        maxOccurs="unbounded" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ValueTableColumn">
+                <xs:sequence>
+                    <xs:element name="Name" type="xs:NMTOKEN" minOccurs="0" />
+                    <xs:element name="ValueType" type="tns:TypeDescription" minOccurs="0" />
+                    <xs:element name="Title" type="xs:string" minOccurs="0" />
+                    <xs:element name="Width" type="xs:nonNegativeInteger" minOccurs="0" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ValueTableIndex">
+                <xs:sequence>
+                    <xs:element name="column" type="xs:NMTOKEN" maxOccurs="unbounded" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ValueTableRow">
+                <xs:sequence>
+                    <xs:element name="Value" nillable="true" minOccurs="0" maxOccurs="unbounded" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ValueTree">
+                <xs:sequence>
+                    <xs:element name="column" type="tns:ValueTreeColumn" minOccurs="0"
+                        maxOccurs="unbounded" />
+                    <xs:element name="row" type="tns:ValueTreeRow" minOccurs="0"
+                        maxOccurs="unbounded" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ValueTreeColumn">
+                <xs:sequence>
+                    <xs:element name="Name" type="xs:NMTOKEN" minOccurs="0" />
+                    <xs:element name="ValueType" type="tns:TypeDescription" minOccurs="0" />
+                    <xs:element name="Title" type="xs:string" minOccurs="0" />
+                    <xs:element name="Width" type="xs:nonNegativeInteger" minOccurs="0" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ValueTreeRow">
+                <xs:sequence>
+                    <xs:element name="row" type="tns:ValueTreeRow" minOccurs="0"
+                        maxOccurs="unbounded" />
+                    <xs:element name="Value" nillable="true" minOccurs="0" maxOccurs="unbounded" />
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+    </types>
+    <message name="CreateUpdateGoodsRequestMessage">
+        <part name="parameters" element="tns:CreateUpdateGoods" />
+    </message>
+    <message name="CreateUpdateGoodsResponseMessage">
+        <part name="parameters" element="tns:CreateUpdateGoodsResponse" />
+    </message>
+    <message name="CreateUpdateMeasureUnitsRequestMessage">
+        <part name="parameters" element="tns:CreateUpdateMeasureUnits" />
+    </message>
+    <message name="CreateUpdateMeasureUnitsResponseMessage">
+        <part name="parameters" element="tns:CreateUpdateMeasureUnitsResponse" />
+    </message>
+    <message name="CreateUpdateOrdersRequestMessage">
+        <part name="parameters" element="tns:CreateUpdateOrders" />
+    </message>
+    <message name="CreateUpdateOrdersResponseMessage">
+        <part name="parameters" element="tns:CreateUpdateOrdersResponse" />
+    </message>
+    <message name="CreateUpdateOrdersUkrposhtaRequestMessage">
+        <part name="parameters" element="tns:CreateUpdateOrdersUkrposhta" />
+    </message>
+    <message name="CreateUpdateOrdersUkrposhtaResponseMessage">
+        <part name="parameters" element="tns:CreateUpdateOrdersUkrposhtaResponse" />
+    </message>
+    <message name="CreateUpdatePlanInboundRequestMessage">
+        <part name="parameters" element="tns:CreateUpdatePlanInbound" />
+    </message>
+    <message name="CreateUpdatePlanInboundResponseMessage">
+        <part name="parameters" element="tns:CreateUpdatePlanInboundResponse" />
+    </message>
+    <message name="UndoOrderRequestMessage">
+        <part name="parameters" element="tns:UndoOrder" />
+    </message>
+    <message name="UndoOrderResponseMessage">
+        <part name="parameters" element="tns:UndoOrderResponse" />
+    </message>
+    <message name="GetCurrentRemainsRequestMessage">
+        <part name="parameters" element="tns:GetCurrentRemains" />
+    </message>
+    <message name="GetCurrentRemainsResponseMessage">
+        <part name="parameters" element="tns:GetCurrentRemainsResponse" />
+    </message>
+    <message name="GetOrdersStatusRequestMessage">
+        <part name="parameters" element="tns:GetOrdersStatus" />
+    </message>
+    <message name="GetOrdersStatusResponseMessage">
+        <part name="parameters" element="tns:GetOrdersStatusResponse" />
+    </message>
+    <message name="GetFactInboundRequestMessage">
+        <part name="parameters" element="tns:GetFactInbound" />
+    </message>
+    <message name="GetFactInboundResponseMessage">
+        <part name="parameters" element="tns:GetFactInboundResponse" />
+    </message>
+    <message name="UndoGoodsPlanRequestMessage">
+        <part name="parameters" element="tns:UndoGoodsPlan" />
+    </message>
+    <message name="UndoGoodsPlanResponseMessage">
+        <part name="parameters" element="tns:UndoGoodsPlanResponse" />
+    </message>
+    <message name="GetItemParamRequestMessage">
+        <part name="parameters" element="tns:GetItemParam" />
+    </message>
+    <message name="GetItemParamResponseMessage">
+        <part name="parameters" element="tns:GetItemParamResponse" />
+    </message>
+    <message name="GetBatchRequestMessage">
+        <part name="parameters" element="tns:GetBatch" />
+    </message>
+    <message name="GetBatchResponseMessage">
+        <part name="parameters" element="tns:GetBatchResponse" />
+    </message>
+    <message name="CreateUpdateBatchRequestMessage">
+        <part name="parameters" element="tns:CreateUpdateBatch" />
+    </message>
+    <message name="CreateUpdateBatchResponseMessage">
+        <part name="parameters" element="tns:CreateUpdateBatchResponse" />
+    </message>
+    <portType name="OM_depositorExchanePortType">
+        <operation name="CreateUpdateGoods">
+            <input message="tns:CreateUpdateGoodsRequestMessage" />
+            <output message="tns:CreateUpdateGoodsResponseMessage" />
+        </operation>
+        <operation name="CreateUpdateMeasureUnits">
+            <input message="tns:CreateUpdateMeasureUnitsRequestMessage" />
+            <output message="tns:CreateUpdateMeasureUnitsResponseMessage" />
+        </operation>
+        <operation name="CreateUpdateOrders">
+            <input message="tns:CreateUpdateOrdersRequestMessage" />
+            <output message="tns:CreateUpdateOrdersResponseMessage" />
+        </operation>
+        <operation name="CreateUpdateOrdersUkrposhta">
+            <input message="tns:CreateUpdateOrdersUkrposhtaRequestMessage" />
+            <output message="tns:CreateUpdateOrdersUkrposhtaResponseMessage" />
+        </operation>
+        <operation name="CreateUpdatePlanInbound">
+            <input message="tns:CreateUpdatePlanInboundRequestMessage" />
+            <output message="tns:CreateUpdatePlanInboundResponseMessage" />
+        </operation>
+        <operation name="UndoOrder">
+            <input message="tns:UndoOrderRequestMessage" />
+            <output message="tns:UndoOrderResponseMessage" />
+        </operation>
+        <operation name="GetCurrentRemains">
+            <input message="tns:GetCurrentRemainsRequestMessage" />
+            <output message="tns:GetCurrentRemainsResponseMessage" />
+        </operation>
+        <operation name="GetOrdersStatus">
+            <input message="tns:GetOrdersStatusRequestMessage" />
+            <output message="tns:GetOrdersStatusResponseMessage" />
+        </operation>
+        <operation name="GetFactInbound">
+            <input message="tns:GetFactInboundRequestMessage" />
+            <output message="tns:GetFactInboundResponseMessage" />
+        </operation>
+        <operation name="UndoGoodsPlan">
+            <input message="tns:UndoGoodsPlanRequestMessage" />
+            <output message="tns:UndoGoodsPlanResponseMessage" />
+        </operation>
+        <operation name="GetItemParam">
+            <input message="tns:GetItemParamRequestMessage" />
+            <output message="tns:GetItemParamResponseMessage" />
+        </operation>
+        <operation name="GetBatch">
+            <input message="tns:GetBatchRequestMessage" />
+            <output message="tns:GetBatchResponseMessage" />
+        </operation>
+        <operation name="CreateUpdateBatch">
+            <input message="tns:CreateUpdateBatchRequestMessage" />
+            <output message="tns:CreateUpdateBatchResponseMessage" />
+        </operation>
+    </portType>
+    <binding name="OM_depositorExchaneSoapBinding" type="tns:OM_depositorExchanePortType">
+        <soapbind:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+        <operation name="CreateUpdateGoods">
+            <soapbind:operation style="document"
+                soapAction="http://npl-dev.omnic.solutions/wms#OM_depositorExchane:CreateUpdateGoods" />
+            <input>
+                <soapbind:body use="literal" />
+            </input>
+            <output>
+                <soapbind:body use="literal" />
+            </output>
+        </operation>
+        <operation name="CreateUpdateMeasureUnits">
+            <soapbind:operation style="document"
+                soapAction="http://npl-dev.omnic.solutions/wms#OM_depositorExchane:CreateUpdateMeasureUnits" />
+            <input>
+                <soapbind:body use="literal" />
+            </input>
+            <output>
+                <soapbind:body use="literal" />
+            </output>
+        </operation>
+        <operation name="CreateUpdateOrders">
+            <soapbind:operation style="document"
+                soapAction="http://npl-dev.omnic.solutions/wms#OM_depositorExchane:CreateUpdateOrders" />
+            <input>
+                <soapbind:body use="literal" />
+            </input>
+            <output>
+                <soapbind:body use="literal" />
+            </output>
+        </operation>
+        <operation name="CreateUpdateOrdersUkrposhta">
+            <soapbind:operation style="document"
+                soapAction="http://npl-dev.omnic.solutions/wms#OM_depositorExchane:CreateUpdateOrdersUkrposhta" />
+            <input>
+                <soapbind:body use="literal" />
+            </input>
+            <output>
+                <soapbind:body use="literal" />
+            </output>
+        </operation>
+        <operation name="CreateUpdatePlanInbound">
+            <soapbind:operation style="document"
+                soapAction="http://npl-dev.omnic.solutions/wms#OM_depositorExchane:CreateUpdatePlanInbound" />
+            <input>
+                <soapbind:body use="literal" />
+            </input>
+            <output>
+                <soapbind:body use="literal" />
+            </output>
+        </operation>
+        <operation name="UndoOrder">
+            <soapbind:operation style="document"
+                soapAction="http://npl-dev.omnic.solutions/wms#OM_depositorExchane:UndoOrder" />
+            <input>
+                <soapbind:body use="literal" />
+            </input>
+            <output>
+                <soapbind:body use="literal" />
+            </output>
+        </operation>
+        <operation name="GetCurrentRemains">
+            <soapbind:operation style="document"
+                soapAction="http://npl-dev.omnic.solutions/wms#OM_depositorExchane:GetCurrentRemains" />
+            <input>
+                <soapbind:body use="literal" />
+            </input>
+            <output>
+                <soapbind:body use="literal" />
+            </output>
+        </operation>
+        <operation name="GetOrdersStatus">
+            <soapbind:operation style="document"
+                soapAction="http://npl-dev.omnic.solutions/wms#OM_depositorExchane:GetOrdersStatus" />
+            <input>
+                <soapbind:body use="literal" />
+            </input>
+            <output>
+                <soapbind:body use="literal" />
+            </output>
+        </operation>
+        <operation name="GetFactInbound">
+            <soapbind:operation style="document"
+                soapAction="http://npl-dev.omnic.solutions/wms#OM_depositorExchane:GetFactInbound" />
+            <input>
+                <soapbind:body use="literal" />
+            </input>
+            <output>
+                <soapbind:body use="literal" />
+            </output>
+        </operation>
+        <operation name="UndoGoodsPlan">
+            <soapbind:operation style="document"
+                soapAction="http://npl-dev.omnic.solutions/wms#OM_depositorExchane:UndoGoodsPlan" />
+            <input>
+                <soapbind:body use="literal" />
+            </input>
+            <output>
+                <soapbind:body use="literal" />
+            </output>
+        </operation>
+        <operation name="GetItemParam">
+            <soapbind:operation style="document"
+                soapAction="http://npl-dev.omnic.solutions/wms#OM_depositorExchane:GetItemParam" />
+            <input>
+                <soapbind:body use="literal" />
+            </input>
+            <output>
+                <soapbind:body use="literal" />
+            </output>
+        </operation>
+        <operation name="GetBatch">
+            <soapbind:operation style="document"
+                soapAction="http://npl-dev.omnic.solutions/wms#OM_depositorExchane:GetBatch" />
+            <input>
+                <soapbind:body use="literal" />
+            </input>
+            <output>
+                <soapbind:body use="literal" />
+            </output>
+        </operation>
+        <operation name="CreateUpdateBatch">
+            <soapbind:operation style="document"
+                soapAction="http://npl-dev.omnic.solutions/wms#OM_depositorExchane:CreateUpdateBatch" />
+            <input>
+                <soapbind:body use="literal" />
+            </input>
+            <output>
+                <soapbind:body use="literal" />
+            </output>
+        </operation>
+    </binding>
+    <binding name="OM_depositorExchaneSoap12Binding" type="tns:OM_depositorExchanePortType">
+        <soap12bind:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+        <operation name="CreateUpdateGoods">
+            <soap12bind:operation style="document"
+                soapAction="http://npl-dev.omnic.solutions/wms#OM_depositorExchane:CreateUpdateGoods" />
+            <input>
+                <soap12bind:body use="literal" />
+            </input>
+            <output>
+                <soap12bind:body use="literal" />
+            </output>
+        </operation>
+        <operation name="CreateUpdateMeasureUnits">
+            <soap12bind:operation style="document"
+                soapAction="http://npl-dev.omnic.solutions/wms#OM_depositorExchane:CreateUpdateMeasureUnits" />
+            <input>
+                <soap12bind:body use="literal" />
+            </input>
+            <output>
+                <soap12bind:body use="literal" />
+            </output>
+        </operation>
+        <operation name="CreateUpdateOrders">
+            <soap12bind:operation style="document"
+                soapAction="http://npl-dev.omnic.solutions/wms#OM_depositorExchane:CreateUpdateOrders" />
+            <input>
+                <soap12bind:body use="literal" />
+            </input>
+            <output>
+                <soap12bind:body use="literal" />
+            </output>
+        </operation>
+        <operation name="CreateUpdateOrdersUkrposhta">
+            <soap12bind:operation style="document"
+                soapAction="http://npl-dev.omnic.solutions/wms#OM_depositorExchane:CreateUpdateOrdersUkrposhta" />
+            <input>
+                <soap12bind:body use="literal" />
+            </input>
+            <output>
+                <soap12bind:body use="literal" />
+            </output>
+        </operation>
+        <operation name="CreateUpdatePlanInbound">
+            <soap12bind:operation style="document"
+                soapAction="http://npl-dev.omnic.solutions/wms#OM_depositorExchane:CreateUpdatePlanInbound" />
+            <input>
+                <soap12bind:body use="literal" />
+            </input>
+            <output>
+                <soap12bind:body use="literal" />
+            </output>
+        </operation>
+        <operation name="UndoOrder">
+            <soap12bind:operation style="document"
+                soapAction="http://npl-dev.omnic.solutions/wms#OM_depositorExchane:UndoOrder" />
+            <input>
+                <soap12bind:body use="literal" />
+            </input>
+            <output>
+                <soap12bind:body use="literal" />
+            </output>
+        </operation>
+        <operation name="GetCurrentRemains">
+            <soap12bind:operation style="document"
+                soapAction="http://npl-dev.omnic.solutions/wms#OM_depositorExchane:GetCurrentRemains" />
+            <input>
+                <soap12bind:body use="literal" />
+            </input>
+            <output>
+                <soap12bind:body use="literal" />
+            </output>
+        </operation>
+        <operation name="GetOrdersStatus">
+            <soap12bind:operation style="document"
+                soapAction="http://npl-dev.omnic.solutions/wms#OM_depositorExchane:GetOrdersStatus" />
+            <input>
+                <soap12bind:body use="literal" />
+            </input>
+            <output>
+                <soap12bind:body use="literal" />
+            </output>
+        </operation>
+        <operation name="GetFactInbound">
+            <soap12bind:operation style="document"
+                soapAction="http://npl-dev.omnic.solutions/wms#OM_depositorExchane:GetFactInbound" />
+            <input>
+                <soap12bind:body use="literal" />
+            </input>
+            <output>
+                <soap12bind:body use="literal" />
+            </output>
+        </operation>
+        <operation name="UndoGoodsPlan">
+            <soap12bind:operation style="document"
+                soapAction="http://npl-dev.omnic.solutions/wms#OM_depositorExchane:UndoGoodsPlan" />
+            <input>
+                <soap12bind:body use="literal" />
+            </input>
+            <output>
+                <soap12bind:body use="literal" />
+            </output>
+        </operation>
+        <operation name="GetItemParam">
+            <soap12bind:operation style="document"
+                soapAction="http://npl-dev.omnic.solutions/wms#OM_depositorExchane:GetItemParam" />
+            <input>
+                <soap12bind:body use="literal" />
+            </input>
+            <output>
+                <soap12bind:body use="literal" />
+            </output>
+        </operation>
+        <operation name="GetBatch">
+            <soap12bind:operation style="document"
+                soapAction="http://npl-dev.omnic.solutions/wms#OM_depositorExchane:GetBatch" />
+            <input>
+                <soap12bind:body use="literal" />
+            </input>
+            <output>
+                <soap12bind:body use="literal" />
+            </output>
+        </operation>
+        <operation name="CreateUpdateBatch">
+            <soap12bind:operation style="document"
+                soapAction="http://npl-dev.omnic.solutions/wms#OM_depositorExchane:CreateUpdateBatch" />
+            <input>
+                <soap12bind:body use="literal" />
+            </input>
+            <output>
+                <soap12bind:body use="literal" />
+            </output>
+        </operation>
+    </binding>
+    <service name="OM_depositorExchane">
+        <port name="OM_depositorExchaneSoap" binding="tns:OM_depositorExchaneSoapBinding">
+            <documentation>
+                <wsi:Claim xmlns:wsi="http://ws-i.org/schemas/conformanceClaim/"
+                    conformsTo="http://ws-i.org/profiles/basic/1.1" />
+            </documentation>
+            <soapbind:address location="https://api-nps.np.work/wms_npl3/ws/depositorExchane.1cws" />
+        </port>
+        <port name="OM_depositorExchaneSoap12" binding="tns:OM_depositorExchaneSoap12Binding">
+            <soap12bind:address location="https://api-nps.np.work/wms_npl3/ws/depositorExchane.1cws" />
+        </port>
+    </service>
+</definitions>
