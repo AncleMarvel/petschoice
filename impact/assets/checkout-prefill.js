@@ -16,7 +16,7 @@
  * @returns {String}
  * @example 'https://petschoice.club/cart/41864347975754:1?checkout[email]=customer@example.com&checkout[shipping_address][city]=Lviv&checkout[shipping_address][first_name]=Nikita&checkout[shipping_address][last_name]=Shechenko&checkout[shipping_address][address1]=Ломоносова,55,кв6&checkout[shipping_address][zip]=03022&checkout[shipping_address][country]=Ukraine&checkout[shipping_address][phone]=+380995586745'
  */
-function createPrefilLink({ variantsWithQty, email, city, firstName, lastName, address, zip, country, phone, selectedPostoffice, settlementObject }) {
+function createPrefilLink({ variantsWithQty, email, city, firstName, lastName, address, zip, country, phone, street, house, flat, selectedPostoffice, settlementObject }) {
     let variants = Object.entries(variantsWithQty)
         .map(([variantId, qty]) => `${variantId}:${qty}`)
         .join(',');
@@ -32,13 +32,22 @@ function createPrefilLink({ variantsWithQty, email, city, firstName, lastName, a
         "checkout[shipping_address][phone]": phone
     };
 
+    const note = {
+        phone: phone,
+        street: street,
+        house: house,
+        flat: flat || ''
+    }
+
     if (selectedPostoffice) {
-        queryParams["note"] = JSON.stringify({selectedPostoffice});
+        note.selectedPostoffice = JSON.stringify({selectedPostoffice});
     }
 
     if (settlementObject) {
-        queryParams["note"] = JSON.stringify({settlementObject});
+        note.settlementObject = JSON.stringify({settlementObject});
     }
+
+    queryParams["note"] = JSON.stringify(note);
 
     const queryString = Object.entries(queryParams)
         .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
