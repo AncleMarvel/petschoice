@@ -138,7 +138,6 @@ function prepareInventoryAdjustments(stocksNovaPost, stocksShopify) {
   };
 }
 
-
 function createXMLForOrdersCreate(order) {
   const getItemsXML = (lineItems) => {
     return lineItems.map(item => `
@@ -170,10 +169,7 @@ function createXMLForOrdersCreate(order) {
   if (prepaymentItem) {
     order.line_items.forEach((line) => {
       if (line.variant_id == 41899282661450) return;
-      const price = parseFloat(line.price);
-      const quantity = parseInt(line.current_quantity);
-
-      subtotalPrice += price * quantity;
+      subtotalPrice += parseFloat(line.price) * parseInt(line.current_quantity);
     });
   }
 
@@ -219,7 +215,6 @@ function createXMLForOrdersCreate(order) {
     return addressFields.length > 0 ? `<wms:Adress>${addressFields.join('')}</wms:Adress>` : '';
   };
 
-
   const date = new Date(order.created_at || '');
   const externalDate = `${date.getDate().toString().padStart(2, '0')}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}${date.getMinutes().toString().padStart(2, '0')}${date.getSeconds().toString().padStart(2, '0')}`;
 
@@ -236,14 +231,12 @@ function createXMLForOrdersCreate(order) {
               <wms:DestWarehouse>KyivSkhid</wms:DestWarehouse>
               <wms:PayType>1</wms:PayType>
               <wms:payer>1</wms:payer>
-              <wms:Adress>
-                ${getAdressXML()}
-              </wms:Adress>
               <wms:Contactor>
                 <wms:rcptName>${shippingAddress.name || `${customer.first_name} ${customer.last_name}`}</wms:rcptName>
                 <wms:rcptContact>${shippingAddress.name || `${customer.first_name} ${customer.last_name}`}</wms:rcptContact>
                 <wms:RecipientType>PrivatePerson</wms:RecipientType>
               </wms:Contactor>
+              ${getAdressXML()}
               <wms:Description>Shopify order</wms:Description>
               ${prepaymentItem ? '' : '<wms:RedeliveryType>2</wms:RedeliveryType>'}
               ${prepaymentItem ? '' : `<wms:DeliveryInOut>${subtotalPrice.toFixed(2)}</wms:DeliveryInOut>`}
