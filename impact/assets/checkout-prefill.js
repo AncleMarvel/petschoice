@@ -106,24 +106,6 @@ async function prefillSubmitHandler(event) {
 
     const form = document.querySelector(selectors.prefillForm);
     const formData = new FormData(form);
-    const dataExample = {
-        "firstName": "Нікіта",
-        "lastName": "Шевченко",
-        "surname": "Олександрович",
-        "email": "test@gmail.com",
-        "phone": "+380993350918",
-        "shipping-type": "post-office" || "courier",
-        "settlement-search": "Обрано: Львів, Львівська",
-        "settlement-selection": "e71abb60-4b33-11e4-ab6d-005056801329",
-        "search-post-office": "Обрано: Відділення №1: вул. Городоцька, 359",
-        "post-office": "1ec09d2e-e1c2-11e3-8c4a-0050568002cf",
-        "courier-settlement-search": "",
-        "street": "",
-        "house": "",
-        "flat": "",
-        "postal-code": "50055",
-        "country": "Ukraine"
-    }
     const data = {};
 
 
@@ -142,6 +124,31 @@ async function prefillSubmitHandler(event) {
     });
 
     data.variantsWithQty = variantsWithQty;
+    
+    const dataExample = {
+        "zip": "79018",
+        "address": "Відділення №1: вул. Городоцька, 359",
+        "city": "Львів",
+        "firstName": "Нікіта",
+        "lastName": "Шевченко",
+        "surname": "Олександрович",
+        "email": "anclemarvel@gmail.com",
+        "phone": "+380993350918",
+        "shipping-type": "post-office",
+        "settlement-search": "Обрано: Львів, Львівська",
+        "settlement-selection": "e71abb60-4b33-11e4-ab6d-005056801329",
+        "search-post-office": "Обрано: Відділення №1: вул. Городоцька, 359",
+        "post-office": "1ec09d2e-e1c2-11e3-8c4a-0050568002cf",
+        "courier-settlement-search": "",
+        "street": "",
+        "house": "",
+        "flat": "",
+        "postal-code": "50055",
+        "country": "Ukraine",
+        "variantsWithQty": {
+            "41864347877450": 2
+        }
+    };
     console.log('✌️data --->', data);
 
     const response = await fetch('/cart/update.js', {
@@ -149,13 +156,13 @@ async function prefillSubmitHandler(event) {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ note: data })
+        body: JSON.stringify({ note: JSON.stringify(data) })
     }).then(response => response.json()).catch(console.error);
     console.log('✌️response --->', response);
 
     const prefillLink = createPrefilLink(data);
 
-    window.location.href = prefillLink;
+    // window.location.href = prefillLink;
 }
 
 /**

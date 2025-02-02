@@ -120,7 +120,31 @@ exports.syncInventory = async (_req, res) => {
 
 exports.orderCreate = async (req, res) => {
   // Если локально, берём mock
-  const data = config.isLocal ? webhooks.ordersCreate : req.body;
+  const data = config.isLocal ? JSON.parse(webhooks.ordersCreate.note) : JSON.parse(req.body.note);
+  const exampleOfData = {
+    "zip": "79018",
+    "address": "Відділення №1: вул. Городоцька, 359",
+    "city": "Львів",
+    "firstName": "Нікіта",
+    "lastName": "Шевченко",
+    "surname": "Олександрович",
+    "email": "anclemarvel@gmail.com",
+    "phone": "+380993350918",
+    "shipping-type": "post-office",
+    "settlement-search": "Обрано: Львів, Львівська",
+    "settlement-selection": "e71abb60-4b33-11e4-ab6d-005056801329",
+    "search-post-office": "Обрано: Відділення №1: вул. Городоцька, 359",
+    "post-office": "1ec09d2e-e1c2-11e3-8c4a-0050568002cf",
+    "courier-settlement-search": "",
+    "street": "",
+    "house": "",
+    "flat": "",
+    "postal-code": "50055",
+    "country": "Ukraine",
+    "variantsWithQty": {
+      "41864347877450": 2
+    }
+  }
 
   if (!data || Object.keys(data).length === 0) {
     console.error('❌[ERROR] - Bad request. No data found');
