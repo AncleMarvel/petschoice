@@ -109,9 +109,10 @@ async function prefillSubmitHandler(event) {
     const dataExample = {
         "firstName": "Нікіта",
         "lastName": "Шевченко",
-        "email": "anclemarvel@gmail.com",
+        "surname": "Олександрович",
+        "email": "test@gmail.com",
         "phone": "+380993350918",
-        "shipping-type": "post-office",
+        "shipping-type": "post-office" || "courier",
         "settlement-search": "Обрано: Львів, Львівська",
         "settlement-selection": "e71abb60-4b33-11e4-ab6d-005056801329",
         "search-post-office": "Обрано: Відділення №1: вул. Городоцька, 359",
@@ -134,7 +135,6 @@ async function prefillSubmitHandler(event) {
     for (const [key, value] of formData.entries()) {
         data[key] = value;
     }
-    console.log('✌️data --->', data);
 
     const variantsWithQty = {};
     cart.items.forEach(item => {
@@ -142,6 +142,16 @@ async function prefillSubmitHandler(event) {
     });
 
     data.variantsWithQty = variantsWithQty;
+    console.log('✌️data --->', data);
+
+    const response = await fetch('/cart/update.js', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ note: data })
+    }).then(response => response.json()).catch(console.error);
+    console.log('✌️response --->', response);
 
     const prefillLink = createPrefilLink(data);
 
