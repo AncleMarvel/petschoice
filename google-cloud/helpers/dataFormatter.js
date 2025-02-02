@@ -152,7 +152,14 @@ function createXMLForOrdersCreate(order) {
     `).join('');
   };
 
-  const orderNote = JSON.parse(order.note) ?? {}; 
+  const orderNote = (() => {
+    try {
+      return JSON.parse(order.note) || {};
+    } catch (e) {
+      return {};
+    }
+  })();
+
   const organization = config.novapost.xml[config.nodeEnv].organization;
   const shippingAddress = order.shipping_address || {};
   const customer = order.customer || {};
@@ -161,25 +168,27 @@ function createXMLForOrdersCreate(order) {
   const prepaymentItem = order.line_items.find(item => item.variant_id == 41899282661450);
   const prepaymentAmount = prepaymentItem ? parseFloat(prepaymentItem.price) : 0;
   const totalAmount = isFullyPaid ? 0.00 : parseFloat(order.current_subtotal_price) - prepaymentAmount;
-  console.log('🚔🚨totalAmount --->', totalAmount);
 
   const shippingType = orderNote.selectedPostoffice ? 0 : 1;
 
   const getAdressXML = () => {
     return shippingType === 0 ? `
-      <wms:Region>${orderNote.selectedPostoffice.SettlementAreaDescription}</wms:Region>
-      <wms:City>${orderNote.selectedPostoffice.SettlementDescription}</wms:City>
-      <wms:Phone>${orderNote.phone}</wms:Phone>
-      <wms:DivisionID>${orderNote.selectedPostoffice.Number}</wms:DivisionID>
+      <wms:Region>${orderNote.selectedPostoffice?.SettlementAreaDescription || ''}</wms:Region>
+      <wms:City>${orderNote.selectedPostoffice?.SettlementDescription || ''}</wms:City>
+      <wms:Phone>${orderNote.phone || ''}</wms:Phone>
+      <wms:DivisionID>${orderNote.selectedPostoffice?.Number || ''}</wms:DivisionID>
     ` : `
-      <wms:Region>${orderNote.settlementObject.AreaDescription}</wms:Region>
-      <wms:City>${orderNote.settlementObject.Description}</wms:City>
-      <wms:Street>${orderNote.street}</wms:Street>
-      <wms:House>${orderNote.house}</wms:House>
-      <wms:Flat>${orderNote.flat}</wms:Flat>
-      <wms:Phone>${orderNote.phone}</wms:Phone>
+      <wms:Region>${orderNote.settlementObject?.AreaDescription || ''}</wms:Region>
+      <wms:City>${orderNote.settlementObject?.Description || ''}</wms:City>
+      <wms:Street>${orderNote.street || ''}</wms:Street>
+      <wms:House>${orderNote.house || ''}</wms:House>
+      <wms:Flat>${orderNote.flat || ''}</wms:Flat>
+      <wms:Phone>${orderNote.phone || ''}</wms:Phone>
     `;
-  }
+  };
+
+  const date = new Date(order.created_at || '');
+  const externalDate = `${date.getDate().toString().padStart(2, '0')}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}${date.getMinutes().toString().padStart(2, '0')}${date.getSeconds().toString().padStart(2, '0')}`;
 
   const xml = `<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:wms="http://npl-dev.omnic.solutions/wms">
     <soap:Header/>
@@ -190,11 +199,13 @@ function createXMLForOrdersCreate(order) {
           <wms:MessageOrders>
             <wms:HeadOrder>
               <wms:ExternalNumber>${order.id || ''}</wms:ExternalNumber>
-              <wms:ExternalDate>${new Date(order.created_at || '').toISOString().replace(/[-:.TZ]/g, '')}</wms:ExternalDate>
+              <wms:ExternalDate>${externalDate}</wms:ExternalDate>
               <wms:DestWarehouse>KyivSkhid</wms:DestWarehouse>
               <wms:Adress>${getAdressXML()}</wms:Adress>
               <wms:PayType>1</wms:PayType>
               <wms:payer>1</wms:payer>
+              <wms:RedeliveryType>${isFullyPaid ? '0' : '2'}</wms:RedeliveryType>
+              <wms:DeliveryInOut>${isFullyPaid ? '0.00' : totalAmount.toFixed(2)}</wms:DeliveryInOut>
               <wms:Contactor>
                 <wms:rcptName>${shippingAddress.name || `${customer.first_name} ${customer.last_name}`}</wms:rcptName>
                 <wms:rcptContact>${shippingAddress.name || `${customer.first_name} ${customer.last_name}`}</wms:rcptContact>
@@ -203,8 +214,6 @@ function createXMLForOrdersCreate(order) {
               <wms:Description>Shopify order</wms:Description>
               <wms:Cost>${order.total_price || 0}</wms:Cost>
               <wms:DeliveryType>${shippingType}</wms:DeliveryType>
-              ${!isFullyPaid ? '<wms:RedeliveryType>2</wms:RedeliveryType>' : ''}
-              ${!isFullyPaid ? `<wms:DeliveryInOut>${totalAmount}</wms:DeliveryInOut>` : ''}
               <wms:AdditionalParams/>
             </wms:HeadOrder>
             <wms:Items>${getItemsXML(order.line_items || [])}</wms:Items>
@@ -217,9 +226,10 @@ function createXMLForOrdersCreate(order) {
   return xml;
 }
 
+
 function createXMLForOrdersCancelled(order) {
   const organization = config.novapost.xml[config.nodeEnv].organization;
-  
+
   return `<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:wms="http://npl-dev.omnic.solutions/wms">
     <soap:Header/>
     <soap:Body>
@@ -349,7 +359,7 @@ function formatLineItemsByFulfillmentOrder(orderId, lineItems) {
   ];
 }
 
-module.exports = { 
+module.exports = {
   createXMLForProductsCreateUpdate,
   createXMLForProductsDelete,
   createXMLForGetStocks,
