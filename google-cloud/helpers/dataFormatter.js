@@ -212,13 +212,13 @@ function createXMLForOrdersCreate(order) {
               <wms:Adress>${getAdressXML()}</wms:Adress>
               <wms:PayType>1</wms:PayType>
               <wms:payer>1</wms:payer>
-              <wms:RedeliveryType>${prepaymentItem ? '0' : '2'}</wms:RedeliveryType>
-              <wms:DeliveryInOut>${prepaymentItem ? '0.00' : subtotalPrice.toFixed(2)}</wms:DeliveryInOut>
               <wms:Contactor>
                 <wms:rcptName>${shippingAddress.name || `${customer.first_name} ${customer.last_name}`}</wms:rcptName>
                 <wms:rcptContact>${shippingAddress.name || `${customer.first_name} ${customer.last_name}`}</wms:rcptContact>
                 <wms:RecipientType>PrivatePerson</wms:RecipientType>
               </wms:Contactor>
+              <wms:RedeliveryType>${prepaymentItem ? '0' : '2'}</wms:RedeliveryType>
+              <wms:DeliveryInOut>${prepaymentItem ? '0.00' : subtotalPrice.toFixed(2)}</wms:DeliveryInOut>
               <wms:Description>Shopify order</wms:Description>
               <wms:Cost>${order.total_price || 0}</wms:Cost>
               <wms:DeliveryType>${shippingType}</wms:DeliveryType>
