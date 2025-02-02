@@ -113,6 +113,7 @@ exports.orderCreate = async (req, res) => {
     return res.status(400).send('Bad request');
   }
 
+  console.log(JSON.stringify(req.body));
   console.log(`📄[INFO] - Order: ${data.name}`);
 
   try {

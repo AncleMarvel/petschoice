@@ -164,10 +164,18 @@ function createXMLForOrdersCreate(order) {
   const shippingAddress = order.shipping_address || {};
   const customer = order.customer || {};
 
-  const isFullyPaid = !order.line_items.some(item => item.variant_id == 41899282661450);
   const prepaymentItem = order.line_items.find(item => item.variant_id == 41899282661450);
-  const prepaymentAmount = prepaymentItem ? parseFloat(prepaymentItem.price) : 0;
-  const totalAmount = isFullyPaid ? 0.00 : parseFloat(order.current_subtotal_price) - prepaymentAmount;
+  let subtotalPrice = 0;
+ 
+  if (prepaymentItem) {
+    order.line_items.forEach((line) => {
+      if (line.variant_id == 41899282661450) return;
+      const price = parseFloat(line.price);
+      const quantity = parseInt(line.current_quantity);
+  
+      subtotalPrice += price * quantity;
+    });
+  }
 
   const shippingType = orderNote.selectedPostoffice ? 0 : 1;
 
@@ -204,8 +212,8 @@ function createXMLForOrdersCreate(order) {
               <wms:Adress>${getAdressXML()}</wms:Adress>
               <wms:PayType>1</wms:PayType>
               <wms:payer>1</wms:payer>
-              <wms:RedeliveryType>${isFullyPaid ? '0' : '2'}</wms:RedeliveryType>
-              <wms:DeliveryInOut>${isFullyPaid ? '0.00' : totalAmount.toFixed(2)}</wms:DeliveryInOut>
+              <wms:RedeliveryType>${prepaymentItem ? '0' : '2'}</wms:RedeliveryType>
+              <wms:DeliveryInOut>${prepaymentItem ? '0.00' : subtotalPrice.toFixed(2)}</wms:DeliveryInOut>
               <wms:Contactor>
                 <wms:rcptName>${shippingAddress.name || `${customer.first_name} ${customer.last_name}`}</wms:rcptName>
                 <wms:rcptContact>${shippingAddress.name || `${customer.first_name} ${customer.last_name}`}</wms:rcptContact>
