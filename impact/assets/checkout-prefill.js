@@ -16,7 +16,7 @@
  * @returns {String}
  * @example 'https://petschoice.club/cart/41864347975754:1?checkout[email]=customer@example.com&checkout[shipping_address][city]=Lviv&checkout[shipping_address][first_name]=Nikita&checkout[shipping_address][last_name]=Shechenko&checkout[shipping_address][address1]=Ломоносова,55,кв6&checkout[shipping_address][zip]=03022&checkout[shipping_address][country]=Ukraine&checkout[shipping_address][phone]=+380995586745'
  */
-function createPrefilLink({ variantsWithQty, email, city, firstName, lastName, address, zip, country, phone }) {
+function createPrefilLink({ variantsWithQty, email, city, firstName, lastName, address, zip, country, phone, selectedPostoffice, settlementObject }) {
     let variants = Object.entries(variantsWithQty)
         .map(([variantId, qty]) => `${variantId}:${qty}`)
         .join(',');
@@ -31,6 +31,14 @@ function createPrefilLink({ variantsWithQty, email, city, firstName, lastName, a
         "checkout[shipping_address][country]": country,
         "checkout[shipping_address][phone]": phone
     };
+
+    if (selectedPostoffice) {
+        queryParams["note"] = JSON.stringify({selectedPostoffice});
+    }
+
+    if (settlementObject) {
+        queryParams["note"] = JSON.stringify({settlementObject});
+    }
 
     const queryString = Object.entries(queryParams)
         .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
@@ -145,10 +153,25 @@ async function prefillSubmitHandler(event) {
     }
     cart = await fetch('/cart.js').then(response => response.json()).catch(console.error);
 
-    const { PostalCodeUA, Description, CityDescription } = state.fetchedPostOffices.find(postoffice => postoffice.Ref === state.selectedPostoffice);
-    data.zip = PostalCodeUA;
-    data.address = Description;
-    data.city = CityDescription;
+
+    if (data['shipping-type'] === 'post-office') {
+        const selectedPostoffice = state.fetchedPostOffices.find(postoffice => postoffice.Ref === state.selectedPostoffice);
+        const { PostalCodeUA, Description, CityDescription } = selectedPostoffice;
+        data.zip = PostalCodeUA;
+        data.address = Description;
+        data.city = CityDescription;
+        data.selectedPostoffice = selectedPostoffice;
+    } else {
+        const selectedSettlement = state.fetchedSettlements.find(settlement => settlement.Ref === state.selectedSettlement);
+        let address = `обл. ${selectedSettlement.AreaDescription}, ${selectedSettlement.Description}, ${data.street}, ${data.house}`;
+        if (data.flat) {
+            address += `, кв. ${data.flat}`;
+        }
+        data.address = address;
+        data.city = selectedSettlement.Description;
+        data.settlementObject = selectedSettlement;
+    }
+
 
     const variantsWithQty = {};
     cart.items.forEach(item => {
@@ -157,31 +180,180 @@ async function prefillSubmitHandler(event) {
 
     data.variantsWithQty = variantsWithQty;
 
-    const dataExample = {
-        "zip": "79018",
-        "address": "Відділення №1: вул. Городоцька, 359",
-        "city": "Львів",
+    const dataExampleOfCurierShipping = {
         "firstName": "Нікіта",
-        "lastName": "Шевченко",
+        "lastName": "Shevchenko",
         "surname": "Олександрович",
         "email": "anclemarvel@gmail.com",
         "phone": "+380993350918",
-        "payment-type": "full" || "prepayment",
-        "shipping-type": "post-office" || "courier",
+        "payment-type": "full",
+        "shipping-type": "courier",
+        "settlement-search": "",
+        "search-post-office": "",
+        "courier-settlement-search": "Обрано: Львів, Львівська",
+        "courier-settlement-selection": "e71abb60-4b33-11e4-ab6d-005056801329",
+        "street": "Грушевського",
+        "house": "10",
+        "flat": "",
+        "postal-code": "4610100000",
+        "country": "Ukraine",
+        "address": "обл. Львівська, Львів, Грушевського, 10",
+        "city": "Львів",
+        "settlementObject": {
+            "Ref": "e71abb60-4b33-11e4-ab6d-005056801329",
+            "SettlementType": "563ced10-f210-11e3-8c4a-0050568002cf",
+            "Latitude": "49.839678000000000",
+            "Longitude": "24.029709000000000",
+            "Description": "Львів",
+            "DescriptionRu": "Львов",
+            "DescriptionTranslit": "Lviv",
+            "SettlementTypeDescription": "місто",
+            "SettlementTypeDescriptionRu": "город",
+            "SettlementTypeDescriptionTranslit": "misto",
+            "Region": "",
+            "RegionsDescription": "",
+            "RegionsDescriptionRu": "",
+            "RegionsDescriptionTranslit": "",
+            "Area": "dcaadd3a-4b33-11e4-ab6d-005056801329",
+            "AreaDescription": "Львівська",
+            "AreaDescriptionRu": "Львовская область",
+            "AreaDescriptionTranslit": "Lvivska",
+            "Index1": "79002",
+            "Index2": "79071",
+            "IndexCOATSU1": "4610100000",
+            "Delivery1": "1",
+            "Delivery2": "1",
+            "Delivery3": "1",
+            "Delivery4": "1",
+            "Delivery5": "1",
+            "Delivery6": "1",
+            "Delivery7": "1",
+            "SpecialCashCheck": 1,
+            "RadiusHomeDelivery": "500",
+            "RadiusExpressPickUp": "500",
+            "RadiusDrop": "500",
+            "Warehouse": "1",
+            "AddressDeliveryAllowed": true
+        },
+        "variantsWithQty": {
+            "41864347877450": 2
+        }
+    }
+
+    const dataExampleOfPostOfficeShipping = {
+        "firstName": "Нікіта",
+        "lastName": "Shevchenko",
+        "surname": "Олександрович",
+        "email": "anclemarvel@gmail.com",
+        "phone": "+380993350918",
+        "payment-type": "full",
+        "shipping-type": "post-office",
         "settlement-search": "Обрано: Львів, Львівська",
         "settlement-selection": "e71abb60-4b33-11e4-ab6d-005056801329",
         "search-post-office": "Обрано: Відділення №1: вул. Городоцька, 359",
         "post-office": "1ec09d2e-e1c2-11e3-8c4a-0050568002cf",
-        "courier-settlement-search": "",
-        "street": "",
-        "house": "",
+        "courier-settlement-search": "Обрано: Львів, Львівська",
+        "courier-settlement-selection": "e71abb60-4b33-11e4-ab6d-005056801329",
+        "street": "Грушевського",
+        "house": "10",
         "flat": "",
-        "postal-code": "50055",
+        "postal-code": "4610100000",
         "country": "Ukraine",
+        "zip": "79018",
+        "address": "Відділення №1: вул. Городоцька, 359",
+        "city": "Львів",
+        "selectedPostoffice": {
+            "SiteKey": "8",
+            "Description": "Відділення №1: вул. Городоцька, 359",
+            "DescriptionRu": "Отделение №1: ул. Городоцкая, 359",
+            "ShortAddress": "Львів, Городоцька, 359",
+            "ShortAddressRu": "Львов, Городоцкая, 359",
+            "Phone": "380800500609",
+            "TypeOfWarehouse": "9a68df70-0267-42a8-bb5c-37f427e36ee4",
+            "Ref": "1ec09d2e-e1c2-11e3-8c4a-0050568002cf",
+            "Number": "1",
+            "CityRef": "db5c88f5-391c-11dd-90d9-001a92567626",
+            "CityDescription": "Львів",
+            "CityDescriptionRu": "Львов",
+            "SettlementRef": "e71abb60-4b33-11e4-ab6d-005056801329",
+            "SettlementDescription": "Львів",
+            "SettlementAreaDescription": "Львівська",
+            "SettlementRegionsDescription": "",
+            "SettlementTypeDescription": "місто",
+            "SettlementTypeDescriptionRu": "город",
+            "Longitude": "23.919766000000000",
+            "Latitude": "49.821426000000000",
+            "PostFinance": "0",
+            "BicycleParking": "1",
+            "PaymentAccess": "1",
+            "POSTerminal": "1",
+            "InternationalShipping": "1",
+            "SelfServiceWorkplacesCount": "1",
+            "TotalMaxWeightAllowed": "0",
+            "PlaceMaxWeightAllowed": "1100",
+            "SendingLimitationsOnDimensions": {
+                "Width": 170,
+                "Height": 220,
+                "Length": 600
+            },
+            "ReceivingLimitationsOnDimensions": {
+                "Width": 170,
+                "Height": 220,
+                "Length": 600
+            },
+            "Reception": {
+                "Monday": "08:00-21:00",
+                "Tuesday": "08:00-21:00",
+                "Wednesday": "08:00-21:00",
+                "Thursday": "08:00-21:00",
+                "Friday": "08:00-21:00",
+                "Saturday": "09:00-19:00",
+                "Sunday": "09:00-19:00"
+            },
+            "Delivery": {
+                "Monday": "08:00-20:00",
+                "Tuesday": "08:00-20:00",
+                "Wednesday": "08:00-20:00",
+                "Thursday": "08:00-20:00",
+                "Friday": "08:00-20:00",
+                "Saturday": "09:00-19:00",
+                "Sunday": "09:00-19:00"
+            },
+            "Schedule": {
+                "Monday": "08:00-21:00",
+                "Tuesday": "08:00-21:00",
+                "Wednesday": "08:00-21:00",
+                "Thursday": "08:00-21:00",
+                "Friday": "08:00-21:00",
+                "Saturday": "09:00-19:00",
+                "Sunday": "09:00-19:00"
+            },
+            "DistrictCode": "ЛЕО/Т2/В1",
+            "WarehouseStatus": "Working",
+            "WarehouseStatusDate": "2000-01-01 00:00:00",
+            "WarehouseIllusha": "0",
+            "CategoryOfWarehouse": "Branch",
+            "Direct": "",
+            "RegionCity": "ЛЬВІВ ПОСИЛКОВИЙ",
+            "WarehouseForAgent": "0",
+            "GeneratorEnabled": "1",
+            "MaxDeclaredCost": "0",
+            "WorkInMobileAwis": "0",
+            "DenyToSelect": "0",
+            "CanGetMoneyTransfer": "0",
+            "HasMirror": "1",
+            "HasFittingRoom": "1",
+            "OnlyReceivingParcel": "0",
+            "PostMachineType": "",
+            "PostalCodeUA": "79018",
+            "WarehouseIndex": "74/1",
+            "BeaconCode": "",
+            "Location": ""
+        },
         "variantsWithQty": {
             "41864347877450": 2
         }
-    };
+    }
     console.log('✌️data --->', data);
 
     const response = await fetch('/cart/update.js', {
@@ -194,8 +366,9 @@ async function prefillSubmitHandler(event) {
     console.log('✌️response --->', response);
 
     const prefillLink = createPrefilLink(data);
+    console.log('✌️prefillLink --->', prefillLink);
 
-    window.location.href = prefillLink;
+    // window.location.href = prefillLink;
 }
 
 /**
@@ -464,8 +637,8 @@ courierSettlementSearch.addEventListener('input', async (event) => {
  */
 courierSettlementSelection.addEventListener('change', (e) => {
     // Скрываем селект улиц, сбрасываем введённое в поиск улиц
-    courierStreetSelection.classList.add('hidden');
-    courierStreetSearch.value = '';
+    // courierStreetSelection.classList.add('hidden');
+    // courierStreetSearch.value = '';
 
     const selectedRef = e.target.value; // Ref выбранного населённого пункта
     state.selectedSettlement = selectedRef;
