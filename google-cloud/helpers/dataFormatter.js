@@ -152,6 +152,7 @@ function createXMLForOrdersCreate(order) {
     `).join('');
   };
 
+  const orderNote = JSON.parse(order.note) ?? {}; 
   const organization = config.novapost.xml[config.nodeEnv].organization;
   const shippingAddress = order.shipping_address || {};
   const customer = order.customer || {};
@@ -159,11 +160,12 @@ function createXMLForOrdersCreate(order) {
   const isFullyPaid = !order.line_items.some(item => item.variant_id == 41899282661450);
   const prepaymentItem = order.line_items.find(item => item.variant_id == 41899282661450);
   const prepaymentAmount = prepaymentItem ? parseFloat(prepaymentItem.price) : 0;
-  const totalAmount = isFullyPaid ? 0 : parseFloat(order.current_subtotal_price) - prepaymentAmount;
+  const totalAmount = isFullyPaid ? 0.00 : parseFloat(order.current_subtotal_price) - prepaymentAmount;
+  console.log('🚔🚨totalAmount --->', totalAmount);
 
-  const shippingType = order.note['shipping-type'] === 'post-office' ? 0 : 1;
+  const shippingType = orderNote.selectedPostoffice ? 0 : 1;
 
-  const getAdressXML = (orderNote) => {
+  const getAdressXML = () => {
     return shippingType === 0 ? `
       <wms:Region>${orderNote.selectedPostoffice.SettlementAreaDescription}</wms:Region>
       <wms:City>${orderNote.selectedPostoffice.SettlementDescription}</wms:City>
@@ -190,19 +192,19 @@ function createXMLForOrdersCreate(order) {
               <wms:ExternalNumber>${order.id || ''}</wms:ExternalNumber>
               <wms:ExternalDate>${new Date(order.created_at || '').toISOString().replace(/[-:.TZ]/g, '')}</wms:ExternalDate>
               <wms:DestWarehouse>KyivSkhid</wms:DestWarehouse>
-              <wms:Adress>${getAdressXML(order.note)}</wms:Adress>
+              <wms:Adress>${getAdressXML()}</wms:Adress>
               <wms:PayType>1</wms:PayType>
               <wms:payer>1</wms:payer>
               <wms:Contactor>
                 <wms:rcptName>${shippingAddress.name || `${customer.first_name} ${customer.last_name}`}</wms:rcptName>
                 <wms:rcptContact>${shippingAddress.name || `${customer.first_name} ${customer.last_name}`}</wms:rcptContact>
                 <wms:RecipientType>PrivatePerson</wms:RecipientType>
-                ${!isFullyPaid ? '<wms:RedeliveryType>2</wms:RedeliveryType>' : ''}
-                <wms:DeliveryInOut>${totalAmount}</wms:DeliveryInOut>
               </wms:Contactor>
               <wms:Description>Shopify order</wms:Description>
               <wms:Cost>${order.total_price || 0}</wms:Cost>
               <wms:DeliveryType>${shippingType}</wms:DeliveryType>
+              ${!isFullyPaid ? '<wms:RedeliveryType>2</wms:RedeliveryType>' : ''}
+              ${!isFullyPaid ? `<wms:DeliveryInOut>${totalAmount}</wms:DeliveryInOut>` : ''}
               <wms:AdditionalParams/>
             </wms:HeadOrder>
             <wms:Items>${getItemsXML(order.line_items || [])}</wms:Items>
