@@ -209,11 +209,9 @@ function createXMLForOrdersCreate(order) {
               <wms:ExternalNumber>${order.id || ''}</wms:ExternalNumber>
               <wms:ExternalDate>${externalDate}</wms:ExternalDate>
               <wms:DestWarehouse>KyivSkhid</wms:DestWarehouse>
+              <wms:Adress>${getAdressXML()}</wms:Adress>
               <wms:PayType>1</wms:PayType>
               <wms:payer>1</wms:payer>
-              <wms:Adress>
-                ${getAdressXML()}
-              </wms:Adress>
               <wms:Contactor>
                 <wms:rcptName>${shippingAddress.name || `${customer.first_name} ${customer.last_name}`}</wms:rcptName>
                 <wms:rcptContact>${shippingAddress.name || `${customer.first_name} ${customer.last_name}`}</wms:rcptContact>
@@ -233,6 +231,7 @@ function createXMLForOrdersCreate(order) {
     </soap:Body>
   </soap:Envelope>`;
 
+  console.log('🚔🚨xml --->', xml);
   return xml;
 }
 
