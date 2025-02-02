@@ -138,6 +138,7 @@ function prepareInventoryAdjustments(stocksNovaPost, stocksShopify) {
   };
 }
 
+
 function createXMLForOrdersCreate(order) {
   const getItemsXML = (lineItems) => {
     return lineItems.map(item => `
@@ -169,50 +170,29 @@ function createXMLForOrdersCreate(order) {
   if (prepaymentItem) {
     order.line_items.forEach((line) => {
       if (line.variant_id == 41899282661450) return;
-      subtotalPrice += parseFloat(line.price) * parseInt(line.current_quantity);
+      const price = parseFloat(line.price);
+      const quantity = parseInt(line.current_quantity);
+
+      subtotalPrice += price * quantity;
     });
   }
 
   const shippingType = orderNote.selectedPostoffice ? 0 : 1;
 
   const getAdressXML = () => {
-    let addressFields = [];
-
-    if (shippingType === 0) {
-      if (orderNote.selectedPostoffice?.SettlementAreaDescription) {
-        addressFields.push(`<wms:Region>${orderNote.selectedPostoffice.SettlementAreaDescription}</wms:Region>`);
-      }
-      if (orderNote.selectedPostoffice?.SettlementDescription) {
-        addressFields.push(`<wms:City>${orderNote.selectedPostoffice.SettlementDescription}</wms:City>`);
-      }
-      if (orderNote.phone) {
-        addressFields.push(`<wms:Phone>${orderNote.phone}</wms:Phone>`);
-      }
-      if (orderNote.selectedPostoffice?.Number) {
-        addressFields.push(`<wms:DivisionID>${orderNote.selectedPostoffice.Number}</wms:DivisionID>`);
-      }
-    } else {
-      if (orderNote.settlementObject?.AreaDescription) {
-        addressFields.push(`<wms:Region>${orderNote.settlementObject.AreaDescription}</wms:Region>`);
-      }
-      if (orderNote.settlementObject?.Description) {
-        addressFields.push(`<wms:City>${orderNote.settlementObject.Description}</wms:City>`);
-      }
-      if (orderNote.street) {
-        addressFields.push(`<wms:Street>${orderNote.street}</wms:Street>`);
-      }
-      if (orderNote.house) {
-        addressFields.push(`<wms:House>${orderNote.house}</wms:House>`);
-      }
-      if (orderNote.flat) {
-        addressFields.push(`<wms:Flat>${orderNote.flat}</wms:Flat>`);
-      }
-      if (orderNote.phone) {
-        addressFields.push(`<wms:Phone>${orderNote.phone}</wms:Phone>`);
-      }
-    }
-
-    return addressFields.length > 0 ? `<wms:Adress>${addressFields.join('')}</wms:Adress>` : '';
+    return shippingType === 0 ? `
+      <wms:Region>${orderNote.selectedPostoffice?.SettlementAreaDescription || ''}</wms:Region>
+      <wms:City>${orderNote.selectedPostoffice?.SettlementDescription || ''}</wms:City>
+      <wms:Phone>${orderNote.phone || ''}</wms:Phone>
+      <wms:DivisionID>${orderNote.selectedPostoffice?.Number || ''}</wms:DivisionID>
+    ` : `
+      <wms:Region>${orderNote.settlementObject?.AreaDescription || ''}</wms:Region>
+      <wms:City>${orderNote.settlementObject?.Description || ''}</wms:City>
+      <wms:Street>${orderNote.street || ''}</wms:Street>
+      <wms:House>${orderNote.house || ''}</wms:House>
+      <wms:Flat>${orderNote.flat || ''}</wms:Flat>
+      <wms:Phone>${orderNote.phone || ''}</wms:Phone>
+    `;
   };
 
   const date = new Date(order.created_at || '');
@@ -231,12 +211,14 @@ function createXMLForOrdersCreate(order) {
               <wms:DestWarehouse>KyivSkhid</wms:DestWarehouse>
               <wms:PayType>1</wms:PayType>
               <wms:payer>1</wms:payer>
+              <wms:Adress>
+                ${getAdressXML()}
+              </wms:Adress>
               <wms:Contactor>
                 <wms:rcptName>${shippingAddress.name || `${customer.first_name} ${customer.last_name}`}</wms:rcptName>
                 <wms:rcptContact>${shippingAddress.name || `${customer.first_name} ${customer.last_name}`}</wms:rcptContact>
                 <wms:RecipientType>PrivatePerson</wms:RecipientType>
               </wms:Contactor>
-              ${getAdressXML()}
               <wms:Description>Shopify order</wms:Description>
               ${prepaymentItem ? '' : '<wms:RedeliveryType>2</wms:RedeliveryType>'}
               ${prepaymentItem ? '' : `<wms:DeliveryInOut>${subtotalPrice.toFixed(2)}</wms:DeliveryInOut>`}
