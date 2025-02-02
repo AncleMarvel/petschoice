@@ -1,3 +1,5 @@
+const config = require('../config');
+
 const ordersCreate = {
     "id": 820982911946154508,
     "admin_graphql_api_id": "gid://shopify/Order/820982911946154508",
@@ -456,29 +458,26 @@ const ordersCreate = {
 }
 
 /**
- * Преобразует заказ из Shopify в формат, необходимый для создания/обновления заказа (CreateUpdateOrders) в Nova Poshta.
+ * Преобразует заказ из Shopify в формат, необходимый для создания/обновления заказа (CreateUpdateOrders)
+ * в Nova Poshta.
  * 
  * Функция использует стандартные поля заказа Shopify и NP-специфичные данные, сохранённые в order.note.
  * В зависимости от типа доставки (адресная доставка курьером или доставка на отделение NP)
- * маппинг формируется соответственно:
+ * маппинг формируется соответственно.
  * 
- * - Для доставки на отделение NP (shipping-type === "post-office"):
- *    - В поле HeadOrder.DestWarehouse передаётся ref отделения (из note["post-office"]).
- *    - В узле Adress заполняются минимальные поля (например, City, Phone, ZipCode и т.д.).
- * 
- * - Для адресной доставки курьером (shipping-type !== "post-office"):
- *    - В узле Adress используются данные из shipping_address (с возможными переопределениями из note).
- * 
+ * Если обнаруживается, что в заказе присутствует товар предоплаты (prepaymentVariantId),
+ * предполагается, что пользователь оплатил фиксированную сумму (200 грн) предоплаты.
+ * Тогда для расчёта оставшейся суммы (Cost) суммируются оригинальные цены всех остальных товаров,
+ * после чего из общей суммы вычитается 200 грн.
+ * Если предоплаты нет – итоговая сумма равна "0.00".
+ *
  * @param {Object} shopifyOrder - Объект заказа из Shopify (webhook payload).
  * @returns {Object} Объект, соответствующий структуре для метода CreateUpdateOrders API Nova Poshta.
- *
- * @example
- * const npPayload = mapShopifyOrderToNPFulfillment(shopifyOrder);
- * // npPayload можно передать в вызов createUpdateOrders(npPayload)
  */
 function mapShopifyOrderToNPFulfillment(shopifyOrder) {
+    console.log('RUN mapShopifyOrderToNPFulfillment...');
+    console.log('✌️shopifyOrder --->', JSON.stringify(shopifyOrder, null, 2));
     // Извлекаем NP-специфичные данные из order.note.
-    // Если note – строка, пробуем распарсить её как JSON; если объект – используем напрямую.
     let npNote = {};
     if (shopifyOrder.note) {
         if (typeof shopifyOrder.note === 'string') {
@@ -497,44 +496,39 @@ function mapShopifyOrderToNPFulfillment(shopifyOrder) {
     const isPostOffice = shippingType === 'post-office';
 
     // Формируем идентификаторы заказа.
-    // ExternalNumber – используем значение из shopifyOrder.name (удалив возможный префикс "#").
     const externalNumber = shopifyOrder.name ? shopifyOrder.name.replace(/^#/, '') : shopifyOrder.name;
-    // GUID – используем идентификатор заказа Shopify.
     const guid = shopifyOrder.id ? shopifyOrder.id.toString() : shopifyOrder.id;
-    // ExternalDate – берем дату создания заказа (при необходимости можно преобразовать формат).
     const externalDate = shopifyOrder.created_at || '';
 
-    // Для доставки на отделение NP передаём ref отделения в DestWarehouse.
+    // Для доставки на отделение NP передаём ref отделения из NP note.
     const destWarehouse = isPostOffice ? (npNote["post-office"] || "") : "";
 
     // Формируем блок Adress.
     let adress = {};
     if (isPostOffice) {
-        // Если доставка на отделение, заполняем только необходимые поля.
         adress = {
-            Region: "",                           // Не используется для доставки на отделение
-            City: npNote.city || "",              // Например, "Львів"
-            Street: "",                           // Оставляем пустым
-            House: "",                            // Оставляем пустым
-            Flat: "",                             // Оставляем пустым
-            Phone: npNote.phone || "",            // Телефон из NP данных
-            NPWarehouse: 1,                       // Если возможно – номер отделения (можно задать по умолчанию)
+            Region: "",
+            City: npNote.city || "",
+            Street: "",
+            House: "",
+            Flat: "",
+            Phone: npNote.phone || "",
+            NPWarehouse: 1,
             District: "",
-            ZipCode: npNote.zip || "",            // Например, "79018"
-            CountryCode: npNote.country || "",    // Например, "Ukraine"
-            PostCode: npNote["postal-code"] || "",  // Например, "50055"
+            ZipCode: npNote.zip || "",
+            CountryCode: npNote.country || "",
+            PostCode: npNote["postal-code"] || "",
             Email: npNote.email || ""
         };
     } else {
-        // Если адресная доставка курьером, используем данные из shipping_address с возможными переопределениями из note.
         adress = {
             Region: shopifyOrder.shipping_address ? shopifyOrder.shipping_address.province : "",
             City: shopifyOrder.shipping_address ? shopifyOrder.shipping_address.city : "",
             Street: shopifyOrder.shipping_address ? shopifyOrder.shipping_address.address1 : "",
-            House: npNote.house || "",  // NP-специфичное поле, если указано
+            House: npNote.house || "",
             Flat: npNote.flat || (shopifyOrder.shipping_address ? shopifyOrder.shipping_address.address2 || "" : ""),
             Phone: shopifyOrder.shipping_address ? shopifyOrder.shipping_address.phone : "",
-            NPWarehouse: 0,             // Для адресной доставки оставляем 0
+            NPWarehouse: 0,
             District: "",
             ZipCode: shopifyOrder.shipping_address ? shopifyOrder.shipping_address.zip : "",
             CountryCode: shopifyOrder.shipping_address ? shopifyOrder.shipping_address.country_code : "",
@@ -543,31 +537,55 @@ function mapShopifyOrderToNPFulfillment(shopifyOrder) {
         };
     }
 
-    // Настраиваем параметры оплаты.
-    // Предполагаем, что тип оплаты и плательщик фиксированы: 1 — наличный, плательщик – получатель.
+    // Фиксированные параметры оплаты: 1 — наличный расчет, payer – получатель.
     const payType = 1;
     const payer = 1;
 
     // Формируем данные контактного лица (Contactor).
-    // Объединяем поля firstName, lastName, surname из NP note.
     const rcptName = [npNote.firstName, npNote.lastName, npNote.surname].filter(Boolean).join(" ");
     const rcptContact = npNote.phone || "";
-    const recipientType = "PrivatePerson"; // по умолчанию (если физическое лицо)
-    const recipientEDRPOU = "";           // оставляем пустым, если не требуется
+    const recipientType = "PrivatePerson";
+    const recipientEDRPOU = "";
 
-    // Описание заказа. Здесь можно задать различное описание для доставки на отделение или курьерской доставки.
+    // Описание заказа.
     const description = isPostOffice
         ? "Доставка через відділення Нової Пошти"
         : "Адресна доставка кур'єром";
 
-    // Сумма, которую необходимо собрать при получении (Cost).
-    // Если в NP note есть значение, используем его; иначе – по умолчанию "0.00".
-    const cost = npNote.cost || "0.00";
+    // --- Удаляем линию предоплаты из заказа (если она присутствует) ---
+    const prepaymentVariantId = 41899282661450;
+    const indexOfPrepaymentLine = shopifyOrder.line_items.findIndex(item => item.variant_id === prepaymentVariantId);
+    if (indexOfPrepaymentLine !== -1) {
+        shopifyOrder.line_items = shopifyOrder.line_items.filter((_, index) => index !== indexOfPrepaymentLine);
+    }
+
+    /**
+     * Сумма, которую необходимо собрать от юзера при получении посылки (Cost).
+     * Если indexOfPrepaymentLine >= 0, тогда предполагается, что пользователь заплатил уже 200 грн предоплаты,
+     * и на все продукты, кроме prepaymentVariantId, была применена скидка 100%.
+     * В этом случае необходимо взять стоимость товаров без скидки (используя поле original_price, если оно присутствует)
+     * и вычесть из общей суммы фиксированную сумму предоплаты (200 грн).
+     * Если итоговая сумма меньше или равна 200 грн, то Cost будет "0.00".
+     * Если предоплаты нет – по умолчанию "0.00".
+     */
+    let cost;
+    if (indexOfPrepaymentLine !== -1) {
+        let totalOriginal = 0;
+        shopifyOrder.line_items.forEach(item => {
+            // Используем original_price, если оно есть; иначе, fallback к price.
+            const originalPrice = parseFloat(item.original_price || item.price || "0");
+            const qty = parseFloat(item.quantity || "0");
+            totalOriginal += originalPrice * qty;
+        });
+        cost = totalOriginal > 200 ? (totalOriginal - 200).toFixed(2) : "0.00";
+    } else {
+        cost = "0.00";
+    }
 
     // Тип доставки: 0 для доставки на отделение, 1 для курьерской доставки.
     const deliveryType = isPostOffice ? 0 : 1;
 
-    // Дополнительные параметры – здесь можно передать, например, сумму наложенного платежа.
+    // Дополнительные параметры – передаём сумму наложенного платежа.
     const additionalParams = {
         DeliveryAmount: cost
     };
@@ -583,13 +601,13 @@ function mapShopifyOrderToNPFulfillment(shopifyOrder) {
             Qty: qty.toString(),
             Price: price,
             Sum: sum,
-            MeasureUnit: "шт." // Единица измерения по умолчанию (можно изменить)
+            MeasureUnit: "шт."
         };
     });
 
     // Формируем итоговый payload для NP.
     const npPayload = {
-        Organization: "NPL_A1", // Имя организации – можно брать из конфига
+        Organization: config.novapost.xml[config.nodeEnv].organization,
         Orders: {
             MessageOrders: [
                 {
@@ -624,5 +642,9 @@ function mapShopifyOrderToNPFulfillment(shopifyOrder) {
 }
 
 // Пример использования:
-const npPayload = mapShopifyOrderToNPFulfillment(ordersCreate);
-console.log('NP payload:', JSON.stringify(npPayload, null, 2));
+// const npPayload = mapShopifyOrderToNPFulfillment(ordersCreate);
+// console.log('NP payload:', JSON.stringify(npPayload, null, 2));
+
+module.exports = {
+    mapShopifyOrderToNPFulfillment,
+}

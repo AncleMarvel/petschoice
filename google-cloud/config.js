@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const config = {
   nodeEnv: 'development',
-  isLocal: true,
+  isLocal: false,
   shopify: {
     shopName: '419319-9b',
     apiKey: '972180233377888806965f6177a56941',

@@ -3,125 +3,21 @@ const webhooks = require('./webhooks/examples');
 const requestHelper = require('./helpers/request');
 const firestoreHelper = require('./helpers/firestore');
 const dataFormatter = require('./helpers/dataFormatter');
-
-exports.handleProductsCreateUpdate = async (req, res) => {
-  const data = config.isLocal ? webhooks.productsCreate : req.body;
-  let xmls, result;
-
-  if (!data || Object.keys(data).length === 0) {
-    console.error('❌[ERROR] - Bad request. No data found');
-    return res.status(400).send('Bad request');
-  }
-
-  try {
-    const { existingMetafield, metafieldId } = await requestHelper.getShopifyShopMetafield('wms', 'products');
-    const updatedMetafield = dataFormatter.updateShopifyProductsMetafield(existingMetafield, data);
-    await requestHelper.updateShopifyMetafield(updatedMetafield, metafieldId);
-  } catch (error) {
-    console.error('❌[ERROR] - Error updating Shopify metafield', error);
-    return res.status(500).send('Internal Server Error');
-  }
-
-  try {
-    xmls = dataFormatter.createXMLForProductsCreateUpdate(data);
-  } catch (error) {
-    console.error('❌[ERROR] - Error generating XMLS for productsCreateUpdate:', error);
-    return res.status(500).send('Internal Server Error');
-  }
-
-  try {
-    result = await requestHelper.sendCreateUpdateGoods(xmls);
-  } catch (error) {
-    console.error('❌[ERROR] - Error sending SOAP:', error);
-    return res.status(500).send('Internal Server Error');
-  }
-
-  console.log('✅[SUCCESS] - CreateUpdateGood request sent successfully:', JSON.stringify(result));
-  return res.status(200).send('ok');
-}
-
-exports.handleProductsDelete = async (req, res) => {
-  const data = config.isLocal ? webhooks.productsDelete : req.body;
-  let xmls, result, shopifyMetafield;
-
-  if (!data || Object.keys(data).length === 0) {
-    console.error('❌[ERROR] - Bad request. No data found');
-    return res.status(400).send('Bad request');
-  }
-
-  try {
-    shopifyMetafield = await requestHelper.getShopifyShopMetafield('wms', 'products');
-  } catch (error) {
-    console.error('❌[ERROR] - Error getting Shopify metafield:', error);
-    return res.status(500).send('Internal Server Error');
-  }
-
-  try {
-    xmls = dataFormatter.createXMLForProductsDelete(data, shopifyMetafield);
-  } catch (error) {
-    console.error('❌[ERROR] - Error generating XMLS for productsDelete:', error);
-    return res.status(500).send('Internal Server Error');
-  }
-
-  try {
-    result = await requestHelper.sendCreateUpdateGoods(xmls);
-  } catch (error) {
-    console.error('❌[ERROR] - Error sending SOAP:', error);
-    return res.status(500).send('Internal Server Error');
-  }
-
-  console.log('✅[SUCCESS] - CreateUpdateGood request sent successfully:', JSON.stringify(result));
-  return res.status(200).send('ok');
-}
-
-// Пример предполагаемых функций мапинга (без реализации!)
-// Обычно вы их опишете в отдельном файле, например, "mappings.js".
-// Они должны вернуть объект, подходящий под структуру WSDL (на вход createUpdateOrders, undoOrder, и т.п.)
-const {
-  mapShopifyOrderToNovaPoshtaCreate,
-  mapShopifyOrderToNovaPoshtaCancel,
-  mapOrdersToGetOrdersStatus
-} = require('./helpers/mappings'); // <--- Сам файл мапинга
-
-exports.syncInventory = async (_req, res) => {
-  let stocksNovaPost, stocksShopify, result;
-
-  try {
-    // 1) Получаем остатки из Nova Poshta
-    stocksNovaPost = await requestHelper.getStocksFromNovaPost();
-  } catch (error) {
-    console.error('❌[ERROR] - Error getting stocks from NovaPost:', error);
-    return res.status(500).send('Internal Server Error');
-  }
-
-  try {
-    // 2) Получаем остатки из Shopify
-    stocksShopify = await requestHelper.getStocksFromShopify();
-  } catch (error) {
-    console.error('❌[ERROR] - Error getting stocks from Shopify:', error);
-    return res.status(500).send('Internal Server Error');
-  }
-
-  try {
-    // 3) Формируем список корректировок
-    const { changes, logs } = dataFormatter.prepareInventoryAdjustments(stocksNovaPost, stocksShopify);
-
-    // 4) Отправляем корректировки обратно в Shopify
-    result = await requestHelper.syncStocks(changes);
-    console.log('📄[INFO] - Inventory sync logs:', JSON.stringify(logs));
-  } catch (error) {
-    console.error('❌[ERROR] - Error syncing stocks:', error);
-    return res.status(500).send('Internal Server Error');
-  }
-
-  console.log('✅[SUCCESS] - Stocks synced successfully:', JSON.stringify(result));
-  return res.status(200).send('ok');
-};
+const { mapShopifyOrderToNPFulfillment } = require('./helpers/mapper');
 
 exports.orderCreate = async (req, res) => {
   // Если локально, берём mock
-  const data = config.isLocal ? JSON.parse(webhooks.ordersCreate.note) : JSON.parse(req.body.note);
-  const exampleOfData = {
+  const data = config.isLocal ? webhooks.ordersCreate : req.body;
+  console.log('✌️req.body --->', req.body);
+  if (typeof data.note === 'string') {
+    try {
+      data.note = JSON.parse(data.note);
+    } catch (error) {
+      console.log('✌️error on parsing order.note --->', error);
+    }
+  }
+
+  const exampleOfDataNote = {
     "zip": "79018",
     "address": "Відділення №1: вул. Городоцька, 359",
     "city": "Львів",
@@ -156,7 +52,8 @@ exports.orderCreate = async (req, res) => {
   let mappedArgs;
   try {
     // 1) Мапим структуру Shopify-заказа в структуру NovaPoshta (CreateUpdateOrders)
-    mappedArgs = mapShopifyOrderToNovaPoshtaCreate(data);
+    mappedArgs = mapShopifyOrderToNPFulfillment(data);
+    console.log('✌️mappedArgs --->', JSON.stringify(mappedArgs, null, 2));
   } catch (error) {
     console.error('❌[ERROR] - Error mapping shopify order to NovaPoshta:', error);
     return res.status(500).send('Internal Server Error');
@@ -332,3 +229,111 @@ exports.getOrdersStatuses = async (_req, res) => {
   console.log('✅[SUCCESS] - Done');
   return res.status(200).send('ok');
 };
+
+
+
+exports.syncInventory = async (_req, res) => {
+  let stocksNovaPost, stocksShopify, result;
+
+  try {
+    // 1) Получаем остатки из Nova Poshta
+    stocksNovaPost = await requestHelper.getStocksFromNovaPost();
+  } catch (error) {
+    console.error('❌[ERROR] - Error getting stocks from NovaPost:', error);
+    return res.status(500).send('Internal Server Error');
+  }
+
+  try {
+    // 2) Получаем остатки из Shopify
+    stocksShopify = await requestHelper.getStocksFromShopify();
+  } catch (error) {
+    console.error('❌[ERROR] - Error getting stocks from Shopify:', error);
+    return res.status(500).send('Internal Server Error');
+  }
+
+  try {
+    // 3) Формируем список корректировок
+    const { changes, logs } = dataFormatter.prepareInventoryAdjustments(stocksNovaPost, stocksShopify);
+
+    // 4) Отправляем корректировки обратно в Shopify
+    result = await requestHelper.syncStocks(changes);
+    console.log('📄[INFO] - Inventory sync logs:', JSON.stringify(logs));
+  } catch (error) {
+    console.error('❌[ERROR] - Error syncing stocks:', error);
+    return res.status(500).send('Internal Server Error');
+  }
+
+  console.log('✅[SUCCESS] - Stocks synced successfully:', JSON.stringify(result));
+  return res.status(200).send('ok');
+};
+
+// ----------------- UNUSED -----------------
+exports.handleProductsCreateUpdate = async (req, res) => {
+  const data = config.isLocal ? webhooks.productsCreate : req.body;
+  let xmls, result;
+
+  if (!data || Object.keys(data).length === 0) {
+    console.error('❌[ERROR] - Bad request. No data found');
+    return res.status(400).send('Bad request');
+  }
+
+  try {
+    const { existingMetafield, metafieldId } = await requestHelper.getShopifyShopMetafield('wms', 'products');
+    const updatedMetafield = dataFormatter.updateShopifyProductsMetafield(existingMetafield, data);
+    await requestHelper.updateShopifyMetafield(updatedMetafield, metafieldId);
+  } catch (error) {
+    console.error('❌[ERROR] - Error updating Shopify metafield', error);
+    return res.status(500).send('Internal Server Error');
+  }
+
+  try {
+    xmls = dataFormatter.createXMLForProductsCreateUpdate(data);
+  } catch (error) {
+    console.error('❌[ERROR] - Error generating XMLS for productsCreateUpdate:', error);
+    return res.status(500).send('Internal Server Error');
+  }
+
+  try {
+    result = await requestHelper.sendCreateUpdateGoods(xmls);
+  } catch (error) {
+    console.error('❌[ERROR] - Error sending SOAP:', error);
+    return res.status(500).send('Internal Server Error');
+  }
+
+  console.log('✅[SUCCESS] - CreateUpdateGood request sent successfully:', JSON.stringify(result));
+  return res.status(200).send('ok');
+}
+
+exports.handleProductsDelete = async (req, res) => {
+  const data = config.isLocal ? webhooks.productsDelete : req.body;
+  let xmls, result, shopifyMetafield;
+
+  if (!data || Object.keys(data).length === 0) {
+    console.error('❌[ERROR] - Bad request. No data found');
+    return res.status(400).send('Bad request');
+  }
+
+  try {
+    shopifyMetafield = await requestHelper.getShopifyShopMetafield('wms', 'products');
+  } catch (error) {
+    console.error('❌[ERROR] - Error getting Shopify metafield:', error);
+    return res.status(500).send('Internal Server Error');
+  }
+
+  try {
+    xmls = dataFormatter.createXMLForProductsDelete(data, shopifyMetafield);
+  } catch (error) {
+    console.error('❌[ERROR] - Error generating XMLS for productsDelete:', error);
+    return res.status(500).send('Internal Server Error');
+  }
+
+  try {
+    result = await requestHelper.sendCreateUpdateGoods(xmls);
+  } catch (error) {
+    console.error('❌[ERROR] - Error sending SOAP:', error);
+    return res.status(500).send('Internal Server Error');
+  }
+
+  console.log('✅[SUCCESS] - CreateUpdateGood request sent successfully:', JSON.stringify(result));
+  return res.status(200).send('ok');
+}

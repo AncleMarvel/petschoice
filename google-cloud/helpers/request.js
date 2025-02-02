@@ -6,6 +6,7 @@
 const soap = require('soap');
 const config = require('../config');
 const graphqlHelper = require('./graphql');
+const path = require('path');
 const Shopify = require('shopify-api-node');
 
 /** Инициализация клиента Shopify */
@@ -36,17 +37,24 @@ async function getSoapClient() {
   if (soapClient) return soapClient;
 
   // Путь к WSDL (либо локальный файл, либо URL). Например:
-  // const wsdlPath = path.join(__dirname, '../novaPoshta.wsdl');
+  const wsdlPath = path.join(__dirname, '../novaPoshta.wsdl');
   // Либо 'https://somewhere/novaPoshta.wsdl'
-  const wsdlPath = '../novaPoshta.wsdl';
 
   try {
     // Создаём клиента
     soapClient = await soap.createClientAsync(wsdlPath, {
+      wsdl_options: {
+        forceSoap12Headers: true // Указывает, что используется SOAP 1.2
+      },
+      endpoint: "https://api-nps.np.work/wms_npl3/ws/depositorExchane.1cws", // URL для SOAP 1.2
       overrideRootElement: {
-        namespace: 'OM_depositorExchaneSoap12',
+        namespace: "http://npl-dev.omnic.solutions/wms",
+        xmlnsAttributes: [
+          { name: "xmlns:tns", value: "http://npl-dev.omnic.solutions/wms" }
+        ]
       }
     });
+    
 
     // Устанавливаем BasicAuth из config
     const { username, password } = config.novapost.auth[config.nodeEnv];
