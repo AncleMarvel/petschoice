@@ -166,13 +166,13 @@ function createXMLForOrdersCreate(order) {
 
   const prepaymentItem = order.line_items.find(item => item.variant_id == 41899282661450);
   let subtotalPrice = 0;
- 
+
   if (prepaymentItem) {
     order.line_items.forEach((line) => {
       if (line.variant_id == 41899282661450) return;
       const price = parseFloat(line.price);
       const quantity = parseInt(line.current_quantity);
-  
+
       subtotalPrice += price * quantity;
     });
   }
@@ -209,17 +209,19 @@ function createXMLForOrdersCreate(order) {
               <wms:ExternalNumber>${order.id || ''}</wms:ExternalNumber>
               <wms:ExternalDate>${externalDate}</wms:ExternalDate>
               <wms:DestWarehouse>KyivSkhid</wms:DestWarehouse>
-              <wms:Adress>${getAdressXML()}</wms:Adress>
               <wms:PayType>1</wms:PayType>
               <wms:payer>1</wms:payer>
+              <wms:Adress>
+                ${getAdressXML()}
+              </wms:Adress>
               <wms:Contactor>
                 <wms:rcptName>${shippingAddress.name || `${customer.first_name} ${customer.last_name}`}</wms:rcptName>
                 <wms:rcptContact>${shippingAddress.name || `${customer.first_name} ${customer.last_name}`}</wms:rcptContact>
                 <wms:RecipientType>PrivatePerson</wms:RecipientType>
               </wms:Contactor>
-              <wms:RedeliveryType>${prepaymentItem ? '0' : '2'}</wms:RedeliveryType>
-              <wms:DeliveryInOut>${prepaymentItem ? '0.00' : subtotalPrice.toFixed(2)}</wms:DeliveryInOut>
               <wms:Description>Shopify order</wms:Description>
+              ${prepaymentItem ? '' : '<wms:RedeliveryType>2</wms:RedeliveryType>'}
+              ${prepaymentItem ? '' : `<wms:DeliveryInOut>${subtotalPrice.toFixed(2)}</wms:DeliveryInOut>`}
               <wms:Cost>${order.total_price || 0}</wms:Cost>
               <wms:DeliveryType>${shippingType}</wms:DeliveryType>
               <wms:AdditionalParams/>
@@ -233,6 +235,7 @@ function createXMLForOrdersCreate(order) {
 
   return xml;
 }
+
 
 
 function createXMLForOrdersCancelled(order) {
