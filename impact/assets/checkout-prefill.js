@@ -101,22 +101,54 @@ async function prefillSubmitHandler(event) {
     event.preventDefault();
     event.stopPropagation();
 
-    const cart = await fetch('/cart.js').then(response => response.json()).catch(console.error);
-    if (!cart || !cart.item_count) return;
-
     const form = document.querySelector(selectors.prefillForm);
     const formData = new FormData(form);
     const data = {};
 
+    for (const [key, value] of formData.entries()) {
+        data[key] = value;
+    }
+
+    const prepayemntProductVariant = 41899282661450;
+
+    let cart = await fetch('/cart.js').then(response => response.json()).catch(console.error);
+    if (!cart || !cart.item_count) return;
+
+    if (data['payment-type'] === 'prepayment' && !cart.items.find(item => item.variant_id === prepayemntProductVariant)) {
+        const responseOfAdding = await fetch('/cart/add.js', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                items: [
+                    {
+                        id: prepayemntProductVariant,
+                        quantity: 1
+                    }
+                ]
+            })
+        }).then(response => response.json()).catch(console.error);
+        console.log('responseOfAdding --->', responseOfAdding);
+    } else if (data['payment-type'] !== 'prepayment' && cart.items.find(item => item.variant_id === prepayemntProductVariant)) {
+        const updates = {
+            [prepayemntProductVariant]: 0
+        };
+        const responseOfRemoving = await fetch('/cart/update.js', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ updates })
+        }).then(response => response.json()).catch(console.error);
+        console.log('responseOfRemoving --->', responseOfRemoving);
+    }
+    cart = await fetch('/cart.js').then(response => response.json()).catch(console.error);
 
     const { PostalCodeUA, Description, CityDescription } = state.fetchedPostOffices.find(postoffice => postoffice.Ref === state.selectedPostoffice);
     data.zip = PostalCodeUA;
     data.address = Description;
     data.city = CityDescription;
-
-    for (const [key, value] of formData.entries()) {
-        data[key] = value;
-    }
 
     const variantsWithQty = {};
     cart.items.forEach(item => {
@@ -124,7 +156,7 @@ async function prefillSubmitHandler(event) {
     });
 
     data.variantsWithQty = variantsWithQty;
-    
+
     const dataExample = {
         "zip": "79018",
         "address": "Відділення №1: вул. Городоцька, 359",
@@ -162,7 +194,7 @@ async function prefillSubmitHandler(event) {
 
     const prefillLink = createPrefilLink(data);
 
-    // window.location.href = prefillLink;
+    window.location.href = prefillLink;
 }
 
 /**

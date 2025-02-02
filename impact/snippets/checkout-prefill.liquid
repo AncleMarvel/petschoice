@@ -53,6 +53,20 @@ This snippet is used to prefill the checkout form with the customer's informatio
                     <input class="input" type="tel" id="phone" name="phone" placeholder="+380" required />
                 </fieldset>
 
+                <!-- Payment Type -->
+                <fieldset>
+                    <legend>Оплата</legend>
+                    <label>
+                        <input type="radio" name="payment-type" value="full" checked />
+                        Повна предоплата
+                    </label>
+                    <label>
+                        <input type="radio" name="payment-type" value="prepayment" />
+                        200 грн предоплата (залишок при отриманні)
+                    </label>
+                </fieldset>
+
+
                 <!-- Shipping Type -->
                 <fieldset>
                     <legend>Метод доставки</legend>
