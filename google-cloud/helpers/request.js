@@ -59,48 +59,29 @@ async function getSoapClient() {
   }
 }
 
-/* ===========================================================================
-   1) Методы Nova Poshta (через node-soap)
-   Пример: CreateUpdateGoods, CreateUpdateOrders, UndoOrder, GetOrdersStatus, GetFactInbound...
-   =========================================================================== */
-
-/**
- * Создаёт/обновляет товары в Nova Poshta (WMS), используя метод CreateUpdateGoods.
- * @async
- * @function createUpdateGoods
- * @param {Object} args - Аргументы, соответствующие структуре WSDL
- * @returns {Promise<any>} - Результат метода CreateUpdateGoods
- * @example
- * const args = {
- *   Organization: 'ООО Ромашка',
- *   Goods: {
- *     MessageGoods: {
- *       Sku: '123',
- *       GoodsUnitName: 'SomeName',
- *       // ...
- *     }
- *   }
- * };
- * const result = await createUpdateGoods(args);
- */
-async function createUpdateGoods(args) {
-  const client = await getSoapClient();
-  // Для node-soap асинхронные методы называются "<methodName>Async"
-  // если в WSDL метод: <operation name="CreateUpdateGoods">
-  // то в клиенте будет client.CreateUpdateGoodsAsync(...)
-  const [result, rawResponse, soapHeader, rawRequest] =
-    await client.CreateUpdateGoodsAsync(args);
-
-  // Если нужно, можно проверить result на ошибки
-  return result;
-}
-
 /**
  * Создаёт/обновляет заказы (OrderCreate) в Nova Poshta, метод CreateUpdateOrders.
+ *
  * @async
  * @function createUpdateOrders
- * @param {Object} args - Аргументы согласно WSDL
- * @returns {Promise<any>}
+ * @param {Object} args - Аргументы для метода CreateUpdateOrders
+ * @param {string} args.Organization - Наименование организации (xs:string)
+ * @param {Object} args.Orders - Корневой объект (Orders) с массивом заказов
+ * @param {Object[]} args.Orders.MessageOrders - Массив объектов (MessageOrders)
+ * @param {Object} args.Orders.MessageOrders[].HeadOrder - Шапка заказа (HeadOrder)
+ * @param {string} args.Orders.MessageOrders[].HeadOrder.ExternalNumber - Внешний номер заказа
+ * @param {string} [args.Orders.MessageOrders[].HeadOrder.GUID] - GUID (если используется)
+ * @param {string} [args.Orders.MessageOrders[].HeadOrder.ExternalDate] - Дата заказа (строкой)
+ * @param {string} [args.Orders.MessageOrders[].HeadOrder.DestWarehouse] - Склад назначения
+ * @param {Object} [args.Orders.MessageOrders[].HeadOrder.Adress] - Адрес
+ * @param {number} [args.Orders.MessageOrders[].HeadOrder.PayType] - Тип оплаты (xs:int)
+ * @param {number} [args.Orders.MessageOrders[].HeadOrder.payer] - Плательщик (xs:int)
+ * @param {Object} args.Orders.MessageOrders[].Items - Объект Items
+ * @param {Object[]} args.Orders.MessageOrders[].Items.Item - Массив позиций (Item[])
+ * @param {string} args.Orders.MessageOrders[].Items.Item[].Sku - SKU товара
+ * @param {string} args.Orders.MessageOrders[].Items.Item[].Qty - Количество (xs:string по WSDL)
+ * @param {string} args.Orders.MessageOrders[].Items.Item[].Price - Цена (xs:string по WSDL)
+ * @returns {Promise<any>} Результат вызова метода CreateUpdateOrders
  */
 async function createUpdateOrders(args) {
   const client = await getSoapClient();
@@ -110,10 +91,16 @@ async function createUpdateOrders(args) {
 
 /**
  * Отменяет заказ в Nova Poshta (OrderCancel), метод UndoOrder.
+ *
  * @async
  * @function undoOrder
- * @param {Object} args - Аргументы (ExternalNumbers и т.д.)
- * @returns {Promise<any>}
+ * @param {Object} args - Аргументы для метода UndoOrder
+ * @param {string} args.Organization - Наименование организации
+ * @param {Object} args.ExternalNumbers - Объект, содержащий список внешних номеров
+ * @param {Object[]} args.ExternalNumbers.MessageExternalNumbers - Массив объектов с внешними номерами
+ * @param {string} args.ExternalNumbers.MessageExternalNumbers[].ExternalNumber - Внешний номер заказа
+ * @param {string} [args.ExternalNumbers.MessageExternalNumbers[].GUID] - GUID (если есть)
+ * @returns {Promise<any>} Результат вызова метода UndoOrder
  */
 async function undoOrder(args) {
   const client = await getSoapClient();
@@ -123,9 +110,18 @@ async function undoOrder(args) {
 
 /**
  * Возвращает статусы заказов, метод GetOrdersStatus.
+ *
  * @async
  * @function getOrdersStatus
- * @param {Object} args - Аргументы (Organization, Warehouse, ArrayOrders, ...)
+ * @param {Object} args
+ * @param {string} args.Organization
+ * @param {string} [args.Warehouse]
+ * @param {string} [args.StartDate]
+ * @param {string} [args.EndDate]
+ * @param {Object} args.ArrayOrders
+ * @param {Object[]} args.ArrayOrders.MessageArrayOrders
+ * @param {string} args.ArrayOrders.MessageArrayOrders[].ExternalNumber
+ * @param {string} [args.ArrayOrders.MessageArrayOrders[].GUID]
  * @returns {Promise<any>}
  */
 async function getOrdersStatus(args) {
@@ -136,9 +132,18 @@ async function getOrdersStatus(args) {
 
 /**
  * Возвращает фактические остатки (сток) из Nova Poshta, метод GetFactInbound.
+ *
  * @async
  * @function getFactInbound
- * @param {Object} args - Аргументы (Organization, StartDate, EndDate, Warehouse, ...)
+ * @param {Object} args
+ * @param {string} args.Organization
+ * @param {string} [args.Warehouse]
+ * @param {string} [args.StartDate]
+ * @param {string} [args.EndDate]
+ * @param {Object} args.ArrayPlanInbound
+ * @param {Object[]} args.ArrayPlanInbound.MessageArrayPlanInbound
+ * @param {string} args.ArrayPlanInbound.MessageArrayPlanInbound[].ExternalNumber
+ * @param {string} [args.ArrayPlanInbound.MessageArrayPlanInbound[].GUID]
  * @returns {Promise<any>}
  */
 async function getFactInbound(args) {
@@ -468,7 +473,6 @@ async function getFulfillmentOrders(orderId) {
 module.exports = {
   // 5.1: SOAP (node-soap)
   getSoapClient,
-  createUpdateGoods,
   createUpdateOrders,
   undoOrder,
   getOrdersStatus,
