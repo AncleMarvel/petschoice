@@ -141,7 +141,9 @@ function prepareInventoryAdjustments(stocksNovaPost, stocksShopify) {
 
 function createXMLForOrdersCreate(order) {
   const getItemsXML = (lineItems) => {
-    return lineItems.map(item => `
+    const lines = lineItems.filter(line => line.variant_id !== 41899282661450)
+
+    return lines.map(item => `
       <wms:Item>
         <wms:Sku>${item.sku || ''}</wms:Sku>
         <wms:Qty>${item.quantity || 0}</wms:Qty>
@@ -180,6 +182,12 @@ function createXMLForOrdersCreate(order) {
   const shippingType = orderNote.selectedPostoffice ? 0 : 1;
 
   const getAdressXML = () => {
+    if (orderNote.selectedPostoffice) {
+      orderNote.selectedPostoffice = JSON.parse(orderNote.selectedPostoffice)?.selectedPostoffice;
+    } else if (orderNote.settlementObject) {
+      orderNote.settlementObject = JSON.parse(orderNote.settlementObject)?.settlementObject;
+    }
+
     return shippingType === 0 ? `
       <wms:Region>${orderNote.selectedPostoffice?.SettlementAreaDescription || ''}</wms:Region>
       <wms:City>${orderNote.selectedPostoffice?.SettlementDescription || ''}</wms:City>
@@ -218,9 +226,9 @@ function createXMLForOrdersCreate(order) {
                 <wms:RecipientType>PrivatePerson</wms:RecipientType>
               </wms:Contactor>
               <wms:Description>Shopify order</wms:Description>
-              ${prepaymentItem ? '' : '<wms:RedeliveryType>2</wms:RedeliveryType>'}
-              ${prepaymentItem ? '' : `<wms:DeliveryInOut>${subtotalPrice.toFixed(2)}</wms:DeliveryInOut>`}
-              <wms:Cost>${order.total_price || 0}</wms:Cost>
+              <wms:Cost>${subtotalPrice.toFixed(2)}</wms:Cost>
+              ${prepaymentItem ? '<wms:RedeliveryType>2</wms:RedeliveryType>' : ''}
+              ${prepaymentItem ? `<wms:DeliveryInOut>${subtotalPrice.toFixed(2)}</wms:DeliveryInOut>` : ''}
               <wms:DeliveryType>${shippingType}</wms:DeliveryType>
               <wms:AdditionalParams/>
             </wms:HeadOrder>
@@ -231,11 +239,8 @@ function createXMLForOrdersCreate(order) {
     </soap:Body>
   </soap:Envelope>`;
 
-  console.log('🚔🚨xml --->', xml);
   return xml;
 }
-
-
 
 function createXMLForOrdersCancelled(order) {
   const organization = config.novapost.xml[config.nodeEnv].organization;
