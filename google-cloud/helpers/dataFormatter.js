@@ -156,6 +156,29 @@ function createXMLForOrdersCreate(order) {
   const shippingAddress = order.shipping_address || {};
   const customer = order.customer || {};
 
+  const isFullyPaid = !order.line_items.some(item => item.variant_id == 41899282661450);
+  const prepaymentItem = order.line_items.find(item => item.variant_id == 41899282661450);
+  const prepaymentAmount = prepaymentItem ? parseFloat(prepaymentItem.price) : 0;
+  const totalAmount = isFullyPaid ? 0 : parseFloat(order.current_subtotal_price) - prepaymentAmount;
+
+  const shippingType = order.note['shipping-type'] === 'post-office' ? 0 : 1;
+
+  const getAdressXML = (orderNote) => {
+    return shippingType === 0 ? `
+      <wms:Region>${orderNote.selectedPostoffice.SettlementAreaDescription}</wms:Region>
+      <wms:City>${orderNote.selectedPostoffice.SettlementDescription}</wms:City>
+      <wms:Phone>${orderNote.phone}</wms:Phone>
+      <wms:DivisionID>${orderNote.selectedPostoffice.Number}</wms:DivisionID>
+    ` : `
+      <wms:Region>${orderNote.settlementObject.AreaDescription}</wms:Region>
+      <wms:City>${orderNote.settlementObject.Description}</wms:City>
+      <wms:Street>${orderNote.street}</wms:Street>
+      <wms:House>${orderNote.house}</wms:House>
+      <wms:Flat>${orderNote.flat}</wms:Flat>
+      <wms:Phone>${orderNote.phone}</wms:Phone>
+    `;
+  }
+
   const xml = `<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:wms="http://npl-dev.omnic.solutions/wms">
     <soap:Header/>
     <soap:Body>
@@ -166,26 +189,20 @@ function createXMLForOrdersCreate(order) {
             <wms:HeadOrder>
               <wms:ExternalNumber>${order.id || ''}</wms:ExternalNumber>
               <wms:ExternalDate>${new Date(order.created_at || '').toISOString().replace(/[-:.TZ]/g, '')}</wms:ExternalDate>
-              <wms:DestWarehouse/>
-              <wms:Adress>
-                <wms:Region>${shippingAddress.province || ''}</wms:Region>
-                <wms:City>${shippingAddress.city || ''}</wms:City>
-                <wms:Street>${shippingAddress.address1 || ''}</wms:Street>
-                <wms:House/>
-                <wms:Flat/>
-                <wms:Phone>${shippingAddress.phone || ''}</wms:Phone>
-                <wms:District/>
-              </wms:Adress>
+              <wms:DestWarehouse>KyivSkhid</wms:DestWarehouse>
+              <wms:Adress>${getAdressXML(order.note)}</wms:Adress>
               <wms:PayType>1</wms:PayType>
               <wms:payer>1</wms:payer>
               <wms:Contactor>
                 <wms:rcptName>${shippingAddress.name || `${customer.first_name} ${customer.last_name}`}</wms:rcptName>
                 <wms:rcptContact>${shippingAddress.name || `${customer.first_name} ${customer.last_name}`}</wms:rcptContact>
                 <wms:RecipientType>PrivatePerson</wms:RecipientType>
+                ${!isFullyPaid ? '<wms:RedeliveryType>2</wms:RedeliveryType>' : ''}
+                <wms:DeliveryInOut>${totalAmount}</wms:DeliveryInOut>
               </wms:Contactor>
               <wms:Description>Shopify order</wms:Description>
               <wms:Cost>${order.total_price || 0}</wms:Cost>
-              <wms:DeliveryType>4</wms:DeliveryType>
+              <wms:DeliveryType>${shippingType}</wms:DeliveryType>
               <wms:AdditionalParams/>
             </wms:HeadOrder>
             <wms:Items>${getItemsXML(order.line_items || [])}</wms:Items>
