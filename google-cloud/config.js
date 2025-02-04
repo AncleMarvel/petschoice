@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const config = {
-  nodeEnv: 'development',
+  nodeEnv: 'production',
   isLocal: false,
   shopify: {
     shopName: '419319-9b',

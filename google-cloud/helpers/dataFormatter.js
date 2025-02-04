@@ -192,7 +192,7 @@ function createXMLForOrdersCreate(order) {
       <wms:Region>${orderNote.selectedPostoffice?.SettlementAreaDescription || ''}</wms:Region>
       <wms:City>${orderNote.selectedPostoffice?.SettlementDescription || ''}</wms:City>
       <wms:Phone>${orderNote.phone || ''}</wms:Phone>
-      <wms:DivisionID>${orderNote.selectedPostoffice?.Number || ''}</wms:DivisionID>
+      <wms:NPWarehouse>${orderNote.selectedPostoffice?.Number || ''}</wms:NPWarehouse>
     ` : `
       <wms:Region>${orderNote.settlementObject?.AreaDescription || ''}</wms:Region>
       <wms:City>${orderNote.settlementObject?.Description || ''}</wms:City>
