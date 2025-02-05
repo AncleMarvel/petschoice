@@ -34,7 +34,7 @@ async function sendCreateUpdateGoods(soapRequests) {
       const response = jsonResponse["soap:Envelope"]["soap:Body"]["m:CreateUpdateGoodsResponse"]["m:return"]["m:MessageGoodsER"]["m:Info"]["m:Descr"];
 
       if (errors) throw new Error(JSON.stringify(errors));
-      
+
       responses.push(response);
     } catch (error) {
       console.error('❌[ERROR] - Error sending SOAP:', error);
@@ -48,6 +48,7 @@ async function sendCreateUpdateGoods(soapRequests) {
 
 async function sendOrderCreate(body) {
   const url = config.novapost.urls[config.nodeEnv];
+  console.log('✌️url --->', url);
   const auth = config.novapost.auth[config.nodeEnv];
 
   try {
@@ -59,9 +60,7 @@ async function sendOrderCreate(body) {
     });
 
     const parser = new XMLParser();
-    const jsonResponse = parser.parse(request.data);
-      
-    return JSON.stringify(jsonResponse);
+    return parser.parse(request.data);
   } catch (error) {
     throw error;
   }
@@ -81,7 +80,7 @@ async function sendOrderCancelled(body) {
 
     const parser = new XMLParser();
     const jsonResponse = parser.parse(request.data);
-      
+
     return JSON.stringify(jsonResponse);
   } catch (error) {
     throw error;
@@ -104,7 +103,7 @@ async function getOrdersStatuses(xmls) {
 
       const parser = new XMLParser();
       const jsonResponse = parser.parse(request.data);
-      
+
       responses.push(jsonResponse);
     } catch (error) {
       console.error(`❌[ERROR] - Error sending request:`, error);
@@ -133,9 +132,9 @@ async function getStocksFromNovaPost() {
     const jsonResponse = parser.parse(request.data);
 
     const unparsedStocks = config.nodeEnv === 'development'
-    ? jsonResponse["soap:Envelope"]["soap:Body"]["m:GetFactInboundResponse"]["m:return"]["m:MessageFactInboundER"]
-    : jsonResponse["soap:Envelope"]["soap:Body"]["m:GetFactInboundResponse"]["m:return"]["m:MessageFactInboundER"]["m:ItemsFactinbound"];
-    
+      ? jsonResponse["soap:Envelope"]["soap:Body"]["m:GetFactInboundResponse"]["m:return"]["m:MessageFactInboundER"]
+      : jsonResponse["soap:Envelope"]["soap:Body"]["m:GetFactInboundResponse"]["m:return"]["m:MessageFactInboundER"]["m:ItemsFactinbound"];
+
     console.log('🚔🚨unparsedStocks --->', unparsedStocks);
 
     const stocks = unparsedStocks.map(stock => {
@@ -170,21 +169,21 @@ async function getStocksFromShopify(after = null, collectedData = []) {
   try {
     const response = await shopify.graphql(query, variables);
     const inventoryItems = response.inventoryItems.edges;
-  
+
     const newItems = inventoryItems.map(item => {
       const sku = item.node.sku;
       const quantity = item.node.inventoryLevel?.quantities?.[0]?.quantity || 0;
       const id = item.node.id;
       return { sku, quantity, id };
     });
-  
+
     collectedData.push(...newItems);
-  
+
     if (response.inventoryItems.pageInfo.hasNextPage) {
       const nextCursor = inventoryItems[inventoryItems.length - 1].cursor;
       return getAllStocksRecursively(locationId, nextCursor, collectedData);
     }
-  
+
     return collectedData;
   } catch (error) {
     throw error;
@@ -360,7 +359,7 @@ async function updateOrderStatus(order) {
   }
 }
 
-module.exports = { 
+module.exports = {
   sendCreateUpdateGoods,
   sendOrderCreate,
   sendOrderCancelled,

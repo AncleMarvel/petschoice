@@ -17,7 +17,7 @@ function createXMLForProductsCreateUpdate(data) {
               <wms:GoodsUnitName>${data.title}</wms:GoodsUnitName>
               <wms:GoodsUnitFullName>${data.title + variant.title}</wms:GoodsUnitFullName>
               <wms:BaseMeasureUnit>
-                <wms:MeasureUnitName>шт.</wms:MeasureUnitName>
+                <wms:MeasureUnitName>шт</wms:MeasureUnitName>
                 <wms:Sku>${variant.sku}</wms:Sku>
                 <wms:Includes>1</wms:Includes>
               </wms:BaseMeasureUnit>
@@ -54,7 +54,7 @@ function createXMLForProductsDelete(data, shopifyMetafield) {
               <wms:GoodsUnitName>${removedProduct.productTitle}</wms:GoodsUnitName>
               <wms:GoodsUnitFullName>${removedProduct.productTitle + variant.variantTitle}</wms:GoodsUnitFullName>
               <wms:BaseMeasureUnit>
-                <wms:MeasureUnitName>шт.</wms:MeasureUnitName>
+                <wms:MeasureUnitName>шт</wms:MeasureUnitName>
                 <wms:Includes>1</wms:Includes>
               </wms:BaseMeasureUnit>
               <wms:ExpirationDateSign>0</wms:ExpirationDateSign>
@@ -149,18 +149,12 @@ function createXMLForOrdersCreate(order) {
         <wms:Qty>${item.quantity || 0}</wms:Qty>
         <wms:Price>${item.price || 0}</wms:Price>
         <wms:Sum>${(item.quantity || 0) * (item.price || 0)}</wms:Sum>
-        <wms:MeasureUnit>шт.</wms:MeasureUnit>
+        <wms:MeasureUnit>шт</wms:MeasureUnit>
       </wms:Item>
     `).join('');
   };
 
-  const orderNote = (() => {
-    try {
-      return JSON.parse(order.note) || {};
-    } catch (e) {
-      return {};
-    }
-  })();
+  const orderNote = typeof order.note === 'string' ? JSON.parse(order.note) : order.note;
 
   const organization = config.novapost.xml[config.nodeEnv].organization;
   const shippingAddress = order.shipping_address || {};
@@ -189,22 +183,37 @@ function createXMLForOrdersCreate(order) {
     }
 
     return shippingType === 0 ? `
-      <wms:Region>${orderNote.selectedPostoffice?.SettlementAreaDescription || ''}</wms:Region>
-      <wms:City>${orderNote.selectedPostoffice?.SettlementDescription || ''}</wms:City>
-      <wms:Phone>${orderNote.phone || ''}</wms:Phone>
-      <wms:NPWarehouse>${orderNote.selectedPostoffice?.Number || ''}</wms:NPWarehouse>
+      <wms:Region>${orderNote.selectedPostoffice?.SettlementAreaDescription}</wms:Region>
+      <wms:City>${orderNote.selectedPostoffice?.SettlementDescription}</wms:City>
+      <wms:Phone>${orderNote.phone}</wms:Phone>
+      <wms:NPWarehouse>${orderNote.selectedPostoffice?.Number}</wms:NPWarehouse>
     ` : `
       <wms:Region>${orderNote.settlementObject?.AreaDescription || ''}</wms:Region>
       <wms:City>${orderNote.settlementObject?.Description || ''}</wms:City>
-      <wms:Street>${orderNote.street || ''}</wms:Street>
-      <wms:House>${orderNote.house || ''}</wms:House>
-      <wms:Flat>${orderNote.flat || ''}</wms:Flat>
-      <wms:Phone>${orderNote.phone || ''}</wms:Phone>
+      <wms:Street>${orderNote.street}</wms:Street>
+      <wms:House>${orderNote.house}</wms:House>
+      <wms:Flat>${orderNote.flat}</wms:Flat>
+      <wms:Phone>${orderNote.phone}</wms:Phone>
     `;
   };
 
-  const date = new Date(order.created_at || '');
-  const externalDate = `${date.getDate().toString().padStart(2, '0')}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}${date.getMinutes().toString().padStart(2, '0')}${date.getSeconds().toString().padStart(2, '0')}`;
+  function formatDate(isoString) {
+    const date = new Date(isoString);
+
+    const pad = (num) => num.toString().padStart(2, '0');
+
+    const day = pad(date.getUTCDate());
+    const month = pad(date.getUTCMonth() + 1);
+    const year = date.getUTCFullYear();
+    const hours = pad(date.getUTCHours());
+    const minutes = pad(date.getUTCMinutes());
+    const seconds = pad(date.getUTCSeconds());
+
+    return `${day}${month}${year} ${hours}${minutes}${seconds}`;
+  }
+
+  const externalDate = formatDate(order.created_at);
+
 
   const xml = `<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:wms="http://npl-dev.omnic.solutions/wms">
     <soap:Header/>
@@ -214,7 +223,7 @@ function createXMLForOrdersCreate(order) {
         <wms:Orders>
           <wms:MessageOrders>
             <wms:HeadOrder>
-              <wms:ExternalNumber>${order.id || ''}</wms:ExternalNumber>
+              <wms:ExternalNumber>${order.id}</wms:ExternalNumber>
               <wms:ExternalDate>${externalDate}</wms:ExternalDate>
               <wms:DestWarehouse>KyivSkhid</wms:DestWarehouse>
               <wms:Adress>${getAdressXML()}</wms:Adress>
@@ -230,7 +239,6 @@ function createXMLForOrdersCreate(order) {
               ${prepaymentItem ? '<wms:RedeliveryType>2</wms:RedeliveryType>' : ''}
               ${prepaymentItem ? `<wms:DeliveryInOut>${subtotalPrice.toFixed(2)}</wms:DeliveryInOut>` : ''}
               <wms:DeliveryType>${shippingType}</wms:DeliveryType>
-              <wms:AdditionalParams/>
             </wms:HeadOrder>
             <wms:Items>${getItemsXML(order.line_items || [])}</wms:Items>
           </wms:MessageOrders>

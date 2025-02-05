@@ -5,7 +5,7 @@ const firestoreHelper = require('./helpers/firestore');
 const dataFormatter = require('./helpers/dataFormatter');
 
 exports.handleProductsCreateUpdate = async (req, res) => {
-  const data = config.isLocal === 'true' ? webhooks.productsCreate : req.body;
+  const data = config.isLocal ? webhooks.productsCreate : req.body;
   let xmls, result;
 
   if (!data || Object.keys(data).length === 0) {
@@ -41,7 +41,7 @@ exports.handleProductsCreateUpdate = async (req, res) => {
 }
 
 exports.handleProductsDelete = async (req, res) => {
-  const data = config.isLocal === 'true' ? webhooks.productsDelete : req.body;
+  const data = config.isLocal ? webhooks.productsDelete : req.body;
   let xmls, result, shopifyMetafield;
 
   if (!data || Object.keys(data).length === 0) {
@@ -49,7 +49,7 @@ exports.handleProductsDelete = async (req, res) => {
     return res.status(400).send('Bad request');
   }
 
-    try {
+  try {
     shopifyMetafield = await requestHelper.getShopifyShopMetafield('wms', 'products');
   } catch (error) {
     console.error('❌[ERROR] - Error getting Shopify metafield:', error);
@@ -76,7 +76,7 @@ exports.handleProductsDelete = async (req, res) => {
 
 exports.syncInventory = async (_req, res) => {
   let stocksNovaPost, stocksShopify, result;
-  
+
   try {
     stocksNovaPost = await requestHelper.getStocksFromNovaPost();
   } catch (error) {
@@ -105,19 +105,20 @@ exports.syncInventory = async (_req, res) => {
 };
 
 exports.orderCreate = async (req, res) => {
-  const data = config.isLocal === 'true' ? webhooks.ordersCreate : req.body;
+  console.log('RUN orderCreate...');
+
+  const data = config.isLocal ? webhooks.ordersCreate_PrepaymentWarehouse : req.body;
+  console.log(`📄[INFO] - Order name: ${data?.name}`);
   let xml;
 
   if (!data || Object.keys(data).length === 0) {
     console.error('❌[ERROR] - Bad request. No data found');
     return res.status(400).send('Bad request');
   }
-
-  console.log(JSON.stringify(req.body));
-  console.log(`📄[INFO] - Order: ${data.name}`);
-
   try {
     xml = dataFormatter.createXMLForOrdersCreate(data);
+    console.log(`📄[INFO] - XML created successfully for order: ${data?.name}`);
+    // console.log('✌️xml --->', xml);
   } catch (error) {
     console.error('❌[ERROR] - Error creating XML:', error);
     return res.status(500).send('Internal Server Error');
@@ -125,9 +126,12 @@ exports.orderCreate = async (req, res) => {
 
   try {
     const result = await requestHelper.sendOrderCreate(xml);
-    console.log(`📄[INFO] - Order name: ${data.name}, response: ${result}`);
+
+    if (result.status === 200) {
+      console.log(`📄[INFO] - Order name: ${data.name} successfully sent`);
+    }
   } catch (error) {
-    console.error('❌[ERROR] - Error sending orderCreate:', error);
+    console.error('❌[ERROR] - Error sending orderCreate:', error.response.data);
     return res.status(500).send('Internal Server Error');
   }
 
@@ -148,7 +152,7 @@ exports.orderCreate = async (req, res) => {
 };
 
 exports.orderCancel = async (req, res) => {
-  const data = config.isLocal === 'true' ? webhooks.ordersCancelled : req.body;
+  const data = config.isLocal ? webhooks.ordersCancelled : req.body;
   let xml;
 
   if (!data || Object.keys(data).length === 0) {
@@ -169,7 +173,7 @@ exports.orderCancel = async (req, res) => {
     const result = await requestHelper.sendOrderCancelled(xml);
     console.log(`📄[INFO] - Order name: ${data.name}, response: ${result}`);
   } catch (error) {
-    console.error('❌[ERROR] - Error sending orderCreate:', error);
+    console.error('❌[ERROR] - Error sending orderCancel:', error);
     return res.status(500).send('Internal Server Error');
   }
 
@@ -234,7 +238,7 @@ exports.getOrdersStatuses = async (_req, res) => {
       try {
         const { metafieldId } = await requestHelper.getShopifyOrderMetafield('wms', 'order_status', order.id);
         const metafield = { status: order.status };
-        await requestHelper.updateShopifyMetafield(metafield, metafieldId); 
+        await requestHelper.updateShopifyMetafield(metafield, metafieldId);
         console.log('📄[INFO] - Metafield updated for order:', order.id);
       } catch (error) {
         console.error(`❌[ERROR] - Failed to update order in shopify metafield ${order.id}:`, error);

@@ -34,7 +34,7 @@ const config = {
     },
     urls: {
       development: 'https://api-nps.np.work/wms_test/ws/depositorExchane.1cws',
-      production: 'https://api-nps.np.work/wms/ws/depositorExchane.1cws'
+      production: 'https://api-nps.np.work/wms_npl3/ws/depositorExchane.1cws'
     }
   }
 }
