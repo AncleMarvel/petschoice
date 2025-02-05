@@ -137,6 +137,9 @@
               <reveal-items selector=".product-list > *">
                 <product-list class="product-list" role="region" aria-live="polite">
                   {%- for product in collection.products -%}
+                    {% if product.tags contains "hidden" %}
+                      {%- continue -%}
+                    {% endif %}
                     {%- for block in section.blocks -%}
                       {%- if forloop.parentloop.index != block.settings.position -%}
                         {%- continue -%}

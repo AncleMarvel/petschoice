@@ -105,10 +105,13 @@ exports.syncInventory = async (_req, res) => {
 };
 
 exports.orderCreate = async (req, res) => {
+  console.log('\n\n\n---------------------------------------');
   console.log('RUN orderCreate...');
+  console.log('---------------------------------------');
 
   const data = config.isLocal ? webhooks.ordersCreate_PrepaymentWarehouse : req.body;
   console.log(`📄[INFO] - Order name: ${data?.name}`);
+  console.log(`📄[INFO] - PAYLOAD: ${JSON.stringify(req?.body, null, 2)}`);
   let xml;
 
   if (!data || Object.keys(data).length === 0) {
@@ -118,7 +121,7 @@ exports.orderCreate = async (req, res) => {
   try {
     xml = dataFormatter.createXMLForOrdersCreate(data);
     console.log(`📄[INFO] - XML created successfully for order: ${data?.name}`);
-    // console.log('✌️xml --->', xml);
+    console.log('[XML]:', xml);
   } catch (error) {
     console.error('❌[ERROR] - Error creating XML:', error);
     return res.status(500).send('Internal Server Error');
@@ -128,10 +131,10 @@ exports.orderCreate = async (req, res) => {
     const result = await requestHelper.sendOrderCreate(xml);
 
     if (result.status === 200) {
-      console.log(`📄[INFO] - Order name: ${data.name} successfully sent`);
+      console.log(`📄[INFO] - Order name: ${data.name} successfully sent!`);
     }
   } catch (error) {
-    console.error('❌[ERROR] - Error sending orderCreate:', error.response.data);
+    console.error('❌[ERROR] - Error sending orderCreate:', error);
     return res.status(500).send('Internal Server Error');
   }
 
@@ -152,18 +155,22 @@ exports.orderCreate = async (req, res) => {
 };
 
 exports.orderCancel = async (req, res) => {
+  console.log('\n\n\n---------------------------------------');
+  console.log('RUN orderCancel...');
+  console.log('---------------------------------------');
   const data = config.isLocal ? webhooks.ordersCancelled : req.body;
   let xml;
+  console.log(`📄[INFO] - Order: ${data.name}`);
+  console.log(`📄[INFO] - PAYLOAD: ${JSON.stringify(req?.body, null, 2)}`);
 
   if (!data || Object.keys(data).length === 0) {
     console.error('❌[ERROR] - Bad request. No data found');
     return res.status(400).send('Bad request');
   }
 
-  console.log(`📄[INFO] - Order: ${data.name}`);
-
   try {
     xml = dataFormatter.createXMLForOrdersCancelled(data);
+    console.log('[XML]:', xml);
   } catch (error) {
     console.error('❌[ERROR] - Error creating XML:', error);
     return res.status(500).send('Internal Server Error');
@@ -171,7 +178,9 @@ exports.orderCancel = async (req, res) => {
 
   try {
     const result = await requestHelper.sendOrderCancelled(xml);
-    console.log(`📄[INFO] - Order name: ${data.name}, response: ${result}`);
+    if (result.status === 200) {
+      console.log(`📄[INFO] - Order name: ${data.name} successfully canceled!`);
+    }
   } catch (error) {
     console.error('❌[ERROR] - Error sending orderCancel:', error);
     return res.status(500).send('Internal Server Error');
@@ -188,6 +197,9 @@ exports.orderCancel = async (req, res) => {
 };
 
 exports.getOrdersStatuses = async (_req, res) => {
+  console.log('\n\n\n---------------------------------------');
+  console.log('RUN getOrdersStatuses...');
+  console.log('---------------------------------------');
   let openedOrders, ordersStatuses, allOrdersFromFirestore;
 
   try {
@@ -200,13 +212,19 @@ exports.getOrdersStatuses = async (_req, res) => {
   if (openedOrders.length === 0) {
     console.log('📄[INFO] - Received 0 opened orders');
     return res.status(200).send('ok');
+  } else {
+    console.log(`📄[INFO] - Received ${openedOrders.length} opened orders`);
+    console.log('📄[OPENED ORDERS]:', JSON.stringify(openedOrders, null, 2));
   }
 
   const xmls = dataFormatter.createXMLForGetOrdersStatuses(openedOrders);
+  console.log('📄[XMLs]:', xmls);
 
   try {
     const rawOrdersStatuses = await requestHelper.getOrdersStatuses(xmls);
+    console.log('📄[INFO] - rawOrdersStatuses:', JSON.stringify(rawOrdersStatuses, null, 2));
     ordersStatuses = dataFormatter.formatOrdersStatuses(rawOrdersStatuses);
+    console.log('📄[INFO] - FORMATTED rawOrdersStatuses:', JSON.stringify(ordersStatuses, null, 2));
   } catch (error) {
     console.error('❌[ERROR] - Error getting orders status:', error);
     return res.status(500).send('Internal Server Error');

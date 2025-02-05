@@ -194,6 +194,7 @@ function createXMLForOrdersCreate(order) {
       <wms:House>${orderNote.house}</wms:House>
       <wms:Flat>${orderNote.flat}</wms:Flat>
       <wms:Phone>${orderNote.phone}</wms:Phone>
+      <wms:StructureType>1</wms:StructureType>
     `;
   };
 
