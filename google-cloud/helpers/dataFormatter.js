@@ -172,6 +172,10 @@ function createXMLForOrdersCreate(order) {
       subtotalPrice += price * quantity;
     });
   }
+  if (prepaymentItem) {
+    subtotalPrice -= 200;
+  }
+
 
   const shippingType = orderNote.selectedPostoffice ? 0 : 1;
 
