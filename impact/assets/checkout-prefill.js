@@ -382,6 +382,7 @@ async function prefillSubmitHandler(event) {
     console.log('✌️prefillLink --->', prefillLink);
 
     window.location.href = prefillLink;
+    submitButton.setAttribute('aria-busy', 'false');
 }
 
 /**

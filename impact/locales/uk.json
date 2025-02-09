@@ -468,7 +468,9 @@
         "cart": "Корзина"
       },
       "shipping": {
-        "shipping_method_title": "Метод доставки"
+        "shipping_method_title": "Метод доставки",
+        "free_rate_label": "За тарифами НП",
+        "split_shipping_option_free": "За тарифами НП"
       },
       "contact": {
         "delivery_option_title": "Метод доставки",
@@ -487,6 +489,20 @@
       },
       "customer_account": {
         "save_my_information_label": "Збережіть цю інформацію для наступного разу"
+      },
+      "order_summary": {
+        "free_shipping_discount_label": "За тарифами НП",
+        "applied_free_shipping_discount_label": "За тарифами НП",
+        "free_total_label": "Безкоштовно",
+        "free_shipping_total_label": "За тарифами НП"
+      }
+    }
+  },
+  "customer_accounts": {
+    "order_details": {
+      "shipping": {
+        "free": "За тарифами НП",
+        "free_shipping_discount": "За тарифами НП"
       }
     }
   }
