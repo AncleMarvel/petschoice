@@ -67,6 +67,36 @@
     cursor: pointer;
 }
 
+.prefill-submit-btn[aria-busy="true"] {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.prefill-submit-btn[aria-busy="true"] span {
+    visibility: hidden;
+}
+
+.prefill-submit-btn[aria-busy="true"]::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    border: 2px solid white;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+
 fieldset {
     margin-bottom: 20px;
 }

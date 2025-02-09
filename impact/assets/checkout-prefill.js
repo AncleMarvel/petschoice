@@ -1,4 +1,6 @@
-
+if (window.location.pathname === '/cart') {
+    window.location.href = '/';
+}
 
 /**
  * @param {Object} params
@@ -117,6 +119,8 @@ function checkoutHandler(event) {
 async function prefillSubmitHandler(event) {
     event.preventDefault();
     event.stopPropagation();
+    const submitButton = document.querySelector(selectors.prefillForm).querySelector('[type="submit"]');
+    submitButton.setAttribute('aria-busy', 'true');
 
     const form = document.querySelector(selectors.prefillForm);
     const formData = new FormData(form);
