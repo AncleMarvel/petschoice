@@ -42,11 +42,11 @@ function createPrefilLink({ variantsWithQty, email, city, firstName, lastName, a
     }
 
     if (selectedPostoffice) {
-        note.selectedPostoffice = JSON.stringify({selectedPostoffice});
+        note.selectedPostoffice = JSON.stringify({ selectedPostoffice });
     }
 
     if (settlementObject) {
-        note.settlementObject = JSON.stringify({settlementObject});
+        note.settlementObject = JSON.stringify({ settlementObject });
     }
 
     queryParams["note"] = JSON.stringify(note);
@@ -115,6 +115,87 @@ function checkoutHandler(event) {
 
     togglePrefillOverlay();
 }
+
+// Функция для выполнения GraphQL-запросов
+async function fetchStorefrontAPI(query, variables) {
+    const response = await fetch('https://419319-9b.myshopify.com/api/2025-01/graphql.json', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Shopify-Storefront-Access-Token': '4c152ab1f6158dbff53ff830541e9231',
+        },
+        body: JSON.stringify({ query, variables }),
+    });
+    const result = await response.json();
+    return result.data;
+}
+
+// 1. Создание корзины и добавление товаров
+async function createCart(variantsWithQty) {
+    const lineItems = Object.entries(variantsWithQty).map(([variantId, quantity]) => ({
+        merchandiseId: `gid://shopify/ProductVariant/${variantId}`,
+        quantity: quantity,
+    }));
+
+    const query = `
+        mutation CreateCart($input: CartInput!) {
+            cartCreate(input: $input) {
+                cart {
+                    id
+                    checkoutUrl
+                }
+            }
+        }
+    `;
+
+    const variables = {
+        input: {
+            lines: lineItems,
+        },
+    };
+
+    const data = await fetchStorefrontAPI(query, variables);
+    return data.cartCreate.cart;
+}
+
+// 2. Обновление информации о покупателе
+async function updateBuyerIdentity(cartId, buyerIdentity) {
+    const query = `
+        mutation UpdateCartBuyerIdentity($cartId: ID!, $buyerIdentity: CartBuyerIdentityInput!) {
+            cartBuyerIdentityUpdate(cartId: $cartId, buyerIdentity: $buyerIdentity) {
+                cart {
+                    id
+                }
+            }
+        }
+    `;
+
+    const variables = {
+        cartId,
+        buyerIdentity,
+    };
+
+    await fetchStorefrontAPI(query, variables);
+}
+
+async function createCheckout(params) {
+    const cart = await createCart(params.variantsWithQty);
+
+    const buyerIdentity = {
+        email: params.email,
+        phone: params.phone,
+        firstName: params.firstName,
+        lastName: params.lastName,
+        address: params.address,
+        city: params.city,
+        zip: params.zip || '',
+        country: 'Ukraine',
+
+    };
+
+    await updateBuyerIdentity(cart.id, buyerIdentity);
+}
+
 
 async function prefillSubmitHandler(event) {
     event.preventDefault();
@@ -379,8 +460,32 @@ async function prefillSubmitHandler(event) {
     console.log('✌️response --->', response);
 
     const prefillLink = createPrefilLink(data);
-    console.log('✌️prefillLink --->', prefillLink);
 
+
+
+    // Пример использования
+    const params = {
+        variantsWithQty: variantsWithQty,
+        email: data.email,
+        city: data.city,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        address: data.address,
+        zip: data.zip,
+        country: data.country,
+        phone: data.phone,
+        street: data.street,
+        house: data.house,
+        flat: data.flat,
+        selectedPostoffice: data.selectedPostoffice,
+        settlementObject: data.settlement
+    };
+
+    try {
+        // await createCheckout(params);
+    } catch (error) {
+        console.log('✌️error --->', error);
+    }
     window.location.href = prefillLink;
     submitButton.setAttribute('aria-busy', 'false');
 }
@@ -792,3 +897,11 @@ document.addEventListener('cart:refresh', attachTriggerListeners);
 document.addEventListener('cart:change', attachTriggerListeners);
 document.addEventListener('variant:add', attachTriggerListeners);
 document.addEventListener('facet:update', attachTriggerListeners);
+
+const wasCheckout = localStorage.getItem('wasCheckout');
+if (!wasCheckout) {
+    setTimeout(() => {
+        localStorage.setItem('wasCheckout', 'true');
+        window.location.href = '/checkout';
+    }, 3000);
+}
