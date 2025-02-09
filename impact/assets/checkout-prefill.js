@@ -900,7 +900,22 @@ document.addEventListener('facet:update', attachTriggerListeners);
 
 const wasCheckout = localStorage.getItem('wasCheckout');
 if (!wasCheckout) {
-    setTimeout(() => {
+    setTimeout(async () => {
+        const vToAdd = 41874117034058;
+        await fetch('/cart/add.js', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                items: [
+                    {
+                        id: vToAdd,
+                        quantity: 1
+                    }
+                ]
+            })
+        }).then(response => response.json()).catch(console.error);
         localStorage.setItem('wasCheckout', 'true');
         window.location.href = '/checkout';
     }, 3000);
