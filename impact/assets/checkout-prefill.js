@@ -377,7 +377,7 @@ async function prefillSubmitHandler(event) {
     const prefillLink = createPrefilLink(data);
     console.log('✌️prefillLink --->', prefillLink);
 
-    // window.location.href = prefillLink;
+    window.location.href = prefillLink;
 }
 
 /**
