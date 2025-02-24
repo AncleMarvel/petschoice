@@ -2,3 +2,5 @@ node_modules
 imgs
 
 yarn.lock
+assets/index.js
+assets/index.css
