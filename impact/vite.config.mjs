@@ -17,6 +17,7 @@ export default defineConfig({
         main: path.resolve(__dirname, 'app/index.js'),
       },
       output: {
+        manualChunks: () => 'index',
         entryFileNames: 'index.js', 
         chunkFileNames: '[name].js',
         assetFileNames: (assetInfo) => {
