@@ -1,74 +1,3 @@
-/**
- * @param {Object} params
- *
- * @property {Object} variantsWithQty
- * @example { "41864347975754:1": 2, "41864347975754:2": 1 }
- * @property {String} email
- * @property {String} city
- * @property {String} firstName
- * @property {String} lastName
- * @property {String} address
- * @property {String} zip
- * @property {String} country
- * @property {String} phone
- * @returns {String}
- * @example 'https://petschoice.club/cart/41864347975754:1?checkout[email]=customer@example.com&checkout[shipping_address][city]=Lviv&checkout[shipping_address][first_name]=Nikita&checkout[shipping_address][last_name]=Shechenko&checkout[shipping_address][address1]=Ломоносова,55,кв6&checkout[shipping_address][zip]=03022&checkout[shipping_address][country]=Ukraine&checkout[shipping_address][phone]=+380995586745'
- */
-function createPrefilLink({
-  variantsWithQty,
-  email,
-  city,
-  firstName,
-  lastName,
-  address,
-  zip,
-  country,
-  phone,
-  street,
-  house,
-  flat,
-  selectedPostoffice,
-  settlementObject,
-}) {
-  let variants = Object.entries(variantsWithQty)
-    .map(([variantId, qty]) => `${variantId}:${qty}`)
-    .join(',');
-
-  const queryParams = {
-    'checkout[email]': email,
-    'checkout[shipping_address][city]': city,
-    'checkout[shipping_address][first_name]': firstName,
-    'checkout[shipping_address][last_name]': lastName,
-    'checkout[shipping_address][address1]': address,
-    'checkout[shipping_address][zip]': zip,
-    'checkout[shipping_address][country]': country,
-    'checkout[shipping_address][phone]': phone,
-  };
-
-  const note = {
-    phone: phone,
-    street: street,
-    house: house,
-    flat: flat || '',
-  };
-
-  if (selectedPostoffice) {
-    note.selectedPostoffice = JSON.stringify({ selectedPostoffice });
-  }
-
-  if (settlementObject) {
-    note.settlementObject = JSON.stringify({ settlementObject });
-  }
-
-  queryParams['note'] = JSON.stringify(note);
-
-  const queryString = Object.entries(queryParams)
-    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-    .join('&');
-
-  return `https://petschoice.club/cart/${variants}?${queryString}`;
-}
-
 const state = {
   fetchedSettlements: [],
   fetchedPostOffices: [],
@@ -112,6 +41,60 @@ const selectors = {
   checkoutBtn: '[type="submit"][name="checkout"]',
   buyNowBtn: '.payment-button__prefill-checkout-trigger',
 };
+
+/**
+ * @param {Object} params
+ *
+ * @property {Object} variantsWithQty
+ * @example { "41864347975754:1": 2, "41864347975754:2": 1 }
+ * @property {String} email
+ * @property {String} city
+ * @property {String} firstName
+ * @property {String} lastName
+ * @property {String} address
+ * @property {String} zip
+ * @property {String} country
+ * @property {String} phone
+ * @returns {String}
+ * @example 'https://petschoice.club/cart/41864347975754:1?checkout[email]=customer@example.com&checkout[shipping_address][city]=Lviv&checkout[shipping_address][first_name]=Nikita&checkout[shipping_address][last_name]=Shechenko&checkout[shipping_address][address1]=Ломоносова,55,кв6&checkout[shipping_address][zip]=03022&checkout[shipping_address][country]=Ukraine&checkout[shipping_address][phone]=+380995586745'
+ */
+function createPrefilLink({ variantsWithQty, email, city, firstName, lastName, address, zip, country, phone, street, house, flat, selectedPostoffice, settlementObject }) {
+  let variants = Object.entries(variantsWithQty).map(([variantId, qty]) => `${variantId}:${qty}`).join(',');
+
+  const queryParams = {
+    'checkout[email]': email,
+    'checkout[shipping_address][city]': city,
+    'checkout[shipping_address][first_name]': firstName,
+    'checkout[shipping_address][last_name]': lastName,
+    'checkout[shipping_address][address1]': address,
+    'checkout[shipping_address][zip]': zip,
+    'checkout[shipping_address][country]': country,
+    'checkout[shipping_address][phone]': phone,
+  };
+
+  const note = {
+    phone: phone,
+    street: street,
+    house: house,
+    flat: flat || '',
+  };
+
+  if (selectedPostoffice) {
+    note.selectedPostoffice = JSON.stringify({ selectedPostoffice });
+  }
+
+  if (settlementObject) {
+    note.settlementObject = JSON.stringify({ settlementObject });
+  }
+
+  queryParams['note'] = JSON.stringify(note);
+
+  const queryString = Object.entries(queryParams)
+    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+    .join('&');
+
+  return `https://petschoice.club/cart/${variants}?${queryString}`;
+}
 
 function togglePrefillOverlay() {
   const overlay = document.querySelector(selectors.prefillOverlay);
