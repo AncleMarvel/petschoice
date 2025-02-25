@@ -134,13 +134,17 @@
   width: 100%;
   padding: 12px;
   background: #141414;
-  color: #fff;
+  color: #F6F6F6;
   text-align: center;
   text-transform: uppercase;
   border: none;
   border-radius: 41px;
   cursor: pointer;
   min-height: 60px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 29px;
+  letter-spacing: 1px;
 
   svg path {
     stroke-width: 3px;
