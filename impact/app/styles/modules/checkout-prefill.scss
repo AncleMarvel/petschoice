@@ -118,6 +118,10 @@
 
     input {
       padding-right: 36px;
+
+      &:focus {
+        border-color: red;
+      }
     }
 
     svg {
@@ -125,6 +129,13 @@
       top: 50%;
       right: 0;
       transform: translate(-50%, -50%);
+    }
+
+    .prefill-settlement-search-clear,
+    .prefill-search-post-office-clear {
+      cursor: pointer;
+      display: none;
+      color: #151616;
     }
   }
 }
@@ -153,7 +164,6 @@
 
 input.error {
   border-color: rgb(255, 0, 0);
-  border-width: 3px;
 }
 
 .payment-button-wrapper {
@@ -179,4 +189,42 @@ input.error {
   .prefill-container {
     width: 100%;
   }
+}
+
+.prefill-dropdown {
+  position: absolute;
+  top: 55px;
+  left: 0;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: #F6F6F6;
+  display: none;
+  z-index: 10;
+  max-height: 205px;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.prefill-dropdown.active {
+  display: block;
+}
+
+.prefill-dropdown div {
+  padding: 10px;
+  cursor: pointer;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid #E0E0E0;
+  }
+}
+
+.prefill-dropdown div:hover {
+  background-color: #D8D8D8;
+}
+
+.prefill-dropdown .empty {
+  padding: 10px;
+  cursor: default;
 }

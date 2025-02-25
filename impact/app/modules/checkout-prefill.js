@@ -4,7 +4,7 @@ const state = {
   fetchedStreets: [],
   selectedSettlement: null,
   selectedPostoffice: null,
-  selectedStreet: null,
+  selectedStreet: null
 };
 
 const selectors = {
@@ -24,8 +24,14 @@ const selectors = {
   postOfficeAddressWindow: '#post-office-shipping',
   searchPostOffice: '#search-post-office',
   postOfficeSelection: '#post-office',
+  postOfficeDropdown: 'post-office-dropdown',
+  postOfficeSearchClearIcon: '.prefill-search-post-office-clear',
+  postOfficeSearchIcon: '.prefill-search-post-office-search',
   settlementSearch: '#settlement-search',
   settlementSelection: '#settlement-selection',
+  settlementDropdown: 'settlement-dropdown',
+  settlementSearchClearIcon: '.prefill-settlement-search-clear',
+  settlementSearchIcon: '.icon-prefill-search',
 
   courierAddressWindow: '#courier-shipping',
   courierSettlementSearch: '#courier-settlement-search',
@@ -41,6 +47,14 @@ const selectors = {
   checkoutBtn: '[type="submit"][name="checkout"]',
   buyNowBtn: '.payment-button__prefill-checkout-trigger',
 };
+
+const settlementDropdown = document.getElementById(selectors.settlementDropdown);
+const settlementSearchClearIcon = document.querySelector(selectors.settlementSearchClearIcon);
+const settlementSearchIcon = document.querySelector(selectors.settlementSearchIcon);
+
+const postOfficeDropdown = document.getElementById(selectors.postOfficeDropdown);
+const postOfficeSearchClearIcon = document.querySelector(selectors.postOfficeSearchClearIcon);
+const postOfficeSearchIcon = document.querySelector(selectors.postOfficeSearchIcon);
 
 /**
  * @param {Object} params
@@ -554,6 +568,45 @@ function renderDropdownOptions(dropdown, items, valueKey, textKeys) {
   dropdown.classList.remove('hidden');
 }
 
+function updateDropdown(dropdown, items, value, displayKeys) {
+  dropdown.innerHTML = '';
+
+  if (items.length === 0) {
+    const emptyMessage = document.createElement('div');
+    emptyMessage.textContent = 'Відсутні результати пошуку';
+    emptyMessage.className = 'empty';
+    dropdown.appendChild(emptyMessage);
+  } else {
+    items.forEach(item => {
+      const selection = displayKeys.map(key => {
+        if (key === 'SettlementTypeDescription' && item[key]) {
+          return `${item[key].charAt(0)}. `;
+        }
+
+        if (key === 'Description' && item[key]) {
+          return `${item[key]}`;
+        }
+
+        if (key === 'AreaDescription' && item[key]) {
+          return `, ${item.AreaDescription} обл.`;
+        }
+
+        if (key === 'RegionsDescription' && item[key]) {
+          return `, ${item[key]} р-н`;
+        }
+        return item[key];
+      }).join('');
+
+      const option = document.createElement('div');
+      option.textContent = selection;
+      option.dataset.value = item[value];
+      dropdown.appendChild(option);
+    });
+  }
+
+  dropdown.classList.add('active');
+}
+
 /**
  * Handle settlement search input
  */
@@ -562,7 +615,8 @@ settlementSearch.addEventListener('input', async (event) => {
   if (query.length < 2) return; // Игнорируем запросы короче 2 символов
 
   const settlements = await fetchSettlements(query);
-  renderDropdownOptions(settlementSelection, settlements, 'Ref', ['Description', 'AreaDescription']);
+  // renderDropdownOptions(settlementSelection, settlements, 'Ref', ['Description', 'AreaDescription']);
+  updateDropdown(settlementDropdown, settlements, 'Ref', ['SettlementTypeDescription', 'Description', 'AreaDescription', 'RegionsDescription']);
 });
 
 /**
@@ -570,21 +624,20 @@ settlementSearch.addEventListener('input', async (event) => {
  */
 searchPostOffice.addEventListener('input', async (event) => {
   const query = event.target.value.trim();
-  const settlementRef = settlementSelection.value;
+  const settlementRef = state.selectedSettlement;
 
-  if (!settlementRef) {
+  if (!state.selectedSettlement) {
     settlementSearch.classList.add('error');
-    settlementSelection.classList.add('error');
     settlementSearch.scrollIntoView({ behavior: 'smooth' });
     return;
   } else {
     settlementSearch.classList.remove('error');
-    settlementSelection.classList.remove('error');
   }
 
   const postOffices = await fetchPostOffices(settlementRef, query);
 
-  renderDropdownOptions(postOfficeSelection, postOffices, 'Ref', 'Description');
+  // renderDropdownOptions(postOfficeSelection, postOffices, 'Ref', 'Description');
+  updateDropdown(postOfficeDropdown, postOffices, 'Ref', ['Description']);
 });
 
 /**
@@ -618,12 +671,10 @@ postOfficeSelection.addEventListener('change', (e) => {
 searchPostOffice.addEventListener('focus', async () => {
   if (!state.selectedSettlement) {
     settlementSearch.classList.add('error');
-    settlementSelection.classList.add('error');
     settlementSearch.scrollIntoView({ behavior: 'smooth' });
     return;
   } else {
     settlementSearch.classList.remove('error');
-    settlementSelection.classList.remove('error');
   }
 });
 
@@ -792,6 +843,66 @@ function attachTriggerListeners(e = null) {
     elementsWithAttachedListeners.push(btn);
   });
 }
+
+// settlementSearch
+settlementSearch.addEventListener('focus', () => {
+  if (settlementDropdown.children.length > 0) {
+    settlementDropdown.classList.add('active');
+  }
+});
+
+settlementDropdown.addEventListener('click', (e) => {
+  if (e.target.dataset.value) {
+    settlementSearch.value = e.target.textContent;
+    state.selectedSettlement = e.target.dataset.value;
+    settlementDropdown.classList.remove('active');
+    settlementSearch.classList.remove('error');
+    settlementSearch.setAttribute('disabled', 'disabled');
+    settlementSearchIcon.style.display = 'none';
+    settlementSearchClearIcon.style.display = 'block';
+  }
+});
+
+settlementSearchClearIcon.addEventListener('click', () => {
+  state.selectedSettlement = null;
+  settlementSearch.value = '';
+  settlementSearch.removeAttribute('disabled');
+  settlementSearchClearIcon.style.display = 'none';
+  settlementSearchIcon.style.display = 'block';
+});
+
+// searchPostOffice
+searchPostOffice.addEventListener('focus', () => {
+  if (postOfficeDropdown.children.length > 0) {
+    postOfficeDropdown.classList.add('active');
+  }
+});
+
+postOfficeDropdown.addEventListener('click', (e) => {
+  if (e.target.dataset.value) {
+    searchPostOffice.value = e.target.textContent;
+    state.selectedPostoffice = e.target.dataset.value;
+    postOfficeDropdown.classList.remove('active');
+    searchPostOffice.classList.remove('error');
+    searchPostOffice.setAttribute('disabled', 'disabled');
+    postOfficeSearchIcon.style.display = 'none';
+    postOfficeSearchClearIcon.style.display = 'block';
+  }
+});
+
+postOfficeSearchClearIcon.addEventListener('click', () => {
+  state.selectedPostoffice = null;
+  searchPostOffice.value = '';
+  searchPostOffice.removeAttribute('disabled');
+  postOfficeSearchClearIcon.style.display = 'none';
+  postOfficeSearchIcon.style.display = 'block';
+});
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.settlement-search__wrapper')) {
+    settlementDropdown.classList.remove('active');
+  }
+});
 
 attachTriggerListeners();
 
