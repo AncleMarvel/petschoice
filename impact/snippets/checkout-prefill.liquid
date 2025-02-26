@@ -31,17 +31,19 @@ This snippet is used to prefill the checkout form with the customer's informatio
       </button>
     </div>
 
+    <div class="prefill-error-message">Будь ласка заповніть поля</div>
+
     <div class="prefill-content">
       <form id="prefill-form">
         <!-- Contact Information -->
         <fieldset class="prefill-fieldset">
           <div class="prefill-name">
-            <input class="input" type="text" id="first-name" name="firstName" placeholder="Ім'я" required />
-            <input class="input" type="text" id="last-name" name="lastName" placeholder="Прізвище" required />
+            <input class="input" type="text" id="first-name" name="firstName" placeholder="Ім'я" />
+            <input class="input" type="text" id="last-name" name="lastName" placeholder="Прізвище" />
           </div>
 
-          <input class="input" type="tel" id="phone" name="phone" placeholder="Номер телефону" required />
-          <input class="input" type="email" id="email" name="email" placeholder="Електронна адреса" required />
+          <input class="input" type="tel" id="phone" name="phone" placeholder="Номер телефону" />
+          <input class="input" type="email" id="email" name="email" placeholder="Електронна адреса" />
         </fieldset>
 
         <!-- Shipping Type -->

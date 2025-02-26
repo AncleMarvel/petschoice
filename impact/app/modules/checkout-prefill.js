@@ -4,7 +4,8 @@ const state = {
   fetchedStreets: [],
   selectedSettlement: null,
   selectedPostoffice: null,
-  selectedStreet: null
+  selectedStreet: null,
+  selectedDelivery: 'post-office'
 };
 
 const selectors = {
@@ -13,6 +14,8 @@ const selectors = {
 
   prefillForm: '#prefill-form',
   closeBtn: '#close-prefill-form',
+
+  errorMessage: '.prefill-error-message',
 
   firstName: '#first-name',
   lastName: '#last-name',
@@ -67,6 +70,10 @@ const courierSettlementClearIcon = document.querySelector(selectors.courierSettl
 const courierSettlementSearchIcon = document.querySelector(selectors.courierSettlementSearchIcon);
 
 const inputsWrappers = document.querySelectorAll(selectors.inputsWrappers);
+const firstNameInput = document.querySelector(selectors.firstName);
+const lastNameInput = document.querySelector(selectors.lastName);
+const phoneInput = document.querySelector(selectors.phone);
+const emailImput = document.querySelector(selectors.email);
 
 /**
  * @param {Object} params
@@ -139,6 +146,8 @@ function checkoutHandler(event) {
 async function prefillSubmitHandler(event) {
   event.preventDefault();
   event.stopPropagation();
+
+  if (!validatePrefillForm()) return;
 
   const form = document.querySelector(selectors.prefillForm);
   const formData = new FormData(form);
@@ -439,17 +448,6 @@ const prefillContainer = document.querySelector(selectors.prefillContainer);
 prefillContainer.addEventListener('click', (event) => {
   if (event.target === prefillContainer) {
     togglePrefillOverlay();
-  }
-});
-
-/**
- * Handle phone input. Add +380 to the beginning of the phone number
- */
-const phoneInput = document.querySelector(selectors.phone);
-phoneInput.addEventListener('input', (event) => {
-  const value = event.target.value;
-  if (!value.startsWith('+380')) {
-    event.target.value = '+380' + value;
   }
 });
 
@@ -807,6 +805,8 @@ shippingType.forEach((radio) => {
       postOfficeAddressWindow.classList.add('hidden');
       courierAddressWindow.classList.remove('hidden');
     }
+
+    state.selectedDelivery = event.target.value;
   });
 });
 
@@ -874,6 +874,7 @@ settlementDropdown.addEventListener('click', (e) => {
     settlementSearch.setAttribute('disabled', 'disabled');
     settlementSearchIcon.style.display = 'none';
     settlementSearchClearIcon.style.display = 'block';
+    validatePrefillForm(false);
   }
 });
 
@@ -901,6 +902,7 @@ postOfficeDropdown.addEventListener('click', (e) => {
     searchPostOffice.setAttribute('disabled', 'disabled');
     postOfficeSearchIcon.style.display = 'none';
     postOfficeSearchClearIcon.style.display = 'block';
+    validatePrefillForm(false);
   }
 });
 
@@ -928,6 +930,7 @@ courierSettlementDropdown.addEventListener('click', (e) => {
     courierSettlementSearch.setAttribute('disabled', 'disabled');
     courierSettlementSearchIcon.style.display = 'none';
     courierSettlementClearIcon.style.display = 'block';
+    validatePrefillForm(false);
   }
 });
 
@@ -949,6 +952,126 @@ inputsWrappers.forEach(inputWrapper => {
     }
   });
 });
+
+firstNameInput.addEventListener('input', () => {
+  firstNameInput.value = firstNameInput.value.replace(/[^\u0400-\u04FF]/g, '');
+  firstNameInput.classList.remove('error');
+  handheErrorMessage();
+});
+
+lastNameInput.addEventListener('input', () => {
+  lastNameInput.value = lastNameInput.value.replace(/[^\u0400-\u04FF]/g, '');
+  lastNameInput.classList.remove('error');
+  handheErrorMessage();
+});
+
+emailImput.addEventListener('input', () => {
+  emailImput.classList.remove('error');
+  handheErrorMessage();
+});
+
+/**
+ * Handle phone input. Add +380 to the beginning of the phone number
+ */
+phoneInput.addEventListener('input', (event) => {
+  const value = event.target.value;
+  if (!value.startsWith('+380')) {
+    event.target.value = '+380' + value;
+  }
+
+  phoneInput.classList.remove('error');
+  handheErrorMessage();
+});
+
+function validatePrefillForm() {
+  const firstNameField = document.querySelector(selectors.firstName);
+  const lastNameField = document.querySelector(selectors.lastName);
+  const phoneField = document.querySelector(selectors.phone);
+  const emailField = document.querySelector(selectors.email);
+  const settlementSearchField = document.querySelector(selectors.settlementSearch);
+  const searchPostOfficeField = document.querySelector(selectors.searchPostOffice);
+  const courierSettlementSearchField = document.querySelector(selectors.courierSettlementSearch);
+  const errorMessage = document.querySelector(selectors.errorMessage);
+
+  const firstName = firstNameField?.value.trim();
+  const lastName = lastNameField?.value.trim();
+  const phoneNumber = phoneField?.value.trim();
+  const emailAddress = emailField?.value.trim();
+  const settlementSearch = settlementSearchField?.value.trim();
+  const searchPostOffice = searchPostOfficeField?.value.trim();
+  const courierSettlementSearch = courierSettlementSearchField?.value.trim();
+
+  [firstNameField, lastNameField, phoneField, emailField, settlementSearchField, searchPostOfficeField, courierSettlementSearchField, errorMessage].forEach(field => {
+    if (field) field.classList.remove('error');
+  });
+
+  let isValid = true;
+
+  // const cyrillicRegex = /^[\u0400-\u04FF]+$/;
+  if (!firstName) {
+    firstNameField?.classList.add('error');
+    isValid = false;
+  }
+
+  if (!lastName) {
+    lastNameField?.classList.add('error');
+    isValid = false;
+  }
+
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!emailRegex.test(emailAddress)) {
+    emailField?.classList.add('error');
+    isValid = false;
+  }
+
+  const phoneRegex = /^\+38\d{10}$/;
+  if (!phoneRegex.test(phoneNumber)) {
+    phoneField?.classList.add('error');
+    isValid = false;
+  }
+
+  if (state.selectedDelivery === 'post-office' && !settlementSearch) {
+    settlementSearchField?.classList.add('error');
+    isValid = false;
+  }
+
+  if (state.selectedDelivery === 'post-office' && !searchPostOffice) {
+    searchPostOfficeField?.classList.add('error');
+    isValid = false;
+  }
+
+  if (state.selectedDelivery === 'courier' && !courierSettlementSearch) {
+    courierSettlementSearchField?.classList.add('error');
+    isValid = false;
+  }
+
+  if (!isValid) {
+    errorMessage.classList.add('error');
+  }
+
+  return isValid;
+}
+
+function handheErrorMessage() {
+  const firstNameField = document.querySelector(selectors.firstName);
+  const lastNameField = document.querySelector(selectors.lastName);
+  const phoneField = document.querySelector(selectors.phone);
+  const emailField = document.querySelector(selectors.email);
+  const settlementSearchField = document.querySelector(selectors.settlementSearch);
+  const searchPostOfficeField = document.querySelector(selectors.searchPostOffice);
+  const courierSettlementSearchField = document.querySelector(selectors.courierSettlementSearch);
+  const errorMessage = document.querySelector(selectors.errorMessage);
+
+  const isErrorPresent = [firstNameField, lastNameField, phoneField, emailField, settlementSearchField, searchPostOfficeField, courierSettlementSearchField].some(element => {
+    return element?.classList.contains('error');
+  });
+  
+  if (isErrorPresent) {
+    errorMessage?.classList.add('error');
+  } else {
+    errorMessage?.classList.remove('error');
+  }
+}
 
 document.addEventListener('click', (e) => {
   if (!e.target.closest('.settlement-search__wrapper')) {

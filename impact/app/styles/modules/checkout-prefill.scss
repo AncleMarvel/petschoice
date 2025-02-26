@@ -118,10 +118,6 @@
 
     input {
       padding-right: 36px;
-
-      &:focus {
-        border-color: red;
-      }
     }
 
     svg {
@@ -137,6 +133,26 @@
       cursor: pointer;
       display: none;
       color: #151616;
+    }
+  }
+
+  input.error {
+    border-color: rgb(255, 0, 0);
+    border-width: 2px;
+  }
+
+  .prefill-error-message {
+    margin-top: -10px;
+    margin-bottom: 15px;
+    color: rgb(255, 0, 0);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 18px;
+    letter-spacing: 1px;
+    display: none;
+
+    &.error {
+      display: block;
     }
   }
 }
@@ -161,10 +177,6 @@
   svg path {
     stroke-width: 3px;
   }
-}
-
-input.error {
-  border-color: rgb(255, 0, 0);
 }
 
 .payment-button-wrapper {
