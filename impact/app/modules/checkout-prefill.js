@@ -38,6 +38,10 @@ const selectors = {
   courierSettlementSelection: '#courier-settlement-selection',
   courierStreetSearch: '#courier-street-search',
   courierStreetSelection: '#courier-street-selection',
+  courierSettlementDropdown: 'courier-settlement-dropdown',
+  courierSettlementClearIcon: '.courier-settlement-clear',
+  courierSettlementSearchIcon: '.prefill-courier-settlement-search',
+
   street: '#street',
   house: '#house',
   flat: '#flat',
@@ -55,6 +59,10 @@ const settlementSearchIcon = document.querySelector(selectors.settlementSearchIc
 const postOfficeDropdown = document.getElementById(selectors.postOfficeDropdown);
 const postOfficeSearchClearIcon = document.querySelector(selectors.postOfficeSearchClearIcon);
 const postOfficeSearchIcon = document.querySelector(selectors.postOfficeSearchIcon);
+
+const courierSettlementDropdown = document.getElementById(selectors.courierSettlementDropdown);
+const courierSettlementClearIcon = document.querySelector(selectors.courierSettlementClearIcon);
+const courierSettlementSearchIcon = document.querySelector(selectors.courierSettlementSearchIcon);
 
 /**
  * @param {Object} params
@@ -698,12 +706,14 @@ courierSettlementSearch.addEventListener('input', async (event) => {
   const settlements = await fetchSettlements(query);
 
   // Рендерим результаты в select #courier-settlement-selection
-  renderDropdownOptions(
-    courierSettlementSelection,
-    settlements,
-    'Ref', // value для <option>
-    ['Description', 'AreaDescription'], // текст (Description, AreaDescription)
-  );
+  // renderDropdownOptions(
+  //   courierSettlementSelection,
+  //   settlements,
+  //   'Ref', // value для <option>
+  //   ['Description', 'AreaDescription'], // текст (Description, AreaDescription)
+  // );
+
+  updateDropdown(courierSettlementDropdown, settlements, 'Ref', ['SettlementTypeDescription', 'Description', 'AreaDescription', 'RegionsDescription']);
 });
 
 /**
@@ -896,6 +906,33 @@ postOfficeSearchClearIcon.addEventListener('click', () => {
   searchPostOffice.removeAttribute('disabled');
   postOfficeSearchClearIcon.style.display = 'none';
   postOfficeSearchIcon.style.display = 'block';
+});
+
+// courierSettlementSearch
+courierSettlementSearch.addEventListener('focus', () => {
+  if (courierSettlementDropdown.children.length > 0) {
+    courierSettlementDropdown.classList.add('active');
+  }
+});
+
+courierSettlementDropdown.addEventListener('click', (e) => {
+  if (e.target.dataset.value) {
+    courierSettlementSearch.value = e.target.textContent;
+    state.selectedSettlement = e.target.dataset.value;
+    courierSettlementDropdown.classList.remove('active');
+    courierSettlementSearch.classList.remove('error');
+    courierSettlementSearch.setAttribute('disabled', 'disabled');
+    courierSettlementSearchIcon.style.display = 'none';
+    courierSettlementClearIcon.style.display = 'block';
+  }
+});
+
+courierSettlementClearIcon.addEventListener('click', () => {
+  state.selectedSettlement = null;
+  courierSettlementSearch.value = '';
+  courierSettlementSearch.removeAttribute('disabled');
+  courierSettlementClearIcon.style.display = 'none';
+  courierSettlementSearchIcon.style.display = 'block';
 });
 
 document.addEventListener('click', (e) => {

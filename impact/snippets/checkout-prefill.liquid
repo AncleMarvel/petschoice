@@ -94,7 +94,9 @@ This snippet is used to prefill the checkout form with the customer's informatio
 
               <span class="courier-settlement-search__wrapper">
                 <input class="input" type="text" id="courier-settlement-search" name="courier-settlement-search" autocomplete="off" placeholder="Місто/Регіон" />
-                {%- render 'icon', icon: 'prefill-search' -%}
+                {%- render 'icon', icon: 'prefill-search', class: 'prefill-courier-settlement-search' -%}
+                {%- render "icon", icon: 'close', class: 'courier-settlement-clear' -%}
+                <div class="prefill-dropdown" id="courier-settlement-dropdown"></div>
               </span>
 
               <select class="select hidden" name="courier-settlement-selection" id="courier-settlement-selection">
