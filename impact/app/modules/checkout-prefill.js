@@ -48,6 +48,8 @@ const selectors = {
   postalCode: '#postal-code',
   country: '#country',
 
+  inputsWrappers: '.prefill-input-selection',
+
   checkoutBtn: '[type="submit"][name="checkout"]',
   buyNowBtn: '.payment-button__prefill-checkout-trigger',
 };
@@ -63,6 +65,8 @@ const postOfficeSearchIcon = document.querySelector(selectors.postOfficeSearchIc
 const courierSettlementDropdown = document.getElementById(selectors.courierSettlementDropdown);
 const courierSettlementClearIcon = document.querySelector(selectors.courierSettlementClearIcon);
 const courierSettlementSearchIcon = document.querySelector(selectors.courierSettlementSearchIcon);
+
+const inputsWrappers = document.querySelectorAll(selectors.inputsWrappers);
 
 /**
  * @param {Object} params
@@ -933,6 +937,17 @@ courierSettlementClearIcon.addEventListener('click', () => {
   courierSettlementSearch.removeAttribute('disabled');
   courierSettlementClearIcon.style.display = 'none';
   courierSettlementSearchIcon.style.display = 'block';
+});
+
+inputsWrappers.forEach(inputWrapper => {
+  inputWrapper.addEventListener('click', () => {
+    const radioInput = inputWrapper.querySelector('input[type="radio"]');
+
+    if (radioInput && !radioInput.checked) {
+      radioInput.checked = true;
+      radioInput.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  });
 });
 
 document.addEventListener('click', (e) => {
