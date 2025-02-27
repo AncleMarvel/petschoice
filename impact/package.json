@@ -14,7 +14,14 @@
     "prettier": "^3.5.2",
     "vite": "^6.1.1"
   },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "IE 11"
+  ],
   "devDependencies": {
-    "sass-embedded": "^1.85.0"
+    "@vitejs/plugin-legacy": "^6.0.2",
+    "sass-embedded": "^1.85.0",
+    "terser": "^5.39.0"
   }
 }

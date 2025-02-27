@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite'
+import legacy from '@vitejs/plugin-legacy';
 import path from 'path'
 
 export default defineConfig({
@@ -8,7 +9,14 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'app')
     }
   },
+  plugins: [
+    legacy({
+      targets: ['defaults', 'IE 11'],
+      additionalLegacyPolyfills: ['regenerator-runtime/runtime'],
+    }),
+  ],
   build: {
+    minify: 'terser',
     outDir: '../assets',
     emptyOutDir: false,
     sourcemap: false,
