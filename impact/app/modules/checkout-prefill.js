@@ -1,3 +1,5 @@
+import { closeCartDrawer } from "./utils";
+
 const state = {
   fetchedSettlements: [],
   fetchedPostOffices: [],
@@ -140,6 +142,7 @@ function checkoutHandler(event) {
   event.preventDefault();
   event.stopPropagation();
 
+  closeCartDrawer();
   togglePrefillOverlay();
 }
 
