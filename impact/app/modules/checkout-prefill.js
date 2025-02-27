@@ -858,9 +858,14 @@ function attachTriggerListeners(e = null) {
   });
 }
 
+function removeActiveClasses() {
+  document.querySelectorAll('.active').forEach((el) => el.classList.remove('active'));
+}
+
 // settlementSearch
 settlementSearch.addEventListener('focus', () => {
   if (settlementDropdown.children.length > 0) {
+    removeActiveClasses();
     settlementDropdown.classList.add('active');
   }
 });
@@ -874,7 +879,6 @@ settlementDropdown.addEventListener('click', (e) => {
     settlementSearch.setAttribute('disabled', 'disabled');
     settlementSearchIcon.style.display = 'none';
     settlementSearchClearIcon.style.display = 'block';
-    validatePrefillForm(false);
   }
 });
 
@@ -889,6 +893,7 @@ settlementSearchClearIcon.addEventListener('click', () => {
 // searchPostOffice
 searchPostOffice.addEventListener('focus', () => {
   if (postOfficeDropdown.children.length > 0) {
+    removeActiveClasses();
     postOfficeDropdown.classList.add('active');
   }
 });
@@ -902,7 +907,6 @@ postOfficeDropdown.addEventListener('click', (e) => {
     searchPostOffice.setAttribute('disabled', 'disabled');
     postOfficeSearchIcon.style.display = 'none';
     postOfficeSearchClearIcon.style.display = 'block';
-    validatePrefillForm(false);
   }
 });
 
@@ -917,6 +921,7 @@ postOfficeSearchClearIcon.addEventListener('click', () => {
 // courierSettlementSearch
 courierSettlementSearch.addEventListener('focus', () => {
   if (courierSettlementDropdown.children.length > 0) {
+    removeActiveClasses();
     courierSettlementDropdown.classList.add('active');
   }
 });
@@ -930,7 +935,6 @@ courierSettlementDropdown.addEventListener('click', (e) => {
     courierSettlementSearch.setAttribute('disabled', 'disabled');
     courierSettlementSearchIcon.style.display = 'none';
     courierSettlementClearIcon.style.display = 'block';
-    validatePrefillForm(false);
   }
 });
 
