@@ -1098,8 +1098,17 @@ function handleErrorMessage() {
 }
 
 document.addEventListener('click', (e) => {
+  const body = document.querySelector('body');
+  const overlay = document.querySelector(selectors.prefillOverlay);
+  const prefillContainer = document.querySelector(selectors.prefillContainer);
+
   if (!e.target.closest('.settlement-search__wrapper')) {
     settlementDropdown.classList.remove('active');
+  }
+  
+  if (prefillContainer && !prefillContainer.contains(e.target)) {
+    overlay.classList.add('hidden');
+    body.style.overflow = 'hidden';
   }
 });
 
