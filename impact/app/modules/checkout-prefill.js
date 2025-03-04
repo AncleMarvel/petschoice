@@ -963,31 +963,47 @@ inputsWrappers.forEach(inputWrapper => {
 firstNameInput.addEventListener('input', () => {
   firstNameInput.value = firstNameInput.value.replace(/[^\u0400-\u04FF]/g, '');
   firstNameInput.classList.remove('error');
-  handheErrorMessage();
+  handleErrorMessage();
 });
 
 lastNameInput.addEventListener('input', () => {
   lastNameInput.value = lastNameInput.value.replace(/[^\u0400-\u04FF]/g, '');
   lastNameInput.classList.remove('error');
-  handheErrorMessage();
+  handleErrorMessage();
 });
 
 emailImput.addEventListener('input', () => {
   emailImput.classList.remove('error');
-  handheErrorMessage();
+  handleErrorMessage();
 });
 
 /**
  * Handle phone input. Add +380 to the beginning of the phone number
  */
 phoneInput.addEventListener('input', (event) => {
-  const value = event.target.value;
-  if (!value.startsWith('+380')) {
-    event.target.value = '+380' + value;
+  let value = event.target.value;
+  if (value === '') return;
+
+  if (value === '+' || value === '38' || value === '0') {
+    value = '+380';
   }
 
+  if (!value.startsWith('+380')) {
+    if (value.startsWith('+')) {
+      value = '+380' + value.slice(1).replace(/^38|0/, '');
+    } else if (value.startsWith('38')) {
+      value = '+380' + value.slice(2);
+    } else if (value.startsWith('0')) {
+      value = '+380' + value.slice(1);
+    } else {
+      value = '+380' + value;
+    }
+  }
+
+  event.target.value = value;
+
   phoneInput.classList.remove('error');
-  handheErrorMessage();
+  handleErrorMessage();
 });
 
 function validatePrefillForm() {
@@ -1059,7 +1075,7 @@ function validatePrefillForm() {
   return isValid;
 }
 
-function handheErrorMessage() {
+function handleErrorMessage() {
   const firstNameField = document.querySelector(selectors.firstName);
   const lastNameField = document.querySelector(selectors.lastName);
   const phoneField = document.querySelector(selectors.phone);
