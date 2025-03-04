@@ -149,7 +149,8 @@ function checkoutHandler(event) {
 async function prefillSubmitHandler(event) {
   event.preventDefault();
   event.stopPropagation();
-
+  const submitButton = document.querySelector(selectors.prefillForm).querySelector('[type="submit"]');
+  submitButton.setAttribute('aria-busy', 'true');
   if (!validatePrefillForm()) return;
 
   const form = document.querySelector(selectors.prefillForm);
