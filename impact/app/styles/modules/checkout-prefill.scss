@@ -21,8 +21,7 @@
   max-width: 800px;
   min-width: 320px;
   max-height: 85vh;
-  padding: 20px;
-  padding-top: 0;
+  padding: 0 20px;
   background: #fff;
   border-radius: 5px;
   overflow-y: auto;
@@ -279,4 +278,14 @@
 @keyframes spin {
   0% { transform: translate(-50%, -50%) rotate(0deg); }
   100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.prefill-submit-btn__wrapper {
+  position: sticky;
+  bottom: 0;
+  background-color: #fff;
+  border-top: 1px solid #838383;
+  margin: 0 -20px;
+  width: calc(100% + 40px);
+  padding: 15px;
 }
