@@ -1108,7 +1108,7 @@ document.addEventListener('click', (e) => {
   
   if (prefillContainer && !prefillContainer.contains(e.target)) {
     overlay.classList.add('hidden');
-    body.style.overflow = 'hidden';
+    body.style.overflow = 'auto';
   }
 });
 
