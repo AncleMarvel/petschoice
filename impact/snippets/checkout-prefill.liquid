@@ -1,146 +1,154 @@
-{{ "checkout-prefill.css" | asset_url | stylesheet_tag }}
-
 {% comment %} 
 
 This snippet is used to prefill the checkout form with the customer's information in a modal window.
 
 1. Contact information:
-    - first name
-    - last name
-    - email
-    - phone number
+  - first name
+  - last name
+  - email
+  - phone number
 2. Shipping type:
-    - shipping to an post office
-    - shipping to an address by courier
+  - shipping to an post office
+  - shipping to an address by courier
 3. If shipping to an address by courier (Search with hints and autocomplete):
-    - address
-    - city
-    - postal code (automatically filled in based on the city)
-    - country (Ukraine by default)
+  - address
+  - city
+  - postal code (automatically filled in based on the city)
+  - country (Ukraine by default)
 4. If shipping to an post office (Search with hints and autocomplete):
-    - post office number
-    - city
-    - country (Ukraine by default)
-
+  - post office number
+  - city
+  - country (Ukraine by default)
 {% endcomment %}
 
 <div class="prefill-overlay hidden" id="prefill-overlay">
-    <div class="prefill-container" id="prefill-container">
-        <div class="prefill-header">
-            <h2>Оформлення замовлення</h2>
-            <button class="prefill-close-btn" id="close-prefill-form">
-                {% render "icon", icon: "close", class: "prefill-close-btn-icon" %}
-            </button>
-        </div>
-        <div class="prefill-content">
-            <form id="prefill-form">
-                <!-- Contact Information -->
-                <fieldset>
-                    <legend>Контактні дані</legend>
-                    <label for="first-name">Ім'я</label>
-                    <input class="input" type="text" id="first-name" name="firstName" required />
+  <div class="prefill-container" id="prefill-container">
+    <div class="prefill-header">
+      <h2>Оформлення замовлення</h2>
 
-                    <label for="last-name">Прізвище</label>
-                    <input class="input" type="text" id="last-name" name="lastName" required />
-
-                    <label for="surname">По-батькові</label>
-                    <input class="input" type="text" id="surname" name="surname" required />
-
-                    <label for="email">Електронна адреса</label>
-                    <input class="input" type="email" id="email" name="email" required />
-
-                    <label for="phone">Номер телефону</label>
-                    <input class="input" type="tel" id="phone" name="phone" placeholder="+380" required />
-                </fieldset>
-
-                <!-- Payment Type -->
-                <fieldset>
-                    <legend>Оплата</legend>
-                    <label>
-                        <input type="radio" name="payment-type" value="full" checked />
-                        Повна предоплата
-                    </label>
-                    <label>
-                        <input type="radio" name="payment-type" value="prepayment" />
-                        200 грн предоплата (залишок при отриманні)
-                    </label>
-                </fieldset>
-
-
-                <!-- Shipping Type -->
-                <fieldset>
-                    <legend>Метод доставки</legend>
-                    <label>
-                        <input type="radio" name="shipping-type" value="post-office" checked />
-                        Доставка на відділення Нової Пошти
-                    </label>
-                    <label>
-                        <input type="radio" name="shipping-type" value="courier" />
-                        Кур'єрська доставка від Нова Пошта
-                    </label>
-                </fieldset>
-
-                <!-- Post Office Shipping -->
-                <div id="post-office-shipping" class="shipping-details">
-                    <fieldset>
-                        <label for="settlement-search">Пошук населеного пункту</label>
-                        <input class="input" type="text" id="settlement-search" name="settlement-search" autocomplete="off" placeholder="Київ" />
-                        
-                        <select class="select hidden" name="settlement-selection" id="settlement-selection">
-                            <option value="" selected disabled hidden>Оберіть наслений пункт</option>
-                            
-                        </select>
-
-                        <label for="post-office-number">Пошук відділення</label>
-                        <input class="input" type="text" id="search-post-office" name="search-post-office" autocomplete="off" placeholder="Номер відділення" />
-
-                        <select class="select hidden" name="post-office" id="post-office">
-                            <option value="" selected disabled hidden>Оберіть відділення</option>
-                            
-                        </select>
-                    </fieldset>
-                </div>
-
-                <!-- Address for Courier -->
-                <div id="courier-shipping" class="shipping-details hidden">
-                    <fieldset>
-                        <label for="city">Населений пункт</label>
-                        <input class="input" type="text" id="courier-settlement-search" name="courier-settlement-search" autocomplete="off" placeholder="Київ" />
-                        <select class="select hidden" name="courier-settlement-selection" id="courier-settlement-selection">
-                            <option value="" selected disabled hidden>Оберіть населений пункт</option>
-                            
-                        </select>
-                        
-
-                        {% comment %} 
-                            ------------  ПОИСК УЛИЦ ОТКЛЮЧЁН: AddressGeneral.getSettlements returns different city ref than Address.getCities which is required for Address.getStreet
-
-                            <label for="street">Вулиця</label>                        
-                            <input class="input" type="text" id="courier-street-search" name="courier-street-search" autocomplete="off" placeholder="Назва вулиці" />
-                            <select class="select hidden" name="courier-street-selection" id="courier-street-selection">
-                                <option value="" selected disabled hidden>Оберіть вулицю</option>
-                                
-                            </select> 
-                        {% endcomment %}
-
-                        <label for="street">Вулиця</label>
-                        <input class="input" type="text" id="street" name="street" autocomplete="street" placeholder="Уточнуйте чи це вул, просп, мкрн тощо" />
-
-                        <label for="street">Дім</label>
-                        <input class="input" type="text" id="house" name="house" autocomplete="house" />
-
-                        <label for="street">Квартира</label>
-                        <input class="input" type="text" id="flat" name="flat" autocomplete="flat" />
-
-                        <input class="input" type="text" id="postal-code" name="postal-code" value="50055" hidden readonly />
-                        <input class="input" type="text" id="country" name="country" value="Ukraine" hidden readonly />
-                    </fieldset>
-                </div>
-
-                <button type="submit" class="prefill-submit-btn">Продовжити</button>
-            </form>
-        </div>
+      <button class="prefill-close-btn" id="close-prefill-form">
+        {%- render "icon", icon: "close", class: "prefill-close-btn-icon" -%}
+      </button>
     </div>
-</div>
 
-{{ "checkout-prefill.js" | asset_url | script_tag }}
+    <div class="prefill-error-message">Будь ласка заповніть поля</div>
+
+    <div class="prefill-content">
+      <form id="prefill-form">
+        <!-- Contact Information -->
+        <fieldset class="prefill-fieldset">
+          <div class="prefill-name">
+            <input class="input" type="text" id="first-name" name="firstName" placeholder="Ім'я" />
+            <input class="input" type="text" id="last-name" name="lastName" placeholder="Прізвище" />
+          </div>
+
+          <input class="input" type="tel" id="phone" name="phone" placeholder="Номер телефону" />
+          <input class="input" type="email" id="email" name="email" placeholder="Електронна адреса" />
+        </fieldset>
+
+        <!-- Shipping Type -->
+        <fieldset class="prefill-fieldset">
+          <legend>Метод доставки</legend>
+
+          <div>
+            <div class="prefill-input-selection">
+              <input type="radio" name="shipping-type" value="post-office" checked />
+              <span>Доставка на відділення Нової Пошти</span>
+            </div>
+
+            <div class="prefill-input-selection">
+              <input type="radio" name="shipping-type" value="courier" />
+              <span>Доставка кур’єром Нової Пошти</span>
+            </div>
+          </div>
+
+          <!-- Post Office Shipping -->
+          <div id="post-office-shipping" class="shipping-details">
+            <fieldset class="prefill-fieldset">
+
+              <span class="settlement-search__wrapper">
+                <input class="input" type="text" id="settlement-search" name="settlement-search" autocomplete="off" placeholder="Місто/Регіон" />
+                {%- render 'icon', icon: 'prefill-search' -%}
+                {%- render "icon", icon: 'close', class: 'prefill-settlement-search-clear' -%}
+                <div class="prefill-dropdown" id="settlement-dropdown"></div>
+              </span>
+                  
+              <select class="select hidden" name="settlement-selection" id="settlement-selection">
+                <option value="" selected disabled hidden>Оберіть наслений пункт</option>      
+              </select>
+
+              <span class="search-post-office__wrapper">
+                <input class="input" type="text" id="search-post-office" name="search-post-office" autocomplete="off" placeholder="Відділення Нової Пошти" />
+                {%- render 'icon', icon: 'prefill-search', class: 'prefill-search-post-office-search' -%}
+                {%- render "icon", icon: 'close', class: 'prefill-search-post-office-clear' -%}
+                <div class="prefill-dropdown" id="post-office-dropdown"></div>
+              </span>
+
+              <select class="select hidden" name="post-office" id="post-office">
+                <option value="" selected disabled hidden>Оберіть відділення</option>
+              </select>
+            </fieldset>
+          </div>
+
+          <!-- Address for Courier -->
+          <div id="courier-shipping" class="shipping-details hidden">
+            <fieldset class="prefill-fieldset">
+
+              <span class="courier-settlement-search__wrapper">
+                <input class="input" type="text" id="courier-settlement-search" name="courier-settlement-search" autocomplete="off" placeholder="Місто/Регіон" />
+                {%- render 'icon', icon: 'prefill-search', class: 'prefill-courier-settlement-search' -%}
+                {%- render "icon", icon: 'close', class: 'courier-settlement-clear' -%}
+                <div class="prefill-dropdown" id="courier-settlement-dropdown"></div>
+              </span>
+
+              <select class="select hidden" name="courier-settlement-selection" id="courier-settlement-selection">
+                <option value="" selected disabled hidden>Оберіть населений пункт</option>  
+              </select>
+                          
+              {% comment %} ------------  ПОИСК УЛИЦ ОТКЛЮЧЁН: AddressGeneral.getSettlements returns different city ref than Address.getCities which is required for Address.getStreet
+                <label for="street">Вулиця</label>
+                <input class="input" type="text" id="courier-street-search" name="courier-street-search" autocomplete="off" placeholder="Назва вулиці" />
+                <select class="select hidden" name="courier-street-selection" id="courier-street-selection">
+                  <option value="" selected disabled hidden>Оберіть вулицю</option>
+                </select>
+              {% endcomment %}
+
+              <div class="prefill-address1">
+                <input class="input" type="text" id="street" name="street" autocomplete="street" placeholder="Вулиця" />
+                <input class="input" type="text" id="house" name="house" autocomplete="house" placeholder="Будинок" />
+                <input class="input" type="text" id="floor" name="floor" autocomplete="floor" placeholder="Поверх" />
+                <input class="input" type="text" id="flat" name="flat" autocomplete="flat" placeholder="Квартира" />
+              </div>
+
+              <input class="input" type="text" id="postal-code" name="postal-code" value="50055" hidden readonly />
+              <input class="input" type="text" id="country" name="country" value="Ukraine" hidden readonly />
+            </fieldset>
+          </div>
+        </fieldset>
+
+        <!-- Payment Type -->
+        <fieldset class="prefill-fieldset">
+          <legend>Оплата</legend>
+
+          <div>
+            <div class="prefill-input-selection">
+              <input type="radio" name="payment-type" value="full" checked />
+              <span>Оплатити карткою на сайті</span>
+            </div>
+
+            <div class="prefill-input-selection">
+              <input type="radio" name="payment-type" value="prepayment" />
+              <span>Накладений платіж з передоплатою 200 грн</span>
+            </div>
+          </div>
+        </fieldset>
+
+        <div class="prefill-submit-btn__wrapper">
+          <button type="submit" class="prefill-submit-btn" aria-busy="false">
+            <span>Продовжити</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -69,11 +69,14 @@ NOTE TO DEVELOPERS: welcome to Impact theme! We hope that you will enjoy editing
 
     <script type="module" src="{{ 'vendor.min.js' | asset_url }}"></script>
     <script type="module" src="{{ 'theme.js' | asset_url }}"></script>
+    <script type="module" src="{{ 'index.js' | asset_url }}"></script>
+    <script nomodule src="{{ 'index-legacy.js' | asset_url }}" defer></script>
 
     {{ content_for_header }}
 
     {{- 'theme.css' | asset_url | stylesheet_tag: preload: true -}}
     {{- 'redefine.css' | asset_url | stylesheet_tag: preload: true -}}
+    {{- 'index.css' | asset_url | stylesheet_tag: preload: true -}}
     <!-- Meta Pixel Code -->
     <script>
       !function(f,b,e,v,n,t,s)
