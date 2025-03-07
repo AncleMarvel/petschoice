@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "current": {
     "section_vertical_spacing": "medium",
@@ -35,13 +26,30 @@
     "heading_apparition": "split_fade",
     "product_color_display": "swatch",
     "product_info_alignment": "start",
+    "cart_type": "drawer",
     "cart_icon": "shopping_basket",
-    "cart_empty_button_link": "shopify://collections/каталог",
-    "social_instagram": "https://www.instagram.com/petschoice.club",
-    "favicon": "shopify://shop_images/favicon.png",
+    "cart_empty_button_link": "shopify:\/\/collections\/каталог",
+    "social_instagram": "https:\/\/www.instagram.com\/petschoice.club",
+    "favicon": "shopify:\/\/shop_images\/favicon.png",
     "checkout_accent_color": "#f0c417",
     "checkout_button_color": "#1a1a1a",
-    "content_for_index": []
+    "content_for_index": [],
+    "blocks": {
+      "15683396631634586217": {
+        "type": "shopify:\/\/apps\/inbox\/blocks\/chat\/841fc607-4181-4ad1-842d-e24d7f8bad6b",
+        "disabled": false,
+        "settings": {
+          "button_color": "#f0f0f0",
+          "secondary_color": "#1a1a1a",
+          "ternary_color": "#6a6a6a",
+          "button_icon": "hand_wave",
+          "button_text": "live_chat",
+          "button_horizontal_position": "bottom_right",
+          "button_vertical_position": "lowest",
+          "greeting_message": "Доброго дня! \nРаді вітати вас в PetsChoiceClub🐾"
+        }
+      }
+    }
   },
   "presets": {
     "Sound": {

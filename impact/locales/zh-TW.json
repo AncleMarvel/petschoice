@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin language editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "general": {
     "page": "第 {{ page }} 頁",
@@ -123,7 +114,7 @@
     "volume_pricing": {
       "title": "批發價",
       "minimum": "{{ quantity }}+",
-      "price_at_each": "{{ price }}/每項"
+      "price_at_each": "{{ price }}\/每項"
     },
     "rating_count": {
       "zero": "無評價",

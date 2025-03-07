@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "main": {
@@ -52,13 +43,13 @@
         "liquid_nRmcWr": {
           "type": "liquid",
           "settings": {
-            "liquid": "<p><b>Реквізити:</b> \n<br>\nФізична особа-підприємець\nАрхипенко Наталія Олександрівна\n<br>\n\nIBAN № UA 693220010000026004310000917, в МОНОБАНК | АТ «УНІВЕРСАЛБАНК»,\n<br>\n\nРНОКПП 3192410345\n\n<br>\n\nE-mail: info@petschoice.club \n<br>\n0 800 301 048&nbsp;\n\n(Дзвінки безкоштовні для всіх клієнтів, що телефонують з мобільних та міських номерів України)</p>"
+            "liquid": "<p><b>Реквізити:<\/b> \n<br>\nФізична особа-підприємець\nАрхипенко Наталія Олександрівна\n<br>\n\nIBAN № UA 693220010000026004310000917, в МОНОБАНК | АТ «УНІВЕРСАЛБАНК»,\n<br>\n\nРНОКПП 3192410345\n\n<br>\n\nE-mail: info@petschoice.club \n<br>\n0 800 301 048&nbsp;\n\n(Дзвінки безкоштовні для всіх клієнтів, що телефонують з мобільних та міських номерів України)<\/p>"
           }
         },
         "button_KGtxfC": {
           "type": "button",
           "settings": {
-            "icon": "shopify://shop_images/Inst.svg",
+            "icon": "shopify:\/\/shop_images\/Inst.svg",
             "style": "outline",
             "size": "xl",
             "text": "Instgram",
