@@ -1,0 +1,8 @@
+production:
+  password: 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
+  theme_id: "133446959178"
+  store: 419319-9b.myshopify.com
+development-or:
+  password: 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
+  theme_id: "134308200522"
+  store: 419319-9b.myshopify.com

@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "main": {
@@ -123,7 +114,15 @@
       "type": "related-products",
       "settings": {
         "recommendations_count": 6,
-        "products": [],
+        "products": [
+          "мило-для-лап-лаванда-розмарин",
+          "лікувальні-шампуні-copy",
+          "dogs-shampoo",
+          "лікувальні-шампуні",
+          "шампунь-для-собак-copy-copy",
+          "шампунь-для-собак-copy",
+          "шампунь-для-цуценят-персик-ананас-350-мл"
+        ],
         "full_width": true,
         "stack_products": true,
         "show_progress_bar": false,
